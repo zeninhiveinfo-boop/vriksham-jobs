@@ -166,6 +166,8 @@ async function main() {
 	if (options.mode === 'full') {
 		console.log('[demo-reset] Running prisma migrate reset...');
 		runCommand('npx', ['prisma', 'migrate', 'reset', '--force', '--skip-generate']);
+		console.log('[demo-reset] Removing orphaned candidate local-storage files after full reset...');
+		runCommand('node', ['scripts/local-storage-candidate-orphans.js', '--delete']);
 	} else {
 		console.log('[demo-reset] Skipping full DB reset (seed-only mode).');
 	}

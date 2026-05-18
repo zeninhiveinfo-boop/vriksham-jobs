@@ -761,6 +761,7 @@ async function clearCustomFieldDefinitions() {
 }
 
 async function cleanupSeedData() {
+	const { deleteObject } = await import('../lib/object-storage.js');
 	const seedUsers = await prisma.user.findMany({
 		where: {
 			email: { endsWith: `@${PERSON_EMAIL_DOMAIN}` }
@@ -774,6 +775,21 @@ async function cleanupSeedData() {
 		select: { id: true }
 	});
 	const seedDivisionIds = seedDivisions.map((division) => division.id);
+	const seedCandidateAttachmentFiles = await prisma.candidateAttachment.findMany({
+		where: {
+			candidate: {
+				OR: [
+					{ email: { endsWith: `@${PERSON_EMAIL_DOMAIN}` } },
+					...(seedDivisionIds.length > 0 ? [{ divisionId: { in: seedDivisionIds } }] : [])
+				]
+			}
+		},
+		select: {
+			storageProvider: true,
+			storageBucket: true,
+			storageKey: true
+		}
+	});
 
 	const scopedJobOrderFilter = seedDivisionIds.length > 0 ? { divisionId: { in: seedDivisionIds } } : { id: -1 };
 
@@ -908,6 +924,17 @@ async function cleanupSeedData() {
 			}
 		}
 	});
+	for (const attachment of seedCandidateAttachmentFiles) {
+		try {
+			await deleteObject({
+				key: attachment.storageKey,
+				storageProvider: attachment.storageProvider,
+				storageBucket: attachment.storageBucket
+			});
+		} catch {
+			// Demo reseeds should keep going even if one orphaned file is already gone.
+		}
+	}
 
 	await prisma.contact.deleteMany({
 		where: {

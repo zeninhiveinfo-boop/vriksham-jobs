@@ -29,6 +29,8 @@
 		"db:backup:scheduled": "node scripts/db-backup-scheduled.js --output .backups",
 		"db:restore": "node scripts/db-restore.js",
 		"db:clear:operational": "node scripts/clear-operational-data-preserve-users.js",
+		"storage:candidates:audit": "node scripts/local-storage-candidate-orphans.js",
+		"storage:candidates:clean": "node scripts/local-storage-candidate-orphans.js --delete",
 		"demo:seed": "node scripts/seed-dummy-data.js",
 		"demo:reset": "node scripts/demo-reset.js --mode=full --preserve-settings=true",
 		"demo:reset:seed-only": "node scripts/demo-reset.js --mode=seed --preserve-settings=true",

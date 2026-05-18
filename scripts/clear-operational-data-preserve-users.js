@@ -44,6 +44,14 @@ async function main() {
 	console.log('[clear-operational-data] Clearing operational data while preserving users, divisions, settings, skills, custom fields, and zip codes.');
 
 	const summary = [];
+	const { deleteObject } = await import('../lib/object-storage.js');
+	const attachmentFiles = await prisma.candidateAttachment.findMany({
+		select: {
+			storageProvider: true,
+			storageBucket: true,
+			storageKey: true
+		}
+	});
 	const exportJobFiles = await prisma.bullhornExportJob.findMany({
 		select: {
 			filePath: true
@@ -56,6 +64,21 @@ async function main() {
 			summary.push([label, count.count]);
 		}
 	});
+
+	let attachmentFilesDeleted = 0;
+	let attachmentFileErrors = 0;
+	for (const attachment of attachmentFiles) {
+		try {
+			await deleteObject({
+				key: attachment.storageKey,
+				storageProvider: attachment.storageProvider,
+				storageBucket: attachment.storageBucket
+			});
+			attachmentFilesDeleted += 1;
+		} catch {
+			attachmentFileErrors += 1;
+		}
+	}
 
 	let exportArtifactsDeleted = 0;
 	let exportArtifactErrors = 0;
@@ -74,6 +97,8 @@ async function main() {
 	for (const [label, count] of summary) {
 		console.log(`${label}: ${count}`);
 	}
+	console.log(`Candidate attachment files deleted: ${attachmentFilesDeleted}`);
+	console.log(`Candidate attachment cleanup errors: ${attachmentFileErrors}`);
 	console.log(`Bullhorn export artifacts deleted: ${exportArtifactsDeleted}`);
 	console.log(`Bullhorn export artifact cleanup errors: ${exportArtifactErrors}`);
 }
