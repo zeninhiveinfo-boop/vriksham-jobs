@@ -291,7 +291,7 @@ async function getOperationalReportExportHandler(req) {
 		};
 
 		const workbook = new ExcelJS.Workbook();
-		workbook.creator = 'Hire Gnome ATS';
+		workbook.creator = 'Vriksham Jobs';
 		workbook.created = new Date();
 		const selectedDivision = report.filterOptions.divisions.find(
 			(division) => String(division.id) === String(report.appliedFilters.divisionId || '')

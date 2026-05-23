@@ -10,7 +10,7 @@ import { THEME_OPTIONS } from '@/lib/theme-options';
 import { isValidEmailAddress } from '@/lib/email-validation';
 
 const INITIAL_FORM = {
-	siteName: 'Hire Gnome ATS',
+	siteName: 'Vriksham Jobs',
 	themeKey: 'classic_blue',
 	firstName: '',
 	lastName: '',

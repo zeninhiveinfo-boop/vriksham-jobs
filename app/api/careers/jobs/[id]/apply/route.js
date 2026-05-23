@@ -74,7 +74,7 @@ function buildWebApplicationCandidateNoteContent({ jobOrderTitle, application, n
 		`Applied At: ${new Date().toISOString()}`,
 		`Email: ${asTrimmedString(normalizedEmail) || '-'}`,
 		`Mobile: ${asTrimmedString(application.mobile) || '-'}`,
-		`Zip Code: ${asTrimmedString(application.zipCode) || '-'}`,
+		`PIN Code: ${asTrimmedString(application.zipCode) || '-'}`,
 		`Current Title: ${asTrimmedString(application.currentJobTitle) || '-'}`,
 		`Current Employer: ${asTrimmedString(application.currentEmployer) || '-'}`,
 		`LinkedIn: ${asTrimmedString(application.linkedinUrl) || '-'}`,
@@ -122,7 +122,7 @@ function buildCareerSiteApplicationOwnerEmail({
 		`Candidate: ${safeApplicantName}`,
 		`Email: ${asTrimmedString(normalizedEmail) || '-'}`,
 		`Mobile: ${asTrimmedString(application.mobile) || '-'}`,
-		`Zip Code: ${asTrimmedString(application.zipCode) || '-'}`,
+		`PIN Code: ${asTrimmedString(application.zipCode) || '-'}`,
 		`Current Title: ${asTrimmedString(application.currentJobTitle) || '-'}`,
 		`Current Employer: ${asTrimmedString(application.currentEmployer) || '-'}`,
 		`LinkedIn: ${offeredLinkedin}`,
@@ -154,7 +154,7 @@ function buildCareerSiteApplicationOwnerEmail({
 			}</li>
 			<li><strong>Email:</strong> ${escapeHtml(asTrimmedString(normalizedEmail) || '-')}</li>
 			<li><strong>Mobile:</strong> ${escapeHtml(asTrimmedString(application.mobile) || '-')}</li>
-			<li><strong>Zip Code:</strong> ${escapeHtml(asTrimmedString(application.zipCode) || '-')}</li>
+			<li><strong>PIN Code:</strong> ${escapeHtml(asTrimmedString(application.zipCode) || '-')}</li>
 			<li><strong>Current Title:</strong> ${escapeHtml(asTrimmedString(application.currentJobTitle) || '-')}</li>
 			<li><strong>Current Employer:</strong> ${escapeHtml(asTrimmedString(application.currentEmployer) || '-')}</li>
 			<li><strong>LinkedIn:</strong> ${escapeHtml(offeredLinkedin)}</li>

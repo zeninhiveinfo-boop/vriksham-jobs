@@ -63,7 +63,7 @@ function formatDiagnosticsMarkdown(result) {
 	const checks = Array.isArray(result?.checks) ? result.checks : [];
 	const recentInboundEmails = Array.isArray(result?.recentInboundEmails) ? result.recentInboundEmails : [];
 	const lines = [
-		'# Hire Gnome ATS Diagnostics Report',
+		'# Vriksham Jobs Diagnostics Report',
 		'',
 		`Generated: ${generatedAt}`,
 		'',

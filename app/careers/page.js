@@ -25,7 +25,7 @@ function buildCareersItemListStructuredData({ baseUrl, siteName, jobs }) {
 
 export async function generateMetadata() {
 	const branding = await getSystemBranding();
-	const siteName = String(branding?.siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const siteName = String(branding?.siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	if (!branding?.careerSiteEnabled) {
 		return {
 			title: `${siteName} Careers`,
@@ -71,7 +71,7 @@ export default async function CareersPage() {
 		redirect('/login');
 	}
 
-	const siteName = String(branding?.siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const siteName = String(branding?.siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	const baseUrl = getPublicAppBaseUrl();
 	const structuredData = buildCareersItemListStructuredData({
 		baseUrl,

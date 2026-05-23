@@ -136,8 +136,8 @@ export default function ClientReviewPortal({ initialData, token }) {
 					<div className={portalData?.branding?.hasCustomLogo ? 'client-portal-brand with-logo' : 'client-portal-brand'}>
 						{portalData?.branding?.hasCustomLogo ? (
 							<img
-								src={portalData?.branding?.logoUrl || '/branding/hire-gnome.png'}
-								alt={portalData?.branding?.siteName || 'Hire Gnome ATS'}
+								src={portalData?.branding?.logoUrl || '/branding/vriksham-jobs.png'}
+								alt={portalData?.branding?.siteName || 'Vriksham Jobs'}
 							/>
 						) : null}
 						<div>
@@ -323,8 +323,8 @@ export default function ClientReviewPortal({ initialData, token }) {
 				)}
 
 				<footer className="client-portal-footer">
-					<p>Powered by {portalData?.branding?.siteName || 'Hire Gnome ATS'}</p>
-					<a href="https://hiregnome.com" target="_blank" rel="noreferrer">Learn more</a>
+					<p>Powered by {portalData?.branding?.siteName || 'Vriksham Jobs'}</p>
+					<a href="/" target="_blank" rel="noreferrer">Learn more</a>
 				</footer>
 			</div>
 		</section>

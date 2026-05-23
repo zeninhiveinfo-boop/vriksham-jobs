@@ -187,17 +187,45 @@ async function patchClients_idHandler(req, { params }) {
 			prisma,
 			moduleKey: 'clients',
 			customFieldsInput: { ...existingCustomFields, ...incomingCustomFields }
-		});
-		if (customFieldValidation.errors.length > 0) {
-			return NextResponse.json(
-				{ error: customFieldValidation.errors.join(' ') },
-				{ status: 400 }
-			);
-		}
-		const parsedDataWithCustomFields = {
-			...parsed.data,
-			customFields: customFieldValidation.customFields
-		};
+					});
+
+			if (customFieldValidation.errors.length > 0) {
+				return NextResponse.json(
+					{ error: customFieldValidation.errors.join(' ') },
+					{ status: 400 }
+				);
+			}
+
+			const employerWorkflowCustomFieldKeys = [
+				'employerRequest',
+				'selectedPlan',
+				'selectedPlanLabel',
+				'approvalStatus',
+				'billingStatus',
+				'paymentStatus',
+				'serviceStatus',
+				'portalAccessStatus',
+				'requestSource',
+				'hiringLocation',
+				'lastAdminAction',
+				'lastAdminActionAt'
+			];
+
+			const preservedEmployerWorkflowCustomFields = {};
+
+			for (const key of employerWorkflowCustomFieldKeys) {
+				if (Object.prototype.hasOwnProperty.call(existingCustomFields, key)) {
+					preservedEmployerWorkflowCustomFields[key] = existingCustomFields[key];
+				}
+			}
+
+			const parsedDataWithCustomFields = {
+				...parsed.data,
+				customFields: {
+					...customFieldValidation.customFields,
+					...preservedEmployerWorkflowCustomFields
+				}
+			};
 
 		const normalized = await withInferredCityStateFromZip(
 			prisma,

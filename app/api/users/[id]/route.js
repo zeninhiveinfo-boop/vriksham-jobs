@@ -87,6 +87,9 @@ async function getUsers_idHandler(req, { params }) {
 	if (!actingUser) {
 		return NextResponse.json({ error: 'Authentication required.' }, { status: 401 });
 	}
+	if (hasAdmin && actingUser.role !== 'ADMINISTRATOR') {
+	return NextResponse.json({ error: 'Only administrators can manage users.' }, { status: 403 });
+	}
 	const user = await findScopedUser(id, actingUser, hasAdmin);
 	if (!user) {
 		return NextResponse.json({ error: 'User not found.' }, { status: 404 });
@@ -109,6 +112,9 @@ async function patchUsers_idHandler(req, { params }) {
 		const actingUser = await getActingUser(req, { allowFallback: false });
 		if (!actingUser) {
 			throw new AccessControlError('Authentication required.', 401);
+		}
+		if (hasAdmin && actingUser.role !== 'ADMINISTRATOR') {
+			throw new AccessControlError('Only administrators can edit users.', 403);
 		}
 		if (hasAdmin && actingUser?.role === 'RECRUITER') {
 			throw new AccessControlError('Recruiters cannot edit users.', 403);

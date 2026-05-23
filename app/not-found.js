@@ -10,7 +10,7 @@ export default function NotFound() {
 			subtitle="This trail went cold."
 			description="The page you requested is not here, has moved, or never existed in this workspace."
 			imageSrc="/error-404.png"
-			imageAlt="Hire Gnome 404 illustration"
+			imageAlt="Vriksham Jobs 404 illustration"
 			primaryAction={{
 				label: 'Go Home',
 				href: '/',

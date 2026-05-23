@@ -34,7 +34,7 @@ function buildClientFeedbackEmail({
 	linkHref,
 	createdAt
 }) {
-	const safeSiteName = String(siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const safeSiteName = String(siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	const safeRecipientFirstName = String(recipientFirstName || '').trim() || 'there';
 	const safeClientName = String(clientName || 'A client').trim() || 'A client';
 	const safeActionLabel = String(actionLabel || 'Updated').trim() || 'Updated';

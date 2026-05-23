@@ -57,14 +57,16 @@ function loadStoredApplyForm() {
 	}
 }
 
-function formatCurrencyRange(min, max, currency = 'USD') {
+function formatCurrencyRange(min, max, currency = 'INR') {
 	const hasMin = Number.isFinite(Number(min));
 	const hasMax = Number.isFinite(Number(max));
-	if (!hasMin && !hasMax) return 'Compensation discussed during interview.';
+	if (!hasMin && !hasMax) return 'Salary / CTC discussed during screening.';
 
-	const formatter = new Intl.NumberFormat('en-US', {
+	const normalizedCurrency = currency === 'USD' || currency === 'CAD' ? currency : 'INR';
+
+	const formatter = new Intl.NumberFormat('en-IN', {
 		style: 'currency',
-		currency: currency === 'CAD' ? 'CAD' : 'USD',
+		currency: normalizedCurrency,
 		maximumFractionDigits: 0
 	});
 
@@ -196,19 +198,19 @@ export default function CareerJobDetailClient({ job }) {
 			<header className="career-detail-top">
 				<Link href="/careers" className="career-back-link">
 					<ArrowLeft aria-hidden="true" />
-					<span>Back to open roles</span>
+					<span>Back to jobs</span>
 				</Link>
 			</header>
 
 			<div className="career-detail-layout">
 				<article className="career-detail-main">
 					<div className="career-detail-hero">
-						<p className="careers-eyebrow">Now hiring</p>
+						<p className="careers-eyebrow">Vriksham Jobs opportunity</p>
 						<h1>{job.title}</h1>
 						<div className="career-detail-meta">
 							<p>
 								<Building2 aria-hidden="true" />
-								<span>{job.client?.name || 'Confidential Client'}</span>
+								<span>{job.client?.name || 'Confidential Employer'}</span>
 							</p>
 							<p>
 								<MapPin aria-hidden="true" />
@@ -221,7 +223,7 @@ export default function CareerJobDetailClient({ job }) {
 						</div>
 						<div className="career-detail-highlights">
 							<p>
-								<span>Compensation</span>
+								<span>Salary / CTC</span>
 								<strong>{formatCurrencyRange(job.salaryMin, job.salaryMax, job.currency)}</strong>
 							</p>
 							<p>
@@ -242,11 +244,11 @@ export default function CareerJobDetailClient({ job }) {
 				</article>
 
 				<aside className="career-apply-card">
-					<h2>Quick Apply</h2>
-					<p>Submit your profile and we will connect with you if your background aligns.</p>
+					<h2>Apply for this job</h2>
+					<p>Submit your profile and Vriksham Jobs will contact you if your background matches this requirement.</p>
 					<form onSubmit={onSubmit} className="career-apply-form">
 						<p className="career-apply-helper">
-							Your contact details stay in this browser session so you can apply to multiple roles faster.
+							Your details stay in this browser session so you can apply to multiple jobs faster.
 						</p>
 						<div className="career-apply-grid-2">
 							<label>
@@ -299,7 +301,7 @@ export default function CareerJobDetailClient({ job }) {
 								/>
 							</label>
 							<label>
-								<span>Zip Code *</span>
+								<span>PIN Code *</span>
 								<input
 									inputMode="numeric"
 									value={form.zipCode}
@@ -311,7 +313,7 @@ export default function CareerJobDetailClient({ job }) {
 
 						<div className="career-apply-grid-2">
 							<label>
-								<span>Current Title *</span>
+								<span>Current / Latest Job Title *</span>
 								<input
 									value={form.currentJobTitle}
 									onChange={(event) =>
@@ -321,7 +323,7 @@ export default function CareerJobDetailClient({ job }) {
 								/>
 							</label>
 							<label>
-								<span>Current Employer *</span>
+								<span>Current / Latest Employer *</span>
 								<input
 									value={form.currentEmployer}
 									onChange={(event) =>

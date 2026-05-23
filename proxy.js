@@ -85,12 +85,14 @@ function isStaticAsset(pathname) {
 
 function isPublicPagePath(pathname) {
 	return (
+		pathname === '/' ||
 		pathname === '/login' ||
 		pathname === '/setup' ||
 		pathname === '/forgot-password' ||
 		pathname === '/reset-password' ||
 		pathname.startsWith('/client-review/') ||
-		pathname.startsWith('/careers')
+		pathname.startsWith('/careers') ||
+		pathname.startsWith('/employer/')
 	);
 }
 
@@ -108,7 +110,9 @@ function isPublicApiPath(pathname) {
 		pathname === '/api/session/reset-password' ||
 		pathname === '/api/system-settings' ||
 		pathname === '/api/system-settings/logo' ||
+		pathname === '/api/employer/request-access' ||
 		pathname.startsWith('/api/careers/')
+
 	);
 }
 
@@ -179,11 +183,12 @@ export async function proxy(req) {
 	}
 
 	if (pathname === '/login') {
-		if (isAuthenticated) {
-			return redirectWithRequestId(new URL('/', req.url), requestId);
-		}
-		return nextWithRequestId(forwardHeaders, requestId);
+	if (isAuthenticated) {
+		const nextParam = req.nextUrl.searchParams.get('next') || '/admin';
+		return redirectWithRequestId(new URL(nextParam, req.url), requestId);
 	}
+	return nextWithRequestId(forwardHeaders, requestId);
+}
 
 	if (isPublicPagePath(pathname)) {
 		return nextWithRequestId(forwardHeaders, requestId);

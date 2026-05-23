@@ -46,7 +46,7 @@ function buildResetEmailContent({ firstName, resetUrl, expiresInMinutes, siteNam
 	const safeName = String(firstName || '').trim() || 'there';
 	const safeNameHtml = escapeHtml(safeName);
 	const safeResetUrlHtml = escapeHtml(resetUrl);
-	const safeSiteName = String(siteName || '').trim() || 'Hire Gnome';
+	const safeSiteName = String(siteName || '').trim() || 'Vriksham Jobs';
 	const safeSiteNameHtml = escapeHtml(safeSiteName);
 	const subject = `Reset your ${safeSiteName} password`;
 	const text = [

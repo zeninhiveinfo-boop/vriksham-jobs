@@ -19,7 +19,7 @@ import { fetchLookupOptionById } from '@/lib/lookup-client';
 import { fetchUnassignedDivisionOption } from '@/lib/default-division-client';
 import { toBooleanFlag } from '@/lib/boolean-flag';
 
-const JOB_ORDER_CURRENCIES = ['USD', 'CAD'];
+const JOB_ORDER_CURRENCIES = ['INR', 'USD', 'CAD'];
 
 const initialForm = {
 	title: '',
@@ -35,7 +35,7 @@ const initialForm = {
 	status: 'open',
 	employmentType: '',
 	openings: '1',
-	currency: 'USD',
+	currency: 'INR',
 	salaryMin: '',
 	salaryMax: '',
 	publishToCareerSite: false,
@@ -59,7 +59,7 @@ function normalizeZipValue(value) {
 }
 
 function toJobOrderPayload(formValue) {
-	const currency = JOB_ORDER_CURRENCIES.includes(formValue.currency) ? formValue.currency : 'USD';
+	const currency = JOB_ORDER_CURRENCIES.includes(formValue.currency) ? formValue.currency : 'INR';
 	return {
 		...formValue,
 		currency,
@@ -505,7 +505,7 @@ function NewJobOrdersPageContent() {
 									onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))}
 								/>
 							</FormField>
-							<FormField label="Zip Code" required>
+							<FormField label="PIN Code" required>
 								<input
 									value={form.zipCode}
 									onChange={(e) => setForm((f) => ({ ...f, zipCode: normalizeZipValue(e.target.value) }))}
@@ -538,7 +538,7 @@ function NewJobOrdersPageContent() {
 									onChange={(e) => {
 										const nextCurrency = JOB_ORDER_CURRENCIES.includes(e.target.value)
 											? e.target.value
-											: 'USD';
+											: 'INR';
 										setForm((current) => ({
 											...current,
 											currency: nextCurrency,
@@ -547,6 +547,7 @@ function NewJobOrdersPageContent() {
 										}));
 									}}
 								>
+									<option value="INR">INR</option>
 									<option value="USD">USD</option>
 									<option value="CAD">CAD</option>
 								</select>

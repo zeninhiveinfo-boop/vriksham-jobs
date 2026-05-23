@@ -89,7 +89,7 @@ async function postAdmin_system_settings_email_testHandler(req) {
 		}
 
 		const body = await req.json().catch(() => ({}));
-		const siteName = asTrimmedString(body?.siteName) || 'Hire Gnome ATS';
+		const siteName = asTrimmedString(body?.siteName) || 'Vriksham Jobs';
 		const smtpHost = asTrimmedString(body?.smtpHost);
 		const smtpPort = toNullablePort(body?.smtpPort);
 		const smtpSecure = toBoolean(body?.smtpSecure);

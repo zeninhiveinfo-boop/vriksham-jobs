@@ -13,7 +13,7 @@ export default function GlobalError({ reset }) {
 					subtitle="The gnome dropped the whole toolkit."
 					description="A global application error interrupted the request before the normal screen could recover. Try the page again. If this persists, check the admin diagnostics and error logs."
 					imageSrc="/error-500.png"
-					imageAlt="Hire Gnome 500 illustration"
+					imageAlt="Vriksham Jobs 500 illustration"
 					primaryAction={{
 						label: 'Try Again',
 						onClick: () => reset(),

@@ -92,7 +92,7 @@ async function getHealthStatus() {
 	return {
 		timestamp: new Date().toISOString(),
 		version: process.env.npm_package_version || '0.1.0',
-		service: 'Hire Gnome ATS',
+		service: 'Vriksham Jobs',
 		ok: db.ok && onboardingState !== null,
 		database: {
 			...db

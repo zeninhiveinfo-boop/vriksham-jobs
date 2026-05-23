@@ -146,7 +146,7 @@ function getClientPortalEmailPalette(themeKey) {
 }
 
 function buildClientPortalInviteEmail({ siteName, logoUrl, themeKey, jobOrderTitle, clientName, contactName, portalUrl }) {
-	const safeSiteName = String(siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const safeSiteName = String(siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	const safeJobOrderTitle = String(jobOrderTitle || 'Job Order').trim() || 'Job Order';
 	const safeClientName = String(clientName || '').trim();
 	const safeContactName = String(contactName || 'there').trim() || 'there';

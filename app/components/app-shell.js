@@ -33,7 +33,7 @@ import LoadingIndicator from '@/app/components/loading-indicator';
 import useSystemBranding from '@/app/hooks/use-system-branding';
 
 const modules = [
-	{ label: 'Dashboard', href: '/', icon: LayoutDashboard },
+	{ label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
 	{ label: 'Candidates', href: '/candidates', icon: UserRound },
 	{ label: 'Clients', href: '/clients', icon: Building2 },
 	{ label: 'Contacts', href: '/contacts', icon: BookUser },
@@ -359,13 +359,16 @@ export default function AppShell({ children }) {
 						<X aria-hidden="true" />
 					</button>
 					<div className="brand-block">
-						<Link href="/" className="brand-link" aria-label={`${branding.siteName} home`}>
+						<Link href="/admin" className="brand-link" aria-label={`${branding.siteName} admin home`}>
 							<img src={branding.logoUrl} alt={branding.siteName} className="brand-logo" />
 						</Link>
 					</div>
 					<nav className="module-nav">
 						{modules.map((module) => {
-							const active = pathname === module.href || (module.href !== '/' && pathname.startsWith(module.href));
+							const active =
+								module.href === '/admin'
+									? pathname === '/admin'
+									: pathname === module.href || pathname.startsWith(module.href);
 							return (
 								<Link
 									key={module.href}
@@ -383,23 +386,83 @@ export default function AppShell({ children }) {
 							);
 						})}
 					</nav>
-					{activeUser?.role === 'ADMINISTRATOR' ? (
-						<div className="admin-nav">
-							<p className="admin-nav-label">Administration</p>
-							<Link
-								href="/admin"
-								className={pathname === '/admin' || pathname.startsWith('/admin/') ? 'module-link active' : 'module-link'}
-								onClick={() => setMobileNavOpen(false)}
-							>
-								<span className="module-link-content">
-									<span className="module-link-icon" aria-hidden="true">
-										<Settings2 />
+						{['ADMINISTRATOR', 'DIRECTOR'].includes(activeUser?.role) ? (
+							<div className="admin-nav">
+								<p className="admin-nav-label">Administration</p>
+
+								<Link
+									href="/admin/employer-requests"
+									className={
+										pathname === '/admin/employer-requests' || pathname.startsWith('/admin/employer-requests/')
+											? 'module-link active'
+											: 'module-link'
+									}
+									onClick={() => setMobileNavOpen(false)}
+								>
+									<span className="module-link-content">
+										<span className="module-link-icon" aria-hidden="true">
+											<ClipboardList />
+										</span>
+										<span>Employer Requests</span>
 									</span>
-									<span>Admin Area</span>
-								</span>
-							</Link>
-						</div>
-					) : null}
+								</Link>
+
+								{activeUser?.role === 'ADMINISTRATOR' ? (
+									<>
+										<Link
+											href="/admin/users"
+											className={
+												pathname === '/admin/users' || pathname.startsWith('/admin/users/')
+													? 'module-link active'
+													: 'module-link'
+											}
+											onClick={() => setMobileNavOpen(false)}
+										>
+											<span className="module-link-content">
+												<span className="module-link-icon" aria-hidden="true">
+													<Users />
+												</span>
+												<span>Users</span>
+											</span>
+										</Link>
+
+										<Link
+											href="/admin/divisions"
+											className={
+												pathname === '/admin/divisions' || pathname.startsWith('/admin/divisions/')
+													? 'module-link active'
+													: 'module-link'
+											}
+											onClick={() => setMobileNavOpen(false)}
+										>
+											<span className="module-link-content">
+												<span className="module-link-icon" aria-hidden="true">
+													<Building2 />
+												</span>
+												<span>Divisions</span>
+											</span>
+										</Link>
+
+										<Link
+											href="/admin/settings"
+											className={
+												pathname === '/admin/settings' || pathname.startsWith('/admin/settings/')
+													? 'module-link active'
+													: 'module-link'
+											}
+											onClick={() => setMobileNavOpen(false)}
+										>
+											<span className="module-link-content">
+												<span className="module-link-icon" aria-hidden="true">
+													<Settings2 />
+												</span>
+												<span>Admin Area</span>
+											</span>
+										</Link>
+									</>
+								) : null}
+							</div>
+						) : null}
 				</aside>
 				<div className="workspace-shell">
 					<header className="topbar">
@@ -554,9 +617,9 @@ export default function AppShell({ children }) {
 								<li>Open candidates, job orders, submissions, and interviews to explore the seeded workflow end to end.</li>
 								<li>Use the dashboard and reports to review live seeded activity, pipeline counts, and owner performance.</li>
 								<li>
-									Forward an email to <strong>demo@hiregnome.com</strong> to trigger the Postmark inbound workflow.
+									Forward an email to <strong>demo@vrikshamjobs.com</strong> to trigger the Postmark inbound workflow.
 									The forwarded message must include an email address that matches an existing candidate or contact record.
-									When it matches, Hire Gnome creates an email note on that record, and candidate attachments land in Files.
+									When it matches, Vriksham Jobs creates an email note on that record, and candidate attachments land in Files.
 								</li>
 								<li>Demo data resets periodically, so treat everything here as disposable.</li>
 							</ul>

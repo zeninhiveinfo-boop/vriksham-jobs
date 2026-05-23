@@ -1,6 +1,6 @@
 {
-	"name": "Hire Gnome ATS",
-	"short_name": "Hire Gnome",
+	"name": "Vriksham Jobs",
+	"short_name": "Vriksham Jobs",
 	"icons": [
 		{
 			"src": "/web-app-manifest-192x192.png",
@@ -15,8 +15,8 @@
 			"purpose": "maskable"
 		}
 	],
-	"theme_color": "#0f3a68",
-	"background_color": "#e8edf3",
+	"theme_color": "#047857",
+	"background_color": "#f4faf6",
 	"display": "standalone",
 	"start_url": "/",
 	"scope": "/"

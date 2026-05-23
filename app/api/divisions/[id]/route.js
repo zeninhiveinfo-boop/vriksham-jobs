@@ -37,6 +37,9 @@ async function getScopedDivision(req, id) {
 	if (!actingUser) {
 		return null;
 	}
+	if (hasAdmin && actingUser.role !== 'ADMINISTRATOR') {
+		return null;
+	}
 	if (!hasAdmin || canManageDivisions(actingUser)) {
 		return prisma.division.findUnique({
 			where: { id },
@@ -100,6 +103,9 @@ async function patchDivisions_idHandler(req, { params }) {
 			const actingUser = await getActingUser(req, { allowFallback: false });
 			if (!actingUser) {
 				throw new AccessControlError('Authentication required.', 401);
+			}
+			if (hasAdmin && actingUser.role !== 'ADMINISTRATOR') {
+				throw new AccessControlError('Only administrators can edit divisions.', 403);
 			}
 			if (hasAdmin && actingUser && !canManageDivisions(actingUser)) {
 				throw new AccessControlError('Only administrators can edit divisions.', 403);

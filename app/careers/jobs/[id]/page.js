@@ -66,7 +66,7 @@ function buildJobPostingStructuredData({ baseUrl, siteName, job }) {
 	if (hasMin || hasMax) {
 		payload.baseSalary = {
 			'@type': 'MonetaryAmount',
-			currency: job.currency === 'CAD' ? 'CAD' : 'USD',
+			currency: job.currency || 'INR',
 			value: {
 				'@type': 'QuantitativeValue',
 				minValue: hasMin ? Number(job.salaryMin) : undefined,
@@ -83,7 +83,7 @@ export async function generateMetadata({ params }) {
 	const resolvedParams = await params;
 	const jobId = parseJobId(resolvedParams);
 	const branding = await getSystemBranding();
-	const siteName = String(branding?.siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const siteName = String(branding?.siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	if (!branding?.careerSiteEnabled) {
 		return {
 			title: `${siteName} Careers`,
@@ -151,7 +151,7 @@ export default async function CareerJobDetailPage({ params }) {
 		notFound();
 	}
 
-	const siteName = String(branding?.siteName || 'Hire Gnome ATS').trim() || 'Hire Gnome ATS';
+	const siteName = String(branding?.siteName || 'Vriksham Jobs').trim() || 'Vriksham Jobs';
 	const baseUrl = getPublicAppBaseUrl();
 	const structuredData = buildJobPostingStructuredData({
 		baseUrl,

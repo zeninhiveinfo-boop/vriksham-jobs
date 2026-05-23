@@ -9,14 +9,16 @@ const PAGE_SIZE_STORAGE_KEY = 'hg-list-page-size';
 const DEFAULT_PAGE_SIZE = 10;
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
-function formatCurrencyRange(min, max, currency = 'USD') {
+function formatCurrencyRange(min, max, currency = 'INR') {
 	const hasMin = Number.isFinite(Number(min));
 	const hasMax = Number.isFinite(Number(max));
-	if (!hasMin && !hasMax) return 'Compensation discussed during interview.';
+	if (!hasMin && !hasMax) return 'Salary / CTC discussed during screening.';
 
-	const formatter = new Intl.NumberFormat('en-US', {
+	const normalizedCurrency = currency === 'USD' || currency === 'CAD' ? currency : 'INR';
+
+	const formatter = new Intl.NumberFormat('en-IN', {
 		style: 'currency',
-		currency: currency === 'CAD' ? 'CAD' : 'USD',
+		currency: normalizedCurrency,
 		maximumFractionDigits: 0
 	});
 
@@ -140,7 +142,7 @@ function matchesQuickPreset(job, quickPreset) {
 }
 
 export default function CareersPageClient({
-	siteName = 'Hire Gnome ATS',
+	siteName = 'Vriksham Jobs',
 	initialJobs = [],
 	heroTitle = 'Find your next placement opportunity.',
 	heroBody = 'Explore active roles across healthcare, technology, and professional services. Apply directly through the listing in under two minutes.'
@@ -234,11 +236,11 @@ export default function CareersPageClient({
 				</div>
 				<div className="careers-hero-stats">
 					<p>
-						<span>Open Roles</span>
+						<span>Open Jobs</span>
 						<strong>{jobs.length}</strong>
 					</p>
 					<p>
-						<span>Client Partners</span>
+						<span>Hiring Partners</span>
 						<strong>{new Set(jobs.map((job) => job.client?.name).filter(Boolean)).size}</strong>
 					</p>
 				</div>
@@ -253,8 +255,8 @@ export default function CareersPageClient({
 						<input
 							value={query}
 							onChange={(event) => setQuery(event.target.value)}
-							placeholder="Search role, company, location, keyword"
-							aria-label="Search openings"
+							placeholder="Search job title, company, location, keyword"
+							aria-label="Search jobs"
 						/>
 					</label>
 					<select
