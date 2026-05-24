@@ -18,7 +18,7 @@ import {
 } from '@/lib/generic-import-profiles';
 
 const SOURCE_OPTIONS = [
-	{ value: 'hire_gnome_export', label: 'Hire Gnome Export' },
+	{ value: 'hire_gnome_export', label: 'Legacy ATS Export' },
 	{ value: 'generic_csv_zip', label: 'Generic CSV Batch ZIP' },
 	{ value: 'generic_csv_manual', label: 'Generic CSV Multi-File' },
 	{ value: 'bullhorn_csv_zip', label: 'Bullhorn Batch ZIP' },
@@ -2096,7 +2096,7 @@ function downloadZohoCsvTemplate(entity) {
 					<div>
 						<Link href="/admin" className="module-back-link" aria-label="Back to List">&larr; Back</Link>
 						<h2>Data Import</h2>
-						<p>Import core ATS entities and custom field definitions from Hire Gnome exports, generic CSV files, Bullhorn CSV, or Zoho Recruit CSV files.</p>
+						<p>Import core ATS entities and custom field definitions from legacy ATS exports, generic CSV files, Bullhorn CSV, or Zoho Recruit CSV files.</p>
 					</div>
 				</header>
 
@@ -2288,7 +2288,7 @@ function downloadZohoCsvTemplate(entity) {
 										<div className="admin-import-primary-actions">
 											<label className="btn-secondary admin-import-primary-action">
 												<FileSpreadsheet size={16} aria-hidden="true" />
-												<span>Upload Hire Gnome Export</span>
+												<span>Upload Legacy ATS Export</span>
 												<input
 													type="file"
 													accept={fileAccept}
@@ -2320,9 +2320,9 @@ function downloadZohoCsvTemplate(entity) {
 							<section className="import-mapping-section">
 								<div className="import-mapping-header">
 									<div>
-										<h4>Hire Gnome Export</h4>
+										<h4>Legacy ATS Export</h4>
 										<p className="panel-subtext">
-											Upload a Hire Gnome Admin Data Export file to preview creates, updates, skips, and relationship remaps before applying the import.
+											Upload a legacy ATS export file to preview creates, updates, skips, and relationship remaps before applying the import.
 										</p>
 									</div>
 								</div>
@@ -2358,8 +2358,8 @@ function downloadZohoCsvTemplate(entity) {
 										<h4>{isGenericCsvZip ? 'ZIP Migration Batch' : 'Manual Migration Batch'}</h4>
 											<p className="panel-subtext">
 												{isGenericCsvZip
-													? 'Upload one ZIP containing CSV files. Hire Gnome will unpack the batch, let you review mappings, and then import in dependency order so clients can be created before contacts, contacts before job orders, and so on.'
-													: 'Upload one or more CSV files manually. Hire Gnome will preview and import them in dependency order so clients can be created before contacts, contacts before job orders, and so on.'}
+													? 'Upload one ZIP containing CSV files. Vriksham Jobs will unpack the batch, let you review mappings, and then import in dependency order so clients can be created before contacts, contacts before job orders, and so on.'
+													: 'Upload one or more CSV files manually. Vriksham Jobs will preview and import them in dependency order so clients can be created before contacts, contacts before job orders, and so on.'}
 											</p>
 										</div>
 									</div>
@@ -2582,8 +2582,8 @@ function downloadZohoCsvTemplate(entity) {
 										<h4>{isBullhornZip ? 'Bullhorn ZIP Batch' : 'Bullhorn Manual Batch'}</h4>
 										<p className="panel-subtext">
 											{isBullhornZip
-												? 'Upload one ZIP containing Bullhorn CSV exports. Hire Gnome will unpack the batch, let you review the detected entity files, and import them in dependency order so clients are created before contacts and job orders.'
-												: 'Upload one or more Bullhorn CSV files manually. Hire Gnome will preview and import them in dependency order so clients are created before contacts and job orders.'}
+												? 'Upload one ZIP containing Bullhorn CSV exports. Vriksham Jobs will unpack the batch, let you review the detected entity files, and import them in dependency order so clients are created before contacts and job orders.'
+												: 'Upload one or more Bullhorn CSV files manually. Vriksham Jobs will preview and import them in dependency order so clients are created before contacts and job orders.'}
 										</p>
 									</div>
 								</div>
@@ -2759,8 +2759,8 @@ function downloadZohoCsvTemplate(entity) {
 										<h4>{isZohoZip ? 'Zoho Recruit ZIP Batch' : 'Zoho Recruit Manual Batch'}</h4>
 										<p className="panel-subtext">
 											{isZohoZip
-												? 'Upload one ZIP containing Zoho Recruit CSV exports. Hire Gnome will unpack the batch, let you review the detected entity files, and import them in dependency order so accounts are created before contacts and job orders.'
-												: 'Upload one or more Zoho Recruit CSV files manually. Hire Gnome will preview and import them in dependency order so accounts are created before contacts and job orders.'}
+												? 'Upload one ZIP containing Zoho Recruit CSV exports. Vriksham Jobs will unpack the batch, let you review the detected entity files, and import them in dependency order so accounts are created before contacts and job orders.'
+												: 'Upload one or more Zoho Recruit CSV files manually. Vriksham Jobs will preview and import them in dependency order so accounts are created before contacts and job orders.'}
 										</p>
 									</div>
 								</div>

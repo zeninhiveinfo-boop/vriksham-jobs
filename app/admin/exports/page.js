@@ -415,7 +415,7 @@ export default function AdminExportsPage() {
 						className={`admin-settings-tab${activeTab === 'hire_gnome' ? ' is-active' : ''}`}
 						onClick={() => setActiveTab('hire_gnome')}
 					>
-						Hire Gnome
+						Vriksham Jobs
 					</button>
 					{operationFlags.bullhornOperationsEnabled ? (
 						<button
@@ -434,9 +434,9 @@ export default function AdminExportsPage() {
 					<article className="panel panel-spacious panel-narrow">
 						<section className="form-section">
 							<div className="exports-section-head">
-								<h3>Hire Gnome Export</h3>
+								<h3>Vriksham Jobs Export</h3>
 								<p className="panel-subtext exports-section-intro">
-									Generate a clean snapshot of your Hire Gnome data for migration, backup, or analysis.
+									Generate a clean snapshot of your Vriksham Jobs data for migration, backup, or analysis.
 								</p>
 							</div>
 							<FormField label="Export Format">

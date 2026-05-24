@@ -11,7 +11,7 @@ export async function generateMetadata() {
 	return {
 		title: String(branding?.siteName || '').trim() || DEFAULT_SITE_NAME,
 		metadataBase: new URL(baseUrl),
-		description: 'Recruiting ATS built with Next.js + MySQL',
+		description: 'Vriksham Jobs recruiting ATS and managed hiring platform',
 		manifest: '/site.webmanifest',
 		icons: {
 			icon: [

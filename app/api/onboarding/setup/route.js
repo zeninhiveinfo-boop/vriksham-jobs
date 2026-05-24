@@ -186,7 +186,7 @@ async function postOnboarding_setupHandler(req) {
 			themeKey: result.systemSetting.themeKey,
 			logoUrl: result.systemSetting.logoStorageKey
 				? `/api/system-settings/logo?v=${new Date(result.systemSetting.updatedAt).getTime()}`
-				: '/branding/hire-gnome.png',
+				: '/branding/vriksham-jobs.png',
 			hasCustomLogo: Boolean(result.systemSetting.logoStorageKey),
 			user: result.user
 		});

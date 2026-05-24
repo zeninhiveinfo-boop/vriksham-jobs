@@ -85,7 +85,7 @@ export default function AdminSettingsPage() {
 	const committedThemeRef = useRef('classic_blue');
 	const [currentBranding, setCurrentBranding] = useState({
 		siteName: '',
-		logoUrl: '/branding/hire-gnome.png',
+		logoUrl: '/branding/vriksham-jobs.png',
 		themeKey: 'classic_blue',
 		hasCustomLogo: false
 	});
@@ -126,7 +126,7 @@ export default function AdminSettingsPage() {
 			committedThemeRef.current = data.themeKey || 'classic_blue';
 			setCurrentBranding({
 				siteName: data.siteName || '',
-				logoUrl: data.logoUrl || '/branding/hire-gnome.png',
+				logoUrl: data.logoUrl || '/branding/vriksham-jobs.png',
 				themeKey: data.themeKey || 'classic_blue',
 				hasCustomLogo: Boolean(data.hasCustomLogo)
 			});
@@ -175,7 +175,7 @@ export default function AdminSettingsPage() {
 	}, []);
 
 	const isS3ObjectStorage = form.objectStorageProvider !== 'local';
-	const displayedLogo = logoPreviewUrl || (form.removeLogo ? '/branding/hire-gnome.png' : currentBranding.logoUrl);
+	const displayedLogo = logoPreviewUrl || (form.removeLogo ? '/branding/vriksham-jobs.png' : currentBranding.logoUrl);
 	const brandingDirty = useMemo(
 		() =>
 			Boolean(logoFile)
@@ -351,7 +351,7 @@ export default function AdminSettingsPage() {
 
 		setCurrentBranding({
 			siteName: data.siteName || form.siteName,
-			logoUrl: data.logoUrl || '/branding/hire-gnome.png',
+			logoUrl: data.logoUrl || '/branding/vriksham-jobs.png',
 			themeKey: data.themeKey || form.themeKey || 'classic_blue',
 			hasCustomLogo: Boolean(data.hasCustomLogo)
 		});
@@ -370,7 +370,7 @@ export default function AdminSettingsPage() {
 				new CustomEvent('hg:branding-updated', {
 					detail: {
 						siteName: data.siteName || form.siteName,
-						logoUrl: data.logoUrl || '/branding/hire-gnome.png',
+						logoUrl: data.logoUrl || '/branding/vriksham-jobs.png',
 						themeKey: data.themeKey || form.themeKey || 'classic_blue',
 						careerSiteEnabled: toBooleanFlag(data.careerSiteEnabled, false),
 						clientPortalEnabled: toBooleanFlag(data.clientPortalEnabled, true),

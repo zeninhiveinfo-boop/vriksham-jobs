@@ -170,7 +170,7 @@ export default function SetupPage() {
 				new CustomEvent('hg:branding-updated', {
 					detail: {
 						siteName: data.siteName || form.siteName,
-						logoUrl: data.logoUrl || '/branding/hire-gnome.png',
+						logoUrl: data.logoUrl || '/branding/vriksham-jobs.png',
 						themeKey: data.themeKey || form.themeKey || 'classic_blue',
 						hasCustomLogo: Boolean(data.hasCustomLogo)
 					}
