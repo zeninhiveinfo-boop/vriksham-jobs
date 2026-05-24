@@ -1,22 +1,21 @@
-# Hire Gnome ATS
+# Vriksham Jobs
 
-![Hire Gnome](https://hiregnome.com/gnome_banner.png?v=2)
+Vriksham Jobs is a refined ATS and managed recruitment platform for the Vriksham hiring workflow.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Node](https://img.shields.io/badge/Node-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)](https://www.prisma.io/)
 [![MySQL](https://img.shields.io/badge/MySQL-8+-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 
-Open-source Applicant Tracking System designed for small recruiting teams that want a simple, self-hostable alternative to complex enterprise ATS platforms.
+Applicant Tracking System designed for small recruiting teams that want a simple, self-hostable alternative to complex enterprise ATS platforms.
 
-Hire Gnome focuses on practical hiring workflows — candidate pipelines, structured evaluation, and lightweight reporting — while remaining easy to deploy, customize, and extend.
+Vriksham Jobs focuses on practical hiring workflows: candidate pipelines, structured evaluation, employer request handling, public career applications, and lightweight reporting.
 
 Built for teams that want full control of their hiring stack without the cost or complexity of traditional recruiting software.
 
-## Live Demo
-Try the public demo environment: [https://demo.hiregnome.com](https://demo.hiregnome.com)
+## Demo Environment
 
-When demo mode is enabled, authenticated demo users see a one-time welcome modal with quick guidance. Forwarding a message to `demo@hiregnome.com` triggers the Postmark inbound workflow in the demo environment, but the forwarded message must include an email address that matches an existing candidate or contact record for processing to occur.
+When demo mode is enabled, authenticated demo users see a one-time welcome modal with quick guidance. Configure a demo inbound email address before testing the Postmark inbound workflow; forwarded messages must include an email address that matches an existing candidate or contact record for processing to occur.
 
 ## Table Of Contents
 - [Features](#features)
@@ -60,11 +59,11 @@ When demo mode is enabled, authenticated demo users see a one-time welcome modal
 - Candidate and job-order match workspaces (top matches, sortable/paged)
 - Administrator-only audit trails on records plus admin diagnostics
 - Admin diagnostics includes recent inbound email webhook visibility
-- Admin data export module with `JSON`, `NDJSON`, and `ZIP (per-entity)` Hire Gnome output + a Bullhorn API batch ZIP exporter for bounded migration samples
+- Admin data export module with `JSON`, `NDJSON`, and `ZIP (per-entity)` native ATS output + a Bullhorn API batch ZIP exporter for bounded migration samples
 - Admin data import module:
-	- Hire Gnome export re-import (`JSON`, `NDJSON`, `ZIP`)
+	- Native legacy export re-import (`JSON`, `NDJSON`, `ZIP`)
 	- Generic CSV migration batches with per-column field mapping (`Clients`, `Contacts`, `Candidates`, `Job Orders`, `Submissions`, `Interviews`, `Placements`)
-	- Restores `customFieldDefinitions` from Hire Gnome exports before importing dependent records
+	- Restores `customFieldDefinitions` from native legacy exports before importing dependent records
 	- Bullhorn CSV migration batches (`Custom Fields`, `Clients`, `Contacts`, `Candidates`, `Job Orders`, `Submissions`, `Interviews`, `Placements`)
 	- Zoho Recruit CSV migration batches (`Clients`, `Contacts`, `Candidates`, `Job Orders`, `Submissions`, `Interviews`, `Placements`)
 	- Built-in CSV template downloads per profile plus auto-mapping suggestions for generic CSV headers
@@ -98,8 +97,8 @@ When demo mode is enabled, authenticated demo users see a one-time welcome modal
 
 ### 1) Clone And Install
 ```bash
-git clone <your-repo-url> hire-gnome-ats
-cd hire-gnome-ats
+git clone <your-repo-url> vriksham-jobs
+cd vriksham-jobs
 nvm use || true
 npm install
 cp .env.example .env
@@ -201,11 +200,11 @@ Submission workflows include a print-friendly `Submission Packet` from submissio
 
 Use `Admin Area > Data Import` for:
 - Source selection:
-	- Hire Gnome export (`JSON`, `NDJSON`, `ZIP`)
+	- Native legacy export (`JSON`, `NDJSON`, `ZIP`)
 	- Generic CSV migration batch with field mapping
 	- Bullhorn CSV migration batch
 	- Zoho Recruit CSV batch
-- Hire Gnome import applies `customFieldDefinitions` first, then entity records
+- Native legacy import applies `customFieldDefinitions` first, then entity records
 - Entity profile selection for CSV imports
 - Generic CSV batch upload with per-file entity selection, auto-suggested field matches, and ordered apply
 - Bullhorn batch upload with per-file entity review and ordered apply
@@ -214,7 +213,7 @@ Use `Admin Area > Data Import` for:
 - Bullhorn export/import now also carries candidate attachment files, including resumes, inside the ZIP batch when Bullhorn exposes downloadable candidate files
 - Zoho Recruit batch upload with per-file entity review and ordered apply
 - Generic CSV preview now acts as a safety check with per-entity create/update/skip counts, relationship warnings, row-level actions, match-reason visibility, and tabbed inspection before apply
-- Every import source type now includes an in-app sample download link, including ZIP-ready sample batches for Generic CSV, Bullhorn, Zoho Recruit, and Hire Gnome export testing
+- Every import source type now includes an in-app sample download link, including ZIP-ready sample batches for Generic CSV, Bullhorn, Zoho Recruit, and native legacy export testing
 - `docs/import-samples/bullhorn-batch/` contains a clean Bullhorn-style sample batch with `customFieldDefinitions`, the core entity CSVs, note/education/work-history metadata CSVs, and a candidate resume/file payload for ZIP/manual importer demos
 - `docs/import-samples/zoho-recruit-batch/` contains a clean seven-file Zoho Recruit-style sample batch for ZIP/manual importer demos
 - Import preview before apply
@@ -314,9 +313,9 @@ Use `.env` for:
 | `ERROR_ALERT_WEBHOOK_URL` | empty | Webhook endpoint for runtime/API error alerts. |
 | `ERROR_ALERT_MIN_LEVEL` | `error` | Minimum log severity that triggers error webhook alert. |
 | `ERROR_ALERT_COOLDOWN_SECONDS` | `300` | Alert cooldown period to suppress webhook spam. |
-| `ERROR_ALERT_SOURCE` | `hire-gnome-ats` | Source label included in error alert payloads. |
+| `ERROR_ALERT_SOURCE` | `vriksham-jobs` | Source label included in error alert payloads. |
 | `HEALTH_ALERT_WEBHOOK_URL` | empty | Webhook endpoint for health-check failures. |
-| `HEALTH_ALERT_SOURCE` | `hire-gnome-ats` | Source label included in health alert payloads. |
+| `HEALTH_ALERT_SOURCE` | `vriksham-jobs` | Source label included in health alert payloads. |
 
 #### Papertrail Logging (Optional)
 | Variable | Default | Purpose |
@@ -324,7 +323,7 @@ Use `.env` for:
 | `PAPERTRAIL_HOST` | empty | Papertrail syslog host. When empty, Papertrail shipping is disabled. |
 | `PAPERTRAIL_PORT` | empty | Papertrail UDP syslog port. Required with `PAPERTRAIL_HOST` to enable shipping. |
 | `PAPERTRAIL_MIN_LEVEL` | `info` | Minimum log level forwarded to Papertrail (`debug`, `info`, `warn`, `error`). |
-| `PAPERTRAIL_APP_NAME` | `hire-gnome-ats` | App name tag in Papertrail log lines. |
+| `PAPERTRAIL_APP_NAME` | `vriksham-jobs` | App name tag in Papertrail log lines. |
 | `PAPERTRAIL_FACILITY` | `16` | Syslog facility code (`0-23`), defaults to `local0` (`16`). |
 
 #### CI/Preflight Controls
@@ -417,7 +416,7 @@ All Node operational scripts in `scripts/` auto-load `.env` (and `.env.local` if
 - Runbook: [`docs/OPERATIONS.md`](docs/OPERATIONS.md)
 - Health endpoint: `GET /api/health`
 - Admin diagnostics: `Admin Area > System Settings > System Diagnostics`
-- Data export: `Admin Area > Data Export` (or `GET /api/admin/data-export` for Hire Gnome snapshots, `POST /api/admin/bullhorn-export-jobs` to queue a Bullhorn export job, `GET /api/admin/bullhorn-export-jobs` to poll job status, `PATCH /api/admin/bullhorn-export-jobs/[recordId]` to cancel a queued/running Bullhorn export job, `DELETE /api/admin/bullhorn-export-jobs/[recordId]` to remove a completed, cancelled, or failed Bullhorn export job)
+- Data export: `Admin Area > Data Export` (or `GET /api/admin/data-export` for native ATS snapshots, `POST /api/admin/bullhorn-export-jobs` to queue a Bullhorn export job, `GET /api/admin/bullhorn-export-jobs` to poll job status, `PATCH /api/admin/bullhorn-export-jobs/[recordId]` to cancel a queued/running Bullhorn export job, `DELETE /api/admin/bullhorn-export-jobs/[recordId]` to remove a completed, cancelled, or failed Bullhorn export job)
 - Data import: `Admin Area > Data Import` (or `POST /api/admin/data-import`)
 - Client review portal management: `Job Order Detail > Actions > Client Review Portal`
 
@@ -448,7 +447,7 @@ Kanban status update endpoints:
 - `PATCH /api/candidates/[id]/status` with `{ "status": "...", "reason": "..." }`
 - `PATCH /api/job-orders/[id]/status` with `{ "status": "open|on_hold|closed" }`
 
-Hire Gnome export/import coverage:
+Native legacy export/import coverage:
 - Export includes `customFieldDefinitions`, core entities, and related child records.
 - Import upserts `customFieldDefinitions` by `recordId` or `(moduleKey, fieldKey)` before entity rows.
 - Import applies `customFields` payload values on supported entities, including Submissions, Interviews, and Placements.

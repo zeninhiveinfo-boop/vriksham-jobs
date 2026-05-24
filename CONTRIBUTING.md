@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to Hire Gnome ATS.
+Thanks for contributing to Vriksham Jobs.
 
 ## Prerequisites
 - Node.js `20.x` (see `.nvmrc`)

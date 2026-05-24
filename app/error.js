@@ -7,7 +7,7 @@ export default function Error({ reset }) {
 		<ErrorStatePage
 			statusCode="500"
 			title="Something Broke"
-			subtitle="The gnome hit a live wire."
+			subtitle="We hit a temporary snag."
 			description="We could not finish loading this page. Try the request again first. If it keeps failing, head back and retry the flow from a clean screen."
 			imageSrc="/error-500.png"
 			imageAlt="Vriksham Jobs 500 illustration"

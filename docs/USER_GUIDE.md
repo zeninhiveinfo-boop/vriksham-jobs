@@ -1,4 +1,4 @@
-# Hire Gnome ATS User Guide
+# Vriksham Jobs User Guide
 
 This guide is for day-to-day users. It explains the core workflow and how each module fits together.
 
@@ -69,7 +69,7 @@ Use this sequence as your default process:
 - A clean Bullhorn-style sample batch lives in `docs/import-samples/bullhorn-batch/` if you want to demo the Bullhorn ZIP/manual migration flow, including custom field definitions, note/education/work-history metadata, structured candidate skills, and values.
 - That Bullhorn sample batch now also includes a candidate resume/file payload so file migration can be demonstrated in the same ZIP flow.
 - A clean Zoho Recruit-style sample batch lives in `docs/import-samples/zoho-recruit-batch/` if you want to demo the Zoho ZIP/manual migration flow across clients, contacts, candidates, job orders, submissions, interviews, and placements.
-- A sample Hire Gnome export ZIP lives in `docs/import-samples/hire-gnome-export/` and is also linked directly from the Hire Gnome import path in the UI.
+- A sample native legacy export ZIP lives in `docs/import-samples/hire-gnome-export/` and is also linked directly from the legacy import path in the UI.
 - Generic CSV preview is now a real safety check, with tabbed per-entity creates/updates/skips, relationship warnings, row-level actions, and match reasons before you apply the import.
 - Bullhorn imports now support the same batch preview/apply flow so related clients, contacts, candidates, job orders, submissions, interviews, and placements can be migrated together instead of one file at a time.
 - Zoho Recruit imports now support the same batch preview/apply flow so related clients, contacts, candidates, job orders, submissions, interviews, and placements can be migrated together instead of one file at a time.
@@ -81,9 +81,9 @@ If you are using the public demo environment, the first authenticated login show
 Important demo-specific behavior:
 - Demo data is preloaded so you can move directly through candidate, job order, submission, interview, and placement flows.
 - Demo data resets periodically.
-- Forwarding an email to `demo@hiregnome.com` triggers the inbound Postmark workflow.
+- Configure a demo inbound email address before testing the Postmark inbound workflow.
 - The forwarded message must contain an email address that matches an existing candidate or contact record.
-- When it matches, Hire Gnome creates an email note on that record.
+- When it matches, Vriksham Jobs creates an email note on that record.
 - Candidate matches can also receive file attachments from the inbound message.
 
 ## 4) Required Field Behavior

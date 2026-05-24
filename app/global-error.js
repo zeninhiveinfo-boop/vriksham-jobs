@@ -10,7 +10,7 @@ export default function GlobalError({ reset }) {
 				<ErrorStatePage
 					statusCode="500"
 					title="System Error"
-					subtitle="The gnome dropped the whole toolkit."
+					subtitle="The app needs a fresh start."
 					description="A global application error interrupted the request before the normal screen could recover. Try the page again. If this persists, check the admin diagnostics and error logs."
 					imageSrc="/error-500.png"
 					imageAlt="Vriksham Jobs 500 illustration"

@@ -55,7 +55,7 @@ Operational purge:
 
 ## Data Import
 Supports:
-- Hire Gnome exports
+- Native legacy exports
 - Generic CSV migration batches with per-column field mapping
 - Bullhorn CSV migration batches
 - Zoho Recruit CSV migration batches
@@ -108,7 +108,7 @@ Sample files:
 - `docs/import-samples/zoho-recruit-batch/`
 - Includes a clean seven-file Zoho Recruit-style batch for ZIP/manual batch testing across clients, contacts, candidates, job orders, submissions, interviews, and placements.
 - `docs/import-samples/hire-gnome-export/`
-- Includes a sample Hire Gnome export ZIP payload for testing the native import path.
+- Includes a sample native legacy export ZIP payload for testing the native import path.
 
 UI support:
 - Each import source type includes a direct sample download link in the upload area.

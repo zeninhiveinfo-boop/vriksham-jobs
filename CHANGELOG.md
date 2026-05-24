@@ -1,6 +1,6 @@
 # Changelog
 
-This changelog captures the main recent product-facing changes shipped in Hire Gnome ATS.
+This changelog captures product-facing changes for the ATS now branded as Vriksham Jobs. Older entries may refer to the upstream project identity where that history is useful for context.
 
 ## [Unreleased]
 
@@ -22,7 +22,7 @@ This changelog captures the main recent product-facing changes shipped in Hire G
 - Bullhorn export/import now also carries candidate attachment files, including resumes, inside the Bullhorn ZIP batch, and the sample Bullhorn ZIP includes a candidate resume/file payload for migration demos.
 - Zoho Recruit imports now use the same staged batch model with ZIP/manual intake, preview safety checks, dependency-ordered apply, support for submissions/interviews/placements, and a clean seven-file sample batch under `docs/import-samples/zoho-recruit-batch/`.
 - Bullhorn and Zoho operations can now be disabled with environment variables, and the admin import/export UI hides those integrations when disabled.
-- Admin import now includes per-source sample download links in the UI, including ZIP-ready sample batches for Generic CSV, Bullhorn, Zoho Recruit, and a sample Hire Gnome export ZIP.
+- Admin import now includes per-source sample download links in the UI, including ZIP-ready sample batches for Generic CSV, Bullhorn, Zoho Recruit, and a sample native legacy export ZIP.
 - Data export now includes a Bullhorn API batch ZIP exporter with created/updated date-range filtering, a per-entity changed-row cap, automatic upstream dependency expansion, background job execution, completion notifications, and direct import from completed export jobs.
 - Bullhorn export jobs no longer duplicate the saved credential fields in the export form and now rely on Platform Settings for those values.
 - Admin settings diagnostics now includes a destructive operational-data purge flow with typed confirmation, so administrators can clear ATS records and migration artifacts while preserving users, divisions, system settings, skills, custom field definitions, and zip codes.
@@ -128,7 +128,7 @@ This changelog captures the main recent product-facing changes shipped in Hire G
 ## [1.3.16] - 2026-03-16
 
 #### Added
-- Added branded custom 404 and 500 error pages with dedicated Hire Gnome artwork for not-found, route error, and global error states.
+- Added branded custom 404 and 500 error pages with dedicated artwork for not-found, route error, and global error states.
 
 ## [1.3.15] - 2026-03-16
 
@@ -211,7 +211,7 @@ This changelog captures the main recent product-facing changes shipped in Hire G
 
 #### Added
 - Demo-only first-login welcome modal for authenticated users in demo mode.
-- Guided demo messaging that points users to seeded workflows, reporting, and inbound email testing through `demo@hiregnome.com`.
+- Guided demo messaging that points users to seeded workflows, reporting, and inbound email testing through a configured demo inbound address.
 
 #### Changed
 - Demo documentation now calls out the one-time welcome prompt and the inbound email test path explicitly.
@@ -320,4 +320,4 @@ This changelog captures the main recent product-facing changes shipped in Hire G
 - Seed data quality issues that made matching and dashboard/testing scenarios too uniform.
 - Duplicate-name collisions across demo users, contacts, and candidates.
 
-[1.2.0]: https://github.com/Concept-Cache/hire-gnome-ats
+[1.2.0]: https://github.com/zeninhiveinfo-boop/vriksham-jobs

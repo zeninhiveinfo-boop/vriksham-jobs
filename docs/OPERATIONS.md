@@ -44,7 +44,7 @@ Config:
 
 ### Cron example (daily at 2:15 AM)
 ```cron
-15 2 * * * cd /opt/hire-gnome-ats && /usr/bin/env npm run db:backup:scheduled >> /var/log/hire-gnome-backup.log 2>&1
+15 2 * * * cd /opt/vriksham-jobs && /usr/bin/env npm run db:backup:scheduled >> /var/log/vriksham-jobs-backup.log 2>&1
 ```
 
 ## 3) Restore
@@ -72,7 +72,7 @@ npm run health -- http://localhost:3000/api/health --alert-webhook "https://exam
 
 Env:
 - `HEALTH_ALERT_WEBHOOK_URL`
-- `HEALTH_ALERT_SOURCE` (default: `hire-gnome-ats`)
+- `HEALTH_ALERT_SOURCE` (default: `vriksham-jobs`)
 
 ## 4.1) API Trace Headers
 
@@ -91,7 +91,7 @@ Env:
 - `ERROR_ALERT_WEBHOOK_URL`
 - `ERROR_ALERT_MIN_LEVEL` (default: `error`)
 - `ERROR_ALERT_COOLDOWN_SECONDS` (default: `300`)
-- `ERROR_ALERT_SOURCE` (default: `hire-gnome-ats`)
+- `ERROR_ALERT_SOURCE` (default: `vriksham-jobs`)
 
 Recommended:
 - Use an incident channel webhook (PagerDuty/Opsgenie/Slack middleware).
@@ -108,7 +108,7 @@ Enable by setting:
 
 Optional:
 - `PAPERTRAIL_MIN_LEVEL` (`debug|info|warn|error`, default `info`)
-- `PAPERTRAIL_APP_NAME` (default `hire-gnome-ats`)
+- `PAPERTRAIL_APP_NAME` (default `vriksham-jobs`)
 - `PAPERTRAIL_FACILITY` (`0-23`, default `16` / `local0`)
 
 If `PAPERTRAIL_HOST` or `PAPERTRAIL_PORT` is missing, shipping is disabled and logs remain local to stdout/stderr only.
