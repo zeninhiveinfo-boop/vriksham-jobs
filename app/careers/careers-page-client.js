@@ -286,7 +286,9 @@ export default function CareersPageClient({
 				</div>
 
 				{filteredJobs.length === 0 ? (
-					<p className="careers-empty">No roles match your current filters.</p>
+					<p className="careers-empty">
+						No roles match your current filters. Try clearing a filter or broadening your search.
+					</p>
 				) : null}
 
 				{visibleJobs.length > 0 ? (

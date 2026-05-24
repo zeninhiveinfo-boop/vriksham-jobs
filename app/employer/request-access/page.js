@@ -274,7 +274,7 @@ export default function EmployerRequestAccessPage() {
 					</label>
 
 					<button type="submit" disabled={saving}>
-						{saving ? 'Submitting...' : 'Submit Request'}
+						{saving ? 'Submitting...' : 'Submit Employer Request'}
 					</button>
 
 					{success ? <span className={styles.success}>{success}</span> : null}

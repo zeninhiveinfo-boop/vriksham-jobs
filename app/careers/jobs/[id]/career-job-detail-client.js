@@ -248,7 +248,7 @@ export default function CareerJobDetailClient({ job }) {
 					<p>Submit your profile and Vriksham Jobs will contact you if your background matches this requirement.</p>
 					<form onSubmit={onSubmit} className="career-apply-form">
 						<p className="career-apply-helper">
-							Your details stay in this browser session so you can apply to multiple jobs faster.
+							Your details stay on this device during your visit so you can apply to multiple jobs faster.
 						</p>
 						<div className="career-apply-grid-2">
 							<label>

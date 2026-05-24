@@ -14,7 +14,7 @@ import {
 const ACTION_BUTTONS = [
 	{ value: 'comment', label: 'Save Feedback', className: 'btn-secondary' },
 	{ value: 'request_interview', label: 'Request Interview', className: 'btn-primary' },
-	{ value: 'pass', label: 'Pass', className: 'btn-secondary btn-danger-soft' }
+	{ value: 'pass', label: 'Pass on candidate', className: 'btn-secondary btn-danger-soft' }
 ];
 
 function formatDateTime(value) {

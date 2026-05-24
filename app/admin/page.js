@@ -167,7 +167,7 @@ function DashboardDetailModal({ title, items, onClose }) {
 				</div>
 				<div className="report-detail-modal-body">
 					{items.length === 0 ? (
-						<p className="panel-subtext">No records yet.</p>
+						<p className="panel-subtext">No records found for this dashboard detail yet.</p>
 					) : (
 						<ul className="simple-list report-detail-list">
 							{items.map((item) => (
@@ -412,7 +412,7 @@ useEffect(() => {
 				{loading ? <LoadingIndicator className="list-loading-indicator" label="Loading dashboard activity" /> : null}
 				{!loading && overview.trend.length === 0 ? (
 					<div className="dashboard-empty-state">
-						<p className="panel-subtext">No records yet.</p>
+						<p className="panel-subtext">No activity has been recorded in the last 7 days.</p>
 					</div>
 				) : null}
 				{!loading && overview.trend.length > 0 ? (
@@ -451,7 +451,7 @@ useEffect(() => {
 					<DashboardSection
 						title="Upcoming Interviews"
 						items={overview.sections.upcomingInterviews}
-						emptyMessage="No records yet."
+						emptyMessage="No upcoming interviews are scheduled right now."
 						onViewAll={() => openDetail('Upcoming Interviews', overview.sections.upcomingInterviews)}
 						currentPage={sectionPages.upcomingInterviews}
 						onPageChange={(nextPage) => setSectionPage('upcomingInterviews', nextPage)}
@@ -459,7 +459,7 @@ useEffect(() => {
 					<DashboardSection
 						title="Recently Added Candidates"
 						items={overview.sections.recentCandidates}
-						emptyMessage="No records yet."
+						emptyMessage="No candidates have been added recently."
 						onViewAll={() => openDetail('Recently Added Candidates', overview.sections.recentCandidates)}
 						currentPage={sectionPages.recentCandidates}
 						onPageChange={(nextPage) => setSectionPage('recentCandidates', nextPage)}
@@ -467,7 +467,7 @@ useEffect(() => {
 					<DashboardSection
 						title="Recently Opened Job Orders"
 						items={overview.sections.recentJobOrders}
-						emptyMessage="No records yet."
+						emptyMessage="No job orders have been opened recently."
 						onViewAll={() => openDetail('Recently Opened Job Orders', overview.sections.recentJobOrders)}
 						currentPage={sectionPages.recentJobOrders}
 						onPageChange={(nextPage) => setSectionPage('recentJobOrders', nextPage)}
