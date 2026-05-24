@@ -366,12 +366,18 @@ async function postCareerSiteApplication(req, { params }) {
 		}
 
 		const archivedJobOrderIds = await getArchivedEntityIdSet('JOB_ORDER');
+		if (archivedJobOrderIds.has(id)) {
+			return NextResponse.json(
+				{ error: 'This job is no longer accepting applications.' },
+				{ status: 404 }
+			);
+		}
+
 		const jobOrder = await prisma.jobOrder.findFirst({
 			where: {
 				id,
 				publishToCareerSite: true,
-				status: 'open',
-				...(archivedJobOrderIds.size > 0 ? { id: { notIn: [...archivedJobOrderIds] } } : {})
+				status: 'open'
 			},
 			select: {
 				id: true,
