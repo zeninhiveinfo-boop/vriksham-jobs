@@ -50,9 +50,11 @@ function formatPlan(client) {
 function formatPaymentStatus(client) {
 	const status = readCustomField(client, 'paymentStatus', 'not_started');
 
-	if (status === 'paid') return 'Paid';
+	if (status === 'completed' || status === 'paid') return 'Paid';
 	if (status === 'pending') return 'Pending';
 	if (status === 'not_started') return 'Not started';
+	if (status === 'custom_pricing') return 'Custom pricing';
+	if (status === 'not_applicable') return 'Not applicable';
 
 	return status;
 }
@@ -94,7 +96,21 @@ export default async function EmployerRequestsPage() {
 			},
 			jobOrders: {
 				select: {
-					id: true
+					id: true,
+					_count: {
+						select: {
+							submissions: {
+								where: {
+									isClientVisible: true
+								}
+							},
+							clientPortalAccesses: {
+								where: {
+									isRevoked: false
+								}
+							}
+						}
+					}
 				}
 			}
 		},
@@ -193,6 +209,17 @@ export default async function EmployerRequestsPage() {
 									const selectedPlan = readCustomField(client, 'selectedPlan', 'single_requirement');
 									const assignmentReady = Boolean(client.divisionId && client.ownerId);
 									const jobOrderCount = client.jobOrders?.length || 0;
+									const readiness = {
+										jobOrderCount,
+										visibleSubmissionCount: (client.jobOrders || []).reduce(
+											(total, jobOrder) => total + Number(jobOrder?._count?.submissions || 0),
+											0
+										),
+										activePortalAccessCount: (client.jobOrders || []).reduce(
+											(total, jobOrder) => total + Number(jobOrder?._count?.clientPortalAccesses || 0),
+											0
+										)
+									};
 
 									return (
 										<tr key={client.id}>
@@ -250,6 +277,7 @@ export default async function EmployerRequestsPage() {
 														selectedPlan={selectedPlan}
 														assignmentReady={assignmentReady}
 														jobOrderCount={jobOrderCount}
+														readiness={readiness}
 													/>
 												</div>
 											</td>

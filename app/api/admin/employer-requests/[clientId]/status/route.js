@@ -47,6 +47,16 @@ function normalizePaymentDetails(value, action) {
 	};
 }
 
+function hasValidRecordedPaymentDetails(value) {
+	if (!value || typeof value !== 'object') return false;
+
+	const amountNumber = Number(cleanText(value.amount).replace(/,/g, ''));
+	const mode = cleanText(value.mode);
+	const receivedDate = cleanText(value.receivedDate);
+
+	return Number.isFinite(amountNumber) && amountNumber > 0 && PAYMENT_MODES.includes(mode) && Boolean(receivedDate);
+}
+
 function getUpdatedFields(action, selectedPlan) {
 	if (action === 'reject') {
 		return {
@@ -138,21 +148,35 @@ export async function POST(req, context) {
                 select: {
                     id: true,
                     name: true,
+                    status: true,
                     divisionId: true,
                     ownerId: true,
-                    customFields: true
+                    customFields: true,
+                    jobOrders: {
+                        select: {
+                            id: true,
+                            _count: {
+                                select: {
+                                    submissions: {
+                                        where: {
+                                            isClientVisible: true
+                                        }
+                                    },
+                                    clientPortalAccesses: {
+                                        where: {
+                                            isRevoked: false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 });
 
 		if (!existingClient) {
 			return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
 		}
-        if (action === 'approve' && (!existingClient.divisionId || !existingClient.ownerId)) {
-        return NextResponse.json(
-            { error: 'Assign division and owner before approving this employer request.' },
-            { status: 400 }
-        );
-        }
 
 		const currentCustomFields =
 			existingClient.customFields && typeof existingClient.customFields === 'object'
@@ -164,14 +188,93 @@ export async function POST(req, context) {
 			currentCustomFields.selectedPlanLabel ||
 			(selectedPlan === 'end_to_end' ? 'End-to-End Hiring' : 'Single Requirement Hiring');
 
-		const updated = getUpdatedFields(action, selectedPlan);
-
-
         const paymentValidation = normalizePaymentDetails(body.paymentDetails, action);
 
         if (paymentValidation.error) {
             return NextResponse.json({ error: paymentValidation.error }, { status: 400 });
         }
+
+        if (action === 'approve') {
+            if (existingClient.status !== 'Pending Approval') {
+                return NextResponse.json(
+                    { error: 'Approve is only available for pending employer requests.' },
+                    { status: 400 }
+                );
+            }
+
+            if (!existingClient.divisionId || !existingClient.ownerId) {
+                return NextResponse.json(
+                    { error: 'Assign division and owner before approving this employer request.' },
+                    { status: 400 }
+                );
+            }
+        }
+
+        if (action === 'mark_paid' && existingClient.status !== 'Approved - Payment Pending') {
+            return NextResponse.json(
+                { error: 'Record payment is only available after approval.' },
+                { status: 400 }
+            );
+        }
+
+        if (action === 'mark_portal_ready') {
+            if (existingClient.status !== 'Hiring In Progress') {
+                return NextResponse.json(
+                    { error: 'Portal readiness is only available while hiring is in progress.' },
+                    { status: 400 }
+                );
+            }
+
+            const paymentStatus = cleanText(currentCustomFields.paymentStatus);
+            const hasCompletedPayment = ['completed', 'paid'].includes(paymentStatus) || hasValidRecordedPaymentDetails(currentCustomFields.paymentDetails);
+
+            if (!hasCompletedPayment) {
+                return NextResponse.json(
+                    { error: 'Payment must be recorded before marking the portal ready.' },
+                    { status: 400 }
+                );
+            }
+
+            const jobOrderCount = existingClient.jobOrders?.length || 0;
+            const visibleSubmissionCount = (existingClient.jobOrders || []).reduce(
+                (total, jobOrder) => total + Number(jobOrder?._count?.submissions || 0),
+                0
+            );
+            const activePortalAccessCount = (existingClient.jobOrders || []).reduce(
+                (total, jobOrder) => total + Number(jobOrder?._count?.clientPortalAccesses || 0),
+                0
+            );
+
+            if (jobOrderCount < 1) {
+                return NextResponse.json(
+                    { error: 'Create at least one requirement before marking the portal ready.' },
+                    { status: 400 }
+                );
+            }
+
+            if (visibleSubmissionCount < 1) {
+                return NextResponse.json(
+                    { error: 'Add at least one client-visible submission before marking the portal ready.' },
+                    { status: 400 }
+                );
+            }
+
+            if (activePortalAccessCount < 1) {
+                return NextResponse.json(
+                    { error: 'Generate a client portal link before marking the portal ready.' },
+                    { status: 400 }
+                );
+            }
+        }
+
+        if (action === 'reject' && existingClient.status === 'Client Portal Ready') {
+            return NextResponse.json(
+                { error: 'Client Portal Ready requests cannot be rejected.' },
+                { status: 400 }
+            );
+        }
+
+		const updated = getUpdatedFields(action, selectedPlan);
 
         const paymentDetails = paymentValidation.paymentDetails
             ? {

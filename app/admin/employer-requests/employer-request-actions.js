@@ -10,7 +10,8 @@ export default function EmployerRequestActions({
 	status,
 	selectedPlan,
 	assignmentReady = false,
-	jobOrderCount = 0
+	jobOrderCount = 0,
+	readiness = null
 }) {
 	const router = useRouter();
 	const [saving, setSaving] = useState('');
@@ -86,17 +87,34 @@ export default function EmployerRequestActions({
 	const isHiringInProgress = status === 'Hiring In Progress';
 	const isPortalReady = status === 'Client Portal Ready';
 	const isRejected = status === 'Rejected' || status === 'Rejected Employer';
+	const readinessSummary = {
+		jobOrderCount: Number(readiness?.jobOrderCount ?? jobOrderCount ?? 0),
+		visibleSubmissionCount: Number(readiness?.visibleSubmissionCount ?? 0),
+		activePortalAccessCount: Number(readiness?.activePortalAccessCount ?? 0)
+	};
+	const hasJobOrder = readinessSummary.jobOrderCount > 0;
+	const hasVisibleSubmissions = readinessSummary.visibleSubmissionCount > 0;
+	const hasActivePortalAccess = readinessSummary.activePortalAccessCount > 0;
 
 	const showAssignmentHint = isPendingApproval && !assignmentReady;
 	const showApproveReject = isPendingApproval && assignmentReady;
 	const showMarkPaid = isPaymentPending;
-	const showCreateRequirement = isHiringInProgress && jobOrderCount === 0;
-	const showMarkPortalReady = isHiringInProgress && jobOrderCount > 0;
+	const showCreateRequirement = isHiringInProgress && !hasJobOrder;
+	const showVisibleSubmissionHint = isHiringInProgress && hasJobOrder && !hasVisibleSubmissions;
+	const showPortalLinkHint = isHiringInProgress && hasJobOrder && hasVisibleSubmissions && !hasActivePortalAccess;
+	const showMarkPortalReady = isHiringInProgress && hasJobOrder && hasVisibleSubmissions && hasActivePortalAccess;
 	const showCompleted = isPortalReady;
 	const showRejected = isRejected;
+	const showReadinessSummary = isHiringInProgress || isPortalReady;
 
 	return (
 		<div className={styles.actionGroup}>
+			{showReadinessSummary ? (
+				<span className={styles.assignmentActionHint}>
+					Requirements: {readinessSummary.jobOrderCount} · Visible submissions: {readinessSummary.visibleSubmissionCount} · Portal links: {readinessSummary.activePortalAccessCount}
+				</span>
+			) : null}
+
 			{showAssignmentHint ? (
 				<span className={styles.assignmentActionHint}>Assign division/owner first</span>
 			) : null}
@@ -208,6 +226,14 @@ export default function EmployerRequestActions({
 				>
 					Create Requirement
 				</Link>
+			) : null}
+
+			{showVisibleSubmissionHint ? (
+				<span className={styles.assignmentActionHint}>Add visible submissions</span>
+			) : null}
+
+			{showPortalLinkHint ? (
+				<span className={styles.assignmentActionHint}>Generate portal link</span>
 			) : null}
 
 			{showMarkPortalReady ? (
