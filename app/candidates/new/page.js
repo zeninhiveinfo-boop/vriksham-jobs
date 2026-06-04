@@ -223,8 +223,8 @@ function NewCandidatePageContent() {
 			? 'Enter a valid LinkedIn URL, including http:// or https://.'
 			: '';
 	const requiredFieldsMessage = isAdmin
-		? 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Division, Owner) and use valid email/URL values.'
-		: 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Owner) and use valid email/URL values.';
+		? 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Division, Assigned Recruiter) and use valid email/URL values.'
+		: 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Assigned Recruiter) and use valid email/URL values.';
 
 	useEffect(() => {
 		let cancelled = false;
@@ -726,7 +726,7 @@ function NewCandidatePageContent() {
 										/>
 									</FormField>
 									<FormField
-										label="Owner"
+										label="Assigned Recruiter"
 										required
 										hint={ownerLockedForParsedDraft ? 'Locked to current user for parsed resumes' : ''}
 									>
@@ -737,12 +737,12 @@ function NewCandidatePageContent() {
 											onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
 											placeholder={
 												ownerLockedForParsedDraft
-													? 'Owner locked'
+													? 'Assigned recruiter locked'
 													: !form.divisionId
 														? 'Select division first'
-														: 'Search owner'
+														: 'Search assigned recruiter'
 											}
-											label="Owner"
+											label="Assigned Recruiter"
 											disabled={ownerLockedForParsedDraft || !form.divisionId}
 											emptyLabel="No matching users."
 										/>
@@ -750,7 +750,7 @@ function NewCandidatePageContent() {
 								</div>
 							) : (
 								<FormField
-									label="Owner"
+									label="Assigned Recruiter"
 									required
 									hint={ownerLockedForParsedDraft ? 'Locked to current user for parsed resumes' : ''}
 								>
@@ -759,8 +759,8 @@ function NewCandidatePageContent() {
 										lookupParams={{}}
 										value={form.ownerId}
 										onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-										placeholder={ownerLockedForParsedDraft ? 'Owner locked' : 'Search owner'}
-										label="Owner"
+										placeholder={ownerLockedForParsedDraft ? 'Assigned recruiter locked' : 'Search assigned recruiter'}
+										label="Assigned Recruiter"
 										disabled={ownerLockedForParsedDraft}
 										emptyLabel="No matching users."
 									/>
@@ -1052,7 +1052,7 @@ function NewCandidatePageContent() {
 				title="Candidate Setup"
 				intro="Use manual entry for direct sourcing and resume parse when you want a faster first draft."
 				checklist={[
-					'Make sure email, mobile, source, owner, and current role details are real before saving.',
+					'Make sure email, mobile, source, assigned recruiter, and current role details are real before saving.',
 					'Pick the correct stage up front so matching, submissions, and interviews behave correctly.',
 					'Review parsed resume data before saving if you used the resume workflow.'
 				]}
@@ -1063,7 +1063,7 @@ function NewCandidatePageContent() {
 				]}
 				tips={[
 					'Use Resume Parse when you want structure quickly, then tighten the record before saving.',
-					'Keep the owner accurate because reporting, notifications, and downstream workflows depend on it.'
+					'Keep the assigned recruiter accurate because reporting, notifications, and downstream workflows depend on it.'
 				]}
 			/>
 			</div>

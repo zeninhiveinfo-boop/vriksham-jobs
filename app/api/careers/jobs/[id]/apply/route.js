@@ -17,6 +17,7 @@ import {
 	buildCandidateAttachmentStorageKey,
 	uploadObjectBuffer
 } from '@/lib/object-storage';
+import { deriveResumeSearchTextFromBuffer } from '@/lib/candidate-resume-search';
 import { withInferredCityStateFromZip } from '@/lib/zip-code-lookup';
 import { formatDateTimeAt } from '@/lib/date-format';
 import { createNotification } from '@/lib/notifications';
@@ -559,6 +560,11 @@ async function postCareerSiteApplication(req, { params }) {
 		let resumeAttachment = null;
 		if (resumeFile) {
 			const buffer = resumeBuffer || Buffer.from(await resumeFile.arrayBuffer());
+			const resumeSearchText = await deriveResumeSearchTextFromBuffer({
+				buffer,
+				fileName: resumeFile.name,
+				contentType: resumeFile.type
+			});
 			const storageKey = buildCandidateAttachmentStorageKey(candidate.id, resumeFile.name);
 			const uploaded = await uploadObjectBuffer({
 				key: storageKey,
@@ -566,19 +572,34 @@ async function postCareerSiteApplication(req, { params }) {
 				contentType: resumeFile.type || 'application/octet-stream'
 			});
 
-			resumeAttachment = await prisma.candidateAttachment.create({
-				data: {
-					recordId: createRecordId('CandidateAttachment'),
-					candidateId: candidate.id,
-					fileName: resumeFile.name,
-					isResume: true,
-					contentType: resumeFile.type || null,
-					sizeBytes: resumeFile.size,
-					storageProvider: uploaded.storageProvider,
-					storageBucket: uploaded.storageBucket,
-					storageKey: uploaded.storageKey,
-					uploadedByUserId: null
-				}
+			resumeAttachment = await prisma.$transaction(async (tx) => {
+				await tx.candidateAttachment.updateMany({
+					where: {
+						candidateId: candidate.id,
+						isResume: true
+					},
+					data: { isResume: false }
+				});
+
+				await tx.candidate.update({
+					where: { id: candidate.id },
+					data: { resumeSearchText: resumeSearchText || null }
+				});
+
+				return tx.candidateAttachment.create({
+					data: {
+						recordId: createRecordId('CandidateAttachment'),
+						candidateId: candidate.id,
+						fileName: resumeFile.name,
+						isResume: true,
+						contentType: resumeFile.type || null,
+						sizeBytes: resumeFile.size,
+						storageProvider: uploaded.storageProvider,
+						storageBucket: uploaded.storageBucket,
+						storageKey: uploaded.storageKey,
+						uploadedByUserId: null
+					}
+				});
 			});
 
 			await Promise.allSettled([

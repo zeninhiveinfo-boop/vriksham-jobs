@@ -62,7 +62,7 @@ export default function EmployerRequestAccessPage() {
 		<main className={styles.page}>
 			<header className={styles.header}>
 				<Link href="/" className={styles.brand}>
-					<div className={styles.logo}>V</div>
+					<img src="/branding/vriksham-jobs.png" alt="" className={styles.logo} />
 					<div>
 						<strong>Vriksham Jobs</strong>
 						<span>Employer access request</span>

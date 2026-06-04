@@ -287,8 +287,8 @@ export default function ClientDetailsPage() {
 			setSaveState({
 				saving: false,
 				error: isAdmin
-					? 'Client Name, Status, Division, Zip Code, and Owner are required.'
-					: 'Client Name, Status, Zip Code, and Owner are required.',
+					? 'Client Name, Status, Division, Zip Code, and Assigned Recruiter are required.'
+					: 'Client Name, Status, Zip Code, and Assigned Recruiter are required.',
 				success: ''
 			});
 			return;
@@ -509,7 +509,7 @@ export default function ClientDetailsPage() {
 						<strong>{client.recordId || '-'}</strong>
 					</p>
 					<p>
-						<span>Owner</span>
+						<span>Assigned Recruiter</span>
 						<strong>
 							{client.ownerUser
 								? `${client.ownerUser.firstName} ${client.ownerUser.lastName}`
@@ -590,14 +590,14 @@ export default function ClientDetailsPage() {
 								) : null}
 							</div>
 							<div className="detail-form-grid-2">
-								<FormField label="Owner" required>
+								<FormField label="Assigned Recruiter" required>
 									<LookupTypeaheadSelect
 										entity="users"
 										lookupParams={isAdmin && form.divisionId ? { divisionId: form.divisionId } : {}}
 										value={form.ownerId}
 										onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-										placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search owner'}
-										label="Owner"
+										placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search assigned recruiter'}
+										label="Assigned Recruiter"
 										disabled={isAdmin && !form.divisionId}
 										emptyLabel="No matching users."
 									/>

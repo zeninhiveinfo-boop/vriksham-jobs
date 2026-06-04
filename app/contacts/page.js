@@ -168,7 +168,7 @@ export default function ContactsPage() {
 			label: 'Status',
 			getSortValue: (row) => row.status || ''
 		},
-		{ key: 'owner', label: 'Owner' },
+		{ key: 'owner', label: 'Assigned Recruiter' },
 		{ key: 'emailLabel', label: 'Email', defaultVisible: false },
 		{ key: 'mobileLabel', label: 'Mobile', defaultVisible: false },
 		{ key: 'sourceLabel', label: 'Source', defaultVisible: false },
@@ -241,7 +241,7 @@ export default function ContactsPage() {
 							</div>
 						) : (
 							<input
-								placeholder="Search contact, client, owner, title, department"
+								placeholder="Search contact, client, recruiter, title, department"
 								value={query}
 								onChange={(e) => setQuery(e.target.value)}
 							/>

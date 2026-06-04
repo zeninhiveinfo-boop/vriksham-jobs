@@ -256,7 +256,7 @@ function NewContactsPageContent() {
 			return;
 		}
 		if (!form.ownerId) {
-			setError('Owner is required.');
+			setError('Assigned Recruiter is required.');
 			return;
 		}
 		if (!form.clientId) {
@@ -298,7 +298,7 @@ function NewContactsPageContent() {
 			<article className="panel panel-narrow">
 				<div className="method-content">
 					<h3>Add Contact</h3>
-					<p className="panel-subtext">Required: Name, Email, Phone, Source, Owner, Client.</p>
+					<p className="panel-subtext">Required: Name, Email, Phone, Source, Assigned Recruiter, Client.</p>
 					<form onSubmit={onManualSubmit}>
 						<div className="form-grid-2">
 							<FormField label="First Name" required>
@@ -399,14 +399,14 @@ function NewContactsPageContent() {
 									))}
 								</select>
 							</FormField>
-							<FormField label="Owner" required>
+							<FormField label="Assigned Recruiter" required>
 								<LookupTypeaheadSelect
 									entity="users"
 									lookupParams={isAdmin && form.divisionId ? { divisionId: form.divisionId } : {}}
 									value={form.ownerId}
 									onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search owner'}
-									label="Owner"
+									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search assigned recruiter'}
+									label="Assigned Recruiter"
 									disabled={isAdmin && !form.divisionId}
 									emptyLabel="No matching users."
 								/>
@@ -453,7 +453,7 @@ function NewContactsPageContent() {
 				title="Contact Setup"
 				intro="Use contacts for hiring managers, approvers, and anyone who should receive client portal links or recruiting communication."
 				checklist={[
-					'Email, phone, source, owner, and client are required because the contact needs to be actionable immediately.',
+					'Email, phone, source, assigned recruiter, and client are required because the contact needs to be actionable immediately.',
 					'Attach the contact to the correct client so job-order lookups and portal workflows stay scoped properly.',
 					'Use a real title or department when it helps recruiters understand the person’s role.'
 				]}

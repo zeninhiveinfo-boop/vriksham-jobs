@@ -350,7 +350,7 @@ export default function CandidatesPage() {
 				);
 			}
 		},
-		{ key: 'ownerName', label: 'Owner' },
+		{ key: 'ownerName', label: 'Assigned Recruiter' },
 		{ key: 'sourceLabel', label: 'Source', defaultVisible: false },
 		{ key: 'skillsLabel', label: 'Skills', defaultVisible: false },
 		{ key: 'locationLabel', label: 'Location', defaultVisible: false },
@@ -454,7 +454,7 @@ export default function CandidatesPage() {
 						</div>
 					) : (
 						<input
-							placeholder="Search name, owner, title, email"
+							placeholder="Search name, recruiter, title, email"
 							value={query}
 							onChange={(e) => setQuery(e.target.value)}
 						/>

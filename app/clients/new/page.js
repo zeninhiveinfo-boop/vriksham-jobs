@@ -143,8 +143,8 @@ function NewClientsPageContent() {
 		if (!canSave) {
 			setError(
 				isAdmin
-					? 'Client Name, Status, Division, Zip Code, and Owner are required.'
-					: 'Client Name, Status, Zip Code, and Owner are required.'
+					? 'Client Name, Status, Division, Zip Code, and Assigned Recruiter are required.'
+					: 'Client Name, Status, Zip Code, and Assigned Recruiter are required.'
 			);
 			return;
 		}
@@ -241,14 +241,14 @@ function NewClientsPageContent() {
 									/>
 								</FormField>
 							) : null}
-							<FormField label="Owner" required>
+							<FormField label="Assigned Recruiter" required>
 								<LookupTypeaheadSelect
 									entity="users"
 									lookupParams={isAdmin && form.divisionId ? { divisionId: form.divisionId } : {}}
 									value={form.ownerId}
 									onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search owner'}
-									label="Owner"
+									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search assigned recruiter'}
+									label="Assigned Recruiter"
 									disabled={isAdmin && !form.divisionId}
 									emptyLabel="No matching users."
 								/>
@@ -342,7 +342,7 @@ function NewClientsPageContent() {
 				title="Client Setup"
 				intro="Use this record for the account itself. Hiring managers and portal reviewers should be created as contacts after the client exists."
 				checklist={[
-					'Set the owner and division correctly before adding contacts or job orders.',
+					'Set the assigned recruiter and division correctly before adding contacts or job orders.',
 					'Use the real ZIP code and website so location and account context stay clean.',
 					'Add a short description when the client needs quick internal context.'
 				]}
@@ -351,7 +351,7 @@ function NewClientsPageContent() {
 					'New contacts and job orders can inherit context from this account immediately.'
 				]}
 				tips={[
-					'If ownership is likely to change, fix it now instead of after contacts and jobs are attached.',
+					'If the assigned recruiter is likely to change, fix it now instead of after contacts and jobs are attached.',
 					'Keep the client name canonical to reduce duplicate account creation.'
 				]}
 			/>

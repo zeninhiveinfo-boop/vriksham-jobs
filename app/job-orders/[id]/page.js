@@ -674,7 +674,7 @@ export default function JobOrderDetailsPage() {
 			return;
 		}
 		if (!form.ownerId) {
-			setSaveState({ saving: false, error: 'Owner is required.', success: '' });
+			setSaveState({ saving: false, error: 'Assigned Recruiter is required.', success: '' });
 			return;
 		}
 		if (!form.status) {
@@ -1329,7 +1329,7 @@ export default function JobOrderDetailsPage() {
 						</strong>
 					</p>
 					<p>
-						<span>Owner</span>
+						<span>Assigned Recruiter</span>
 						<strong>
 							{jobOrder.ownerUser
 								? `${jobOrder.ownerUser.firstName} ${jobOrder.ownerUser.lastName}`
@@ -1568,15 +1568,15 @@ export default function JobOrderDetailsPage() {
 									/>
 								</FormField>
 							) : null}
-								<FormField label="Owner" required>
+								<FormField label="Assigned Recruiter" required>
 									<LookupTypeaheadSelect
 										entity="users"
 										lookupParams={ownerLookupParams}
 										value={form.ownerId}
 										onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
 										onSelectOption={(option) => setOwnerDivisionId(option?.divisionId ?? null)}
-										placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search owner (required)'}
-										label="Owner"
+										placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search assigned recruiter (required)'}
+										label="Assigned Recruiter"
 										disabled={isAdmin && !form.divisionId}
 										emptyLabel="No matching users."
 									/>
@@ -2118,7 +2118,7 @@ export default function JobOrderDetailsPage() {
 											options={[
 												{ value: 'scorePercent', label: 'Match Score' },
 												{ value: 'candidate', label: 'Candidate' },
-												{ value: 'owner', label: 'Owner' }
+												{ value: 'owner', label: 'Assigned Recruiter' }
 											]}
 											disabled={sortedMatches.length < 2}
 										/>
@@ -2138,7 +2138,7 @@ export default function JobOrderDetailsPage() {
 																	<Link href={`/candidates/${match.candidateId}`}>{match.candidateName}</Link>
 																</strong>
 																<p>
-																	{match.currentJobTitle || 'No current title'} | Owner: {match.ownerName || '-'}
+																	{match.currentJobTitle || 'No current title'} | Assigned Recruiter: {match.ownerName || '-'}
 																</p>
 																<p>
 																	Match score: <strong>{match.scorePercent}%</strong>

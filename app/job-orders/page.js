@@ -288,7 +288,7 @@ export default function JobOrdersPage() {
 			label: 'Submissions'
 		},
 		{ key: 'clientFeedbackCount', label: 'Client Feedback', defaultVisible: false },
-		{ key: 'owner', label: 'Owner' },
+		{ key: 'owner', label: 'Assigned Recruiter' },
 		{ key: 'contact', label: 'Contact', defaultVisible: false },
 		{ key: 'locationLabel', label: 'Location', defaultVisible: false },
 		{ key: 'employmentTypeLabel', label: 'Employment Type', defaultVisible: false },

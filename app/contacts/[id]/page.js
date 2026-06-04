@@ -290,7 +290,7 @@ export default function ContactDetailsPage() {
 			return;
 		}
 		if (!form.ownerId) {
-			setSaveState({ saving: false, error: 'Owner is required.', success: '' });
+			setSaveState({ saving: false, error: 'Assigned Recruiter is required.', success: '' });
 			return;
 		}
 		if (!form.clientId) {
@@ -533,7 +533,7 @@ export default function ContactDetailsPage() {
 						</strong>
 					</p>
 					<p>
-						<span>Owner</span>
+						<span>Assigned Recruiter</span>
 						<strong>
 							{contact.ownerUser
 								? `${contact.ownerUser.firstName} ${contact.ownerUser.lastName}`
@@ -547,7 +547,7 @@ export default function ContactDetailsPage() {
 				<article className="panel panel-spacious" ref={detailsPanelRef}>
 					<h3>Contact Details</h3>
 					<p className="panel-subtext">
-						Edit contact details and save updates. Required: Name, Email, Phone, Source, Owner, Client.
+						Edit contact details and save updates. Required: Name, Email, Phone, Source, Assigned Recruiter, Client.
 					</p>
 					<form onSubmit={onSave} className="detail-form">
 						<section className="form-section">
@@ -639,7 +639,7 @@ export default function ContactDetailsPage() {
 						</section>
 
 						<section className="form-section">
-							<h4>Ownership</h4>
+							<h4>Recruiter Assignment</h4>
 							<div className="detail-form-grid-2">
 								<FormField label="Source" required>
 									<select
@@ -655,14 +655,14 @@ export default function ContactDetailsPage() {
 										))}
 									</select>
 								</FormField>
-								<FormField label="Owner" required>
+								<FormField label="Assigned Recruiter" required>
 									<LookupTypeaheadSelect
 										entity="users"
 										lookupParams={{}}
 										value={form.ownerId}
 										onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-										placeholder="Search owner"
-										label="Owner"
+										placeholder="Search assigned recruiter"
+										label="Assigned Recruiter"
 										emptyLabel="No matching users."
 									/>
 								</FormField>

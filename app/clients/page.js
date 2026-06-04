@@ -140,7 +140,7 @@ export default function ClientsPage() {
 		{ key: 'name', label: 'Name' },
 		{ key: 'industry', label: 'Industry' },
 		{ key: 'status', label: 'Status' },
-		{ key: 'owner', label: 'Owner' },
+		{ key: 'owner', label: 'Assigned Recruiter' },
 		{ key: 'locationLabel', label: 'Location', defaultVisible: false },
 		{ key: 'divisionName', label: 'Division', defaultVisible: false },
 		{ key: 'websiteLabel', label: 'Website', defaultVisible: false },
@@ -209,7 +209,7 @@ export default function ClientsPage() {
 							</div>
 						) : (
 							<input
-								placeholder="Search client, industry, status, owner"
+								placeholder="Search client, industry, status, recruiter"
 								value={query}
 								onChange={(e) => setQuery(e.target.value)}
 							/>

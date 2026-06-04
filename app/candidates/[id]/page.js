@@ -1078,8 +1078,8 @@ export default function CandidateDetailsPage() {
 				saving: false,
 				error:
 					isAdmin
-						? 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Division, Owner), use valid email/URLs, and add a status change reason when changing status.'
-						: 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Owner), use valid email/URLs, and add a status change reason when changing status.',
+						? 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Division, Assigned Recruiter), use valid email/URLs, and add a status change reason when changing status.'
+						: 'Complete required fields (First Name, Last Name, Email, Mobile, Stage, Source, Assigned Recruiter), use valid email/URLs, and add a status change reason when changing status.',
 				success: ''
 			});
 			return;
@@ -1889,14 +1889,14 @@ export default function CandidateDetailsPage() {
 									/>
 								</FormField>
 							) : null}
-							<FormField label="Owner" required>
+							<FormField label="Assigned Recruiter" required>
 								<LookupTypeaheadSelect
 									entity="users"
 									lookupParams={isAdmin && editForm.divisionId ? { divisionId: editForm.divisionId } : {}}
 									value={editForm.ownerId}
 									onChange={(nextValue) => setEditForm((f) => ({ ...f, ownerId: nextValue }))}
-									placeholder={isAdmin && !editForm.divisionId ? 'Select division first' : 'Search owner'}
-									label="Owner"
+									placeholder={isAdmin && !editForm.divisionId ? 'Select division first' : 'Search assigned recruiter'}
+									label="Assigned Recruiter"
 									disabled={isAdmin && !editForm.divisionId}
 									emptyLabel="No matching users."
 								/>

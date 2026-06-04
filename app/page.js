@@ -1,248 +1,512 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import {
+	ArrowRight,
+	BadgeCheck,
+	BriefcaseBusiness,
+	CheckCircle2,
+	ClipboardCheck,
+	Eye,
+	FileSearch,
+	MailCheck,
+	MessagesSquare,
+	Network,
+	Rocket,
+	ShieldCheck,
+	Sparkles,
+	Timer,
+	UserRoundSearch,
+} from "lucide-react";
 import styles from "./page.module.css";
 
+const fadeUp = {
+	hidden: { opacity: 0, y: 18 },
+	visible: { opacity: 1, y: 0 },
+};
+
+const metrics = [
+	["Free", "for candidates"],
+	["Curated", "shortlists"],
+	["Managed", "recruitment flow"],
+];
+
+const signalTiles = [
+	{ icon: Network, label: "Every application stays tied to the right job" },
+	{ icon: Eye, label: "Employers see only profiles recruiters promote" },
+	{ icon: Timer, label: "Hiring teams review cleaner shortlists faster" },
+];
+
+const candidateCards = [
+	["Aarav M.", "Sales Executive", "92% fit", "Ready for review"],
+	["Nisha K.", "Healthcare Recruiter", "88% fit", "Screening call done"],
+	["Dev R.", "Operations Lead", "84% fit", "Resume verified"],
+];
+
+const activity = [
+	"Application received",
+	"Resume reviewed",
+	"Recruiter note added",
+	"Shared with employer",
+];
+
+const operatingFlow = [
+	{
+		stage: "01",
+		title: "Intake",
+		text: "Public applications, employer requests, and resumes enter one managed recruitment flow.",
+	},
+	{
+		stage: "02",
+		title: "Screen",
+		text: "Recruiters review fit, resume quality, notes, and readiness before a candidate moves forward.",
+	},
+	{
+		stage: "03",
+		title: "Promote",
+		text: "Only selected submissions become client-visible for employer review and feedback.",
+	},
+	{
+		stage: "04",
+		title: "Close",
+		text: "Interviews, offers, placements, and follow-up stay connected to the original requirement.",
+	},
+];
+
+const orbitItems = [
+	["01", "Application", "Candidate applies to one verified opening."],
+	["02", "Screening", "Recruiters review resume quality and fit."],
+	["03", "Promotion", "Ready profiles become employer-visible."],
+	["04", "Decision", "Feedback, interviews, and placements stay connected."],
+];
+
+const roles = [
+	{
+		label: "For candidates",
+		title: "Apply to verified openings without placement fees.",
+		points: ["Browse open roles", "Upload your resume", "Get reviewed by recruiters"],
+		href: "/careers",
+		cta: "Browse jobs",
+	},
+	{
+		label: "For employers",
+		title: "Get screened profiles instead of raw resume volume.",
+		points: ["Submit a hiring request", "Track shortlist readiness", "Review curated candidates"],
+		href: "/employer/request-access",
+		cta: "Request hiring support",
+	},
+];
+
+const controlSignals = [
+	{
+		icon: BadgeCheck,
+		label: "Employer verified",
+		value: "Approved",
+	},
+	{
+		icon: FileSearch,
+		label: "Resume reviewed",
+		value: "Quality checked",
+	},
+	{
+		icon: MessagesSquare,
+		label: "Feedback loop",
+		value: "Portal ready",
+	},
+];
+
+const handoffRows = [
+	["Intake", "12", "New applications"],
+	["Screening", "7", "Recruiter reviewed"],
+	["Promoted", "4", "Client-visible"],
+];
+
+const finalSteps = [
+	{ icon: UserRoundSearch, title: "Candidates apply", text: "Public jobs stay simple and focused." },
+	{ icon: ClipboardCheck, title: "Recruiters qualify", text: "Profiles are screened before employer review." },
+	{ icon: MailCheck, title: "Employers decide", text: "Shortlists, feedback, and interviews stay connected." },
+];
+
 export default function HomePage() {
+	const reduceMotion = useReducedMotion();
+	const transition = reduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.22, 1, 0.36, 1] };
+	const orbitRef = useRef(null);
+	const { scrollYProgress } = useScroll({
+		target: orbitRef,
+		offset: ["start end", "end start"],
+	});
+	const pathScale = useTransform(scrollYProgress, [0.12, 0.82], [0.08, 1]);
+	const gateLift = useTransform(scrollYProgress, [0, 0.5, 1], [18, -12, 10]);
+
 	return (
-		<main className={styles.home}>
-			<header className={styles.navbar}>
-				<div className={`${styles.container} ${styles.navInner}`}>
-					<Link href="/" className={styles.brand}>
-						<div className={styles.logo}>V</div>
-						<div>
-							<p className={styles.brandTitle}>Vriksham Jobs</p>
-							<p className={styles.brandSubtitle}>Managed recruitment platform</p>
-						</div>
+		<main className={styles.preview}>
+			<div className={styles.ambientLayer} aria-hidden="true">
+				<span />
+				<span />
+				<span />
+			</div>
+			<header className={styles.header}>
+				<div className={styles.nav}>
+					<Link href="/" className={styles.brand} aria-label="Vriksham Jobs home">
+						<img src="/branding/vriksham-jobs.png" alt="" className={styles.logo} />
+						<span>
+							<strong>Vriksham Jobs</strong>
+							<small>Managed recruitment platform</small>
+						</span>
 					</Link>
 
-					<nav className={styles.navLinks}>
-						<a href="#how-it-works">How it works</a>
-						<a href="#candidates">Candidates</a>
-						<a href="#employers">Employers</a>
-						<a href="#plans">Hiring plans</a>
+					<nav className={styles.links} aria-label="Landing page sections">
+						<a href="#workflow">Workflow</a>
+						<a href="#control-room">Control room</a>
+						<a href="#audiences">Audiences</a>
+						<a href="#plans">Plans</a>
 					</nav>
 
-					<div className={styles.navActions}>
-						<Link href="/careers" className={`${styles.btn} ${styles.btnLight}`}>
-							Browse Jobs
+					<div className={styles.actions}>
+						<Link href="/careers" className={styles.secondaryAction}>
+							Browse jobs
 						</Link>
-						<Link href="/employer/request-access" className={`${styles.btn} ${styles.btnDark}`}>
-							Hire Talent
+						<Link href="/employer/request-access" className={styles.primaryAction}>
+							Hire talent
 						</Link>
 					</div>
 				</div>
 			</header>
 
 			<section className={styles.hero}>
-				<div className={`${styles.container} ${styles.heroGrid}`}>
-					<div>
-						<p className={styles.pill}>Managed hiring support for employers and job seekers</p>
-						<h1>Curated hiring, managed by real recruiters.</h1>
-						<p className={styles.heroText}>
-							Vriksham Jobs connects job seekers with verified employer requirements through a managed
-							recruitment process. Candidates apply for free, while Vriksham screens, evaluates, and
-							shortlists suitable profiles before employers review them.
+				<div className={styles.heroGrid}>
+					<motion.div
+						className={styles.heroCopy}
+						initial="hidden"
+						animate="visible"
+						variants={fadeUp}
+						transition={transition}
+					>
+						<p className={styles.kicker}>
+							<Sparkles size={16} aria-hidden="true" />
+							Recruiter-managed hiring, not resume dumping
+						</p>
+						<h1>Turn job applications into employer-ready shortlists.</h1>
+						<p className={styles.lede}>
+							Vriksham Jobs sits between candidates and employers as the operating layer for hiring:
+							applications come in, recruiters screen them, and only ready profiles move forward.
 						</p>
 
 						<div className={styles.heroActions}>
-							<Link href="/careers" className={`${styles.btn} ${styles.btnPrimary}`}>
-								Browse Jobs
+							<Link href="/careers" className={styles.heroPrimary}>
+								Find open jobs
+								<ArrowRight size={18} aria-hidden="true" />
 							</Link>
-							<Link href="/employer/request-access" className={`${styles.btn} ${styles.btnOutline}`}>
-								Request Hiring Support
+							<Link href="/employer/request-access" className={styles.heroSecondary}>
+								Request hiring support
 							</Link>
 						</div>
 
-						<div className={styles.stats}>
-							<div>
-								<strong>Free</strong>
-								<span>for job seekers</span>
-							</div>
-							<div>
-								<strong>Screened</strong>
-								<span>candidate shortlists</span>
-							</div>
-							<div>
-								<strong>Managed</strong>
-								<span>recruitment workflow</span>
-							</div>
-						</div>
-					</div>
-
-					<div className={styles.pipelineCard}>
-						<div className={styles.pipelineDark}>
-							<div className={styles.pipelineTop}>
-								<div>
-									<span>Vriksham Hiring Pipeline</span>
-									<h2>Example Requirement</h2>
+						<div className={styles.metrics} aria-label="Vriksham Jobs highlights">
+							{metrics.map(([value, label]) => (
+								<div key={value}>
+									<strong>{value}</strong>
+									<span>{label}</span>
 								</div>
-								<p>Active</p>
+							))}
+						</div>
+					</motion.div>
+
+					<motion.div
+						className={styles.commandCenter}
+						initial={reduceMotion ? false : { opacity: 0, scale: 0.97, y: 18 }}
+						animate={reduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+						transition={{ ...transition, delay: reduceMotion ? 0 : 0.1 }}
+					>
+						<div className={styles.commandTop}>
+							<div>
+								<span>Recruiter workspace</span>
+								<h2>Senior Sales Executive</h2>
+							</div>
+							<p>4 shortlisted</p>
+						</div>
+
+						<div className={styles.commandGrid}>
+							<div className={styles.candidateStack}>
+								{candidateCards.map(([name, role, match, status], index) => (
+									<motion.div
+										key={name}
+										className={styles.candidateCard}
+										initial={reduceMotion ? false : { opacity: 0, x: 18 }}
+										animate={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+										transition={{ ...transition, delay: reduceMotion ? 0 : 0.18 + index * 0.08 }}
+									>
+										<div className={styles.avatar}>{name.charAt(0)}</div>
+										<div>
+											<strong>{name}</strong>
+											<span>{role}</span>
+										</div>
+										<p>{match}</p>
+										<small>{status}</small>
+									</motion.div>
+								))}
 							</div>
 
-							<div className={styles.pipelineList}>
-								<PipelineItem title="Applications Received" count="42" />
-								<PipelineItem title="Vriksham Screening" count="18" />
-								<PipelineItem title="Internal Evaluation" count="9" />
-								<PipelineItem title="Shortlisted Profiles" count="4" />
-								<PipelineItem title="Employer Review" count="3" muted />
+							<div className={styles.activityRail}>
+								<p>Pipeline motion</p>
+								{activity.map((item, index) => (
+									<div key={item} className={styles.activityItem}>
+										<span>{index + 1}</span>
+										<strong>{item}</strong>
+									</div>
+								))}
 							</div>
 						</div>
 
-						<div className={styles.infoGrid}>
-							<div>
-								<h3>Candidate-first process</h3>
-								<p>Job seekers apply for free and are reviewed by the Vriksham recruitment team.</p>
+						<div className={styles.reviewCard}>
+							<div className={styles.reviewIcon}>
+								<ShieldCheck size={22} aria-hidden="true" />
 							</div>
 							<div>
-								<h3>Employer-ready shortlists</h3>
-								<p>Employers receive curated profiles instead of unfiltered applications.</p>
+								<strong>Client-visible only after review</strong>
+								<span>Recruiters control which candidates reach employer review.</span>
 							</div>
 						</div>
-					</div>
+					</motion.div>
 				</div>
 			</section>
 
-			<section id="how-it-works" className={`${styles.section} ${styles.white}`}>
-				<div className={styles.container}>
-					<div className={styles.sectionHeading}>
-						<p className={styles.sectionLabel}>How it works</p>
-						<h2>A controlled hiring flow for better quality.</h2>
+			<section className={styles.signalBand} aria-label="Vriksham Jobs operating principles">
+				<div className={styles.signalGrid}>
+					{signalTiles.map((tile) => (
+						<div key={tile.label}>
+							<tile.icon size={20} aria-hidden="true" />
+							<p>{tile.label}</p>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<section id="workflow" className={styles.section}>
+				<div className={styles.sectionHeading}>
+					<p>How it works</p>
+					<h2>The product flow mirrors the real recruitment workflow.</h2>
+				</div>
+
+				<div className={styles.timeline}>
+					{operatingFlow.map((item, index) => (
+						<motion.article
+							key={item.stage}
+							initial={reduceMotion ? false : "hidden"}
+							whileInView={reduceMotion ? undefined : "visible"}
+							viewport={{ once: true, margin: "-80px" }}
+							variants={fadeUp}
+							transition={{ ...transition, delay: reduceMotion ? 0 : index * 0.08 }}
+						>
+							<span>{item.stage}</span>
+							<h3>{item.title}</h3>
+							<p>{item.text}</p>
+						</motion.article>
+					))}
+				</div>
+			</section>
+
+			<section ref={orbitRef} className={styles.orbitSection}>
+				<div className={styles.orbitSticky}>
+					<div className={styles.orbitCopy}>
+						<p>Scroll the hiring path</p>
+						<h2>Applications move through a controlled review path.</h2>
 						<span>
-							Vriksham acts as the recruitment operations layer between job seekers and employers.
+							The visual flow below mirrors the product rule: nothing reaches an employer until
+							Vriksham has reviewed and promoted it.
 						</span>
 					</div>
 
-					<div className={styles.steps}>
-						<StepCard
-							number="01"
-							title="Employer submits requirement"
-							text="Companies share role details, hiring location, and the type of hiring support they need."
-						/>
-						<StepCard
-							number="02"
-							title="Vriksham reviews and approves"
-							text="Our team verifies the employer request and assigns it to the right internal owner."
-						/>
-						<StepCard
-							number="03"
-							title="Candidates apply for free"
-							text="Job seekers browse open jobs, submit their profile, and upload resumes without paying fees."
-						/>
-						<StepCard
-							number="04"
-							title="Employers review shortlisted talent"
-							text="Only curated profiles are shared with employers through the client review portal."
-						/>
-					</div>
+					<motion.div className={styles.flowScene}>
+						<div className={styles.flowRail} aria-hidden="true">
+							<motion.span
+								style={reduceMotion ? undefined : { scaleY: pathScale }}
+							/>
+						</div>
+
+						<div className={styles.flowRows}>
+							{orbitItems.map(([number, title, text], index) => (
+								<motion.article
+									key={number}
+									className={styles.flowCard}
+									initial={reduceMotion ? false : { opacity: 0, x: -16 }}
+									whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+									viewport={{ once: true, margin: "-80px" }}
+									transition={{ ...transition, delay: reduceMotion ? 0 : index * 0.06 }}
+									whileHover={reduceMotion ? undefined : { x: 4 }}
+								>
+									<span>{number}</span>
+									<div>
+										<strong>{title}</strong>
+										<p>{text}</p>
+									</div>
+								</motion.article>
+							))}
+						</div>
+
+						<motion.div
+							className={styles.flowGate}
+							style={reduceMotion ? undefined : { y: gateLift }}
+						>
+							<img src="/branding/vriksham-jobs.png" alt="" />
+							<strong>Vriksham Review Gate</strong>
+							<span>only promoted profiles become employer-visible</span>
+						</motion.div>
+					</motion.div>
 				</div>
 			</section>
 
-			<section className={styles.section}>
-				<div className={`${styles.container} ${styles.twoCol}`}>
-					<div id="candidates" className={`${styles.panel} ${styles.panelGreen}`}>
-						<p className={styles.sectionLabel}>For candidates</p>
-						<h2>Find verified job opportunities.</h2>
-						<p>
-							Apply to open jobs, share your resume, and let Vriksham help match your profile with
-							employer requirements.
-						</p>
-						<ul>
-							<li>Free job applications</li>
-							<li>Resume-based profile review</li>
-							<li>Recruiter-screened opportunities</li>
-						</ul>
-						<Link href="/careers" className={`${styles.btn} ${styles.btnLight}`}>
-							Browse Open Jobs
-						</Link>
+			<section id="control-room" className={`${styles.section} ${styles.controlRoom}`}>
+				<motion.div
+					className={styles.controlCopy}
+					initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+					whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-80px" }}
+					transition={transition}
+				>
+					<p>Recruitment control room</p>
+					<h2>Every candidate moves through a visible decision lane.</h2>
+					<span>
+						Vriksham is not just a form and a database. It is a recruiter-led operating room where
+						applications, screening, client visibility, and final feedback stay connected.
+					</span>
+				</motion.div>
+
+				<motion.div
+					className={styles.controlPanel}
+					initial={reduceMotion ? false : { opacity: 0, scale: 0.98, y: 18 }}
+					whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+					viewport={{ once: true, margin: "-80px" }}
+					transition={{ ...transition, delay: reduceMotion ? 0 : 0.08 }}
+				>
+					<div className={styles.controlBeam} aria-hidden="true" />
+					<div className={styles.controlHeader}>
+						<strong>Live handoff board</strong>
+						<span>Client visibility locked</span>
 					</div>
 
-					<div id="employers" className={`${styles.panel} ${styles.panelWhite}`}>
-						<p className={styles.sectionLabel}>For employers</p>
-						<h2>Receive shortlisted candidates, not raw resumes.</h2>
-						<p>
-							Submit your hiring requirement and Vriksham will review, screen, and shortlist suitable
-							profiles before employer review.
-						</p>
-						<ul>
-							<li>Single requirement hiring support</li>
-							<li>End-to-end managed hiring option</li>
-							<li>Shortlisted profile review portal</li>
-						</ul>
-						<Link href="/employer/request-access" className={`${styles.btn} ${styles.btnDark}`}>
-							Request Employer Access
-						</Link>
+					<div className={styles.handoffBoard}>
+						<div className={styles.handoffRows}>
+							{handoffRows.map(([stage, count, detail], index) => (
+								<motion.div
+									key={stage}
+									className={styles.handoffRow}
+									initial={reduceMotion ? false : { opacity: 0, x: -12 }}
+									whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }}
+									viewport={{ once: true }}
+									transition={{ ...transition, delay: reduceMotion ? 0 : 0.12 + index * 0.08 }}
+								>
+									<span>{stage}</span>
+									<strong>{count}</strong>
+									<small>{detail}</small>
+								</motion.div>
+							))}
+						</div>
+
+						<div className={styles.handoffCard}>
+							<img src="/branding/vriksham-jobs.png" alt="" />
+							<strong>Promotion Gate</strong>
+							<span>Only recruiter-approved submissions enter employer review.</span>
+						</div>
 					</div>
+
+					<div className={styles.healthGrid}>
+						{controlSignals.map((signal) => (
+							<div key={signal.label}>
+								<signal.icon size={19} aria-hidden="true" />
+								<strong>{signal.label}</strong>
+								<span>{signal.value}</span>
+							</div>
+						))}
+					</div>
+				</motion.div>
+			</section>
+
+			<section id="audiences" className={`${styles.section} ${styles.audienceSection}`}>
+				<div className={styles.audienceHeading}>
+					<p>Two sides, one managed flow</p>
+					<h2>Candidates get clarity. Employers get control.</h2>
+				</div>
+
+				<div className={styles.roleGrid}>
+					{roles.map((role, index) => (
+						<motion.article
+							key={role.label}
+							className={styles.roleCard}
+							initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+							whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-80px" }}
+							transition={{ ...transition, delay: reduceMotion ? 0 : index * 0.08 }}
+						>
+							<div className={styles.roleIcon}>
+								{index === 0 ? (
+									<UserRoundSearch size={22} aria-hidden="true" />
+								) : (
+									<BriefcaseBusiness size={22} aria-hidden="true" />
+								)}
+							</div>
+							<p>{role.label}</p>
+							<h2>{role.title}</h2>
+							<ul>
+								{role.points.map((point) => (
+									<li key={point}>
+										<CheckCircle2 size={18} aria-hidden="true" />
+										{point}
+									</li>
+								))}
+							</ul>
+							<Link href={role.href}>
+								{role.cta}
+								<ArrowRight size={17} aria-hidden="true" />
+							</Link>
+							<div className={styles.roleTrace} aria-hidden="true">
+								<span />
+								<span />
+								<span />
+							</div>
+						</motion.article>
+					))}
 				</div>
 			</section>
 
-			<section id="plans" className={`${styles.section} ${styles.pricing}`}>
-				<div className={`${styles.container} ${styles.pricingGrid}`}>
-					<div className={styles.pricingIntro}>
-						<p className={styles.sectionLabel}>Hiring plans</p>
-						<h2>Choose the right hiring path.</h2>
-						<p>
-							Candidates apply for free. Employers can request support based on whether they have one
-							specific role or need Vriksham to manage the hiring process end to end.
-						</p>
-					</div>
-
-					<div className={styles.priceCards}>
-						<PriceCard
-							title="Single Requirement Hiring"
-							price="Request Based"
-							text="For one specific job requirement. After approval and payment, Vriksham screens applicants and shares shortlisted profiles when ready."
-							highlight
-						/>
-						<PriceCard
-							title="End-to-End Hiring"
-							price="Custom Pricing"
-							text="For employers who want Vriksham to manage screening, coordination, interview support, and hiring follow-up."
-						/>
-					</div>
-				</div>
-			</section>
-
-			<footer className={styles.footer}>
-				<div className={`${styles.container} ${styles.footerInner}`}>
-					<p>© {new Date().getFullYear()} Vriksham Jobs. All rights reserved.</p>
+			<section id="plans" className={`${styles.section} ${styles.planSection}`}>
+				<div className={styles.planPanel}>
 					<div>
-						<Link href="/careers">Careers</Link>
-						<Link href="/employer/request-access">Employer Request</Link>
-						<Link href="/login?next=/admin">Admin Login</Link>
+						<p className={styles.kicker}>
+							<Rocket size={16} aria-hidden="true" />
+							Launch the hiring lane
+						</p>
+						<h2>Start with one role and let the workflow prove itself.</h2>
+					</div>
+					<div className={styles.launchRail}>
+						{finalSteps.map((step, index) => (
+							<motion.div
+								key={step.title}
+								initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+								whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-80px" }}
+								transition={{ ...transition, delay: reduceMotion ? 0 : index * 0.08 }}
+							>
+								<step.icon size={20} aria-hidden="true" />
+								<strong>{step.title}</strong>
+								<p>{step.text}</p>
+							</motion.div>
+						))}
+					</div>
+
+					<div className={styles.finalCtas}>
+						<Link href="/employer/request-access" className={styles.heroPrimary}>
+							Request hiring support
+							<ArrowRight size={18} aria-hidden="true" />
+						</Link>
+						<Link href="/careers" className={styles.heroSecondary}>
+							Browse open jobs
+						</Link>
 					</div>
 				</div>
-			</footer>
+			</section>
 		</main>
-	);
-}
-
-function PipelineItem({ title, count, muted = false }) {
-	return (
-		<div className={styles.pipelineItem}>
-			<div>
-				<span className={muted ? `${styles.dot} ${styles.dotMuted}` : styles.dot} />
-				<p>{title}</p>
-			</div>
-			<strong>{count}</strong>
-		</div>
-	);
-}
-
-function StepCard({ number, title, text }) {
-	return (
-		<div className={styles.stepCard}>
-			<span>{number}</span>
-			<h3>{title}</h3>
-			<p>{text}</p>
-		</div>
-	);
-}
-
-function PriceCard({ title, price, text, highlight = false }) {
-	return (
-		<div className={highlight ? `${styles.priceCard} ${styles.priceCardHighlight}` : styles.priceCard}>
-			<h3>{title}</h3>
-			<strong>{price}</strong>
-			<p>{text}</p>
-		</div>
 	);
 }

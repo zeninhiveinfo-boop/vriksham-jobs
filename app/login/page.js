@@ -91,7 +91,7 @@ function LoginPageContent() {
 			<section className={styles.shell}>
 				<div className={styles.left}>
 					<Link href="/" className={styles.brand}>
-						<div className={styles.logo}>V</div>
+						<img src="/branding/vriksham-jobs.png" alt="" className={styles.logo} />
 						<div className={styles.brandText}>
 							<strong>Vriksham Jobs</strong>
 							<span>Curated hiring platform</span>

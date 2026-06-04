@@ -371,7 +371,7 @@ function NewJobOrdersPageContent() {
 			return;
 		}
 		if (!form.ownerId) {
-			setError('Owner is required.');
+			setError('Assigned Recruiter is required.');
 			return;
 		}
 		if (!form.status) {
@@ -608,14 +608,14 @@ function NewJobOrdersPageContent() {
 								/>
 							</FormField>
 						) : null}
-							<FormField label="Owner" required>
+							<FormField label="Assigned Recruiter" required>
 								<LookupTypeaheadSelect
 									entity="users"
 									lookupParams={ownerLookupParams}
 									value={form.ownerId}
 									onChange={(nextValue) => setForm((f) => ({ ...f, ownerId: nextValue }))}
-									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search owner (required)'}
-									label="Owner"
+									placeholder={isAdmin && !form.divisionId ? 'Select division first' : 'Search assigned recruiter (required)'}
+									label="Assigned Recruiter"
 									disabled={isAdmin && !form.divisionId}
 									emptyLabel="No matching users."
 								/>
@@ -638,7 +638,7 @@ function NewJobOrdersPageContent() {
 										? 'Select division first'
 										: form.ownerId
 											? 'Search client'
-											: 'Select owner first'
+											: 'Select assigned recruiter first'
 								}
 								label="Client"
 								emptyLabel="No matching clients."
@@ -660,7 +660,7 @@ function NewJobOrdersPageContent() {
 											? form.clientId
 												? 'Search hiring manager'
 												: 'Select client first'
-											: 'Select owner first'
+											: 'Select assigned recruiter first'
 								}
 								label="Hiring Manager"
 								disabled={contactLocked || (isAdmin ? !form.divisionId : !form.ownerId) || !form.clientId}
@@ -728,7 +728,7 @@ function NewJobOrdersPageContent() {
 				title="Job Order Setup"
 				intro="This record drives matching, submissions, interviews, the client portal, and public job publishing when enabled."
 				checklist={[
-					'Set the correct owner, client, hiring manager, status, and employment type before saving.',
+					'Set the correct assigned recruiter, client, hiring manager, status, and employment type before saving.',
 					'Use a real ZIP code and location so search and matching stay credible.',
 					'If you plan to publish publicly, finish the public description before turning that on.'
 				]}
