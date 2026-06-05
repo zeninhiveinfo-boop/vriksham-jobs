@@ -277,7 +277,7 @@ async function patchJob_orders_idHandler(req, { params }) {
 			divisionIdInput: clientDivisionId
 		});
 		if (ownership.divisionId !== clientDivisionId) {
-			throw new AccessControlError('Owner must belong to the same division as the selected client.', 400);
+			throw new AccessControlError('Assigned recruiter must belong to the same division as the selected client.', 400);
 		}
 
 		const jobOrder = await prisma.jobOrder.update({

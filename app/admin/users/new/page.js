@@ -160,7 +160,7 @@ export default function NewUserPage() {
 							</span>
 							<span className="switch-copy">
 								<span className="switch-label">Active User</span>
-								<span className="switch-hint">Can be selected as an owner.</span>
+								<span className="switch-hint">Can be selected as an assigned recruiter.</span>
 							</span>
 						</label>
 						<SaveActionButton

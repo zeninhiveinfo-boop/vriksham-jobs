@@ -204,7 +204,7 @@ export async function POST(req, context) {
 
             if (!existingClient.divisionId || !existingClient.ownerId) {
                 return NextResponse.json(
-                    { error: 'Assign division and owner before approving this employer request.' },
+                    { error: 'Assign division and assigned recruiter before approving this employer request.' },
                     { status: 400 }
                 );
             }

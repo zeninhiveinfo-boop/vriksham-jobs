@@ -613,7 +613,7 @@ export default function AppShell({ children }) {
 						<div className="demo-welcome-body">
 							<ul className="demo-welcome-list">
 								<li>Open candidates, job orders, submissions, and interviews to explore the seeded workflow end to end.</li>
-								<li>Use the dashboard and reports to review live seeded activity, pipeline counts, and owner performance.</li>
+								<li>Use the dashboard and reports to review live seeded activity, pipeline counts, and assigned recruiter performance.</li>
 								<li>
 									Forward an email to <strong>demo@vrikshamjobs.com</strong> to trigger the Postmark inbound workflow.
 									The forwarded message must include an email address that matches an existing candidate or contact record.

@@ -118,7 +118,7 @@ function toCandidateSheetRows(detail) {
 			Name: row.title || '-',
 			Title: jobTitle || '-',
 			Company: company || '-',
-			Owner: metaValue(row.meta, 'Owner'),
+			'Assigned Recruiter': metaValue(row.meta, 'Assigned Recruiter') || metaValue(row.meta, 'Owner'),
 			Updated: parseDateTimeLabel(metaValue(row.meta, 'Updated')) || metaValue(row.meta, 'Updated'),
 			Status: chipAt(row, 0)
 		};
@@ -131,7 +131,7 @@ function toJobOrderSheetRows(detail) {
 	return sortByStatusAndPrimary(rows, row => chipAt(row, 0), row => row.title).map((row) => ({
 		Title: row.title || '-',
 		Client: row.subtitle || '-',
-		Owner: metaValue(row.meta, 'Owner'),
+		'Assigned Recruiter': metaValue(row.meta, 'Assigned Recruiter') || metaValue(row.meta, 'Owner'),
 		Updated: parseDateTimeLabel(metaValue(row.meta, 'Updated')) || metaValue(row.meta, 'Updated'),
 		Opened: parseDateTimeLabel(metaValue(row.meta, 'Opened')) || metaValue(row.meta, 'Opened'),
 		Status: chipAt(row, 0)
@@ -252,7 +252,7 @@ function appendSummarySheet(workbook, { report, selectedDivision, selectedOwner 
 	worksheet.addRow(['Start Date', report.appliedFilters.startDate]);
 	worksheet.addRow(['End Date', report.appliedFilters.endDate]);
 	worksheet.addRow(['Division', selectedDivision?.name || 'All']);
-	worksheet.addRow(['Owner', selectedOwner?.name || (report.scope.lockedToOwnData ? 'Current Recruiter' : 'All')]);
+	worksheet.addRow(['Assigned Recruiter', selectedOwner?.name || (report.scope.lockedToOwnData ? 'Current Recruiter' : 'All')]);
 	worksheet.addRow([]);
 	worksheet.addRow(['Metric', 'Count']);
 	worksheet.addRow(['New Candidates', report.summary.candidatesAdded]);

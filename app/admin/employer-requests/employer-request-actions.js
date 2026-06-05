@@ -116,7 +116,7 @@ export default function EmployerRequestActions({
 			) : null}
 
 			{showAssignmentHint ? (
-				<span className={styles.assignmentActionHint}>Assign division/owner first</span>
+				<span className={styles.assignmentActionHint}>Assign division and assigned recruiter first</span>
 			) : null}
 
 			{showApproveReject ? (

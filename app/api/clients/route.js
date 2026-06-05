@@ -102,7 +102,7 @@ async function postClientsHandler(req) {
 			? { ...parsed.data, divisionId: defaultDivisionForAdmin.id }
 			: parsed.data;
 		if (!parsed.data.ownerId) {
-			return NextResponse.json({ error: 'Owner is required.' }, { status: 400 });
+			return NextResponse.json({ error: 'Assigned Recruiter is required.' }, { status: 400 });
 		}
 		const customFieldValidation = await validateAndNormalizeCustomFieldValues({
 			prisma,

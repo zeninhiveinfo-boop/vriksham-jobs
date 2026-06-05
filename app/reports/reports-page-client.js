@@ -354,13 +354,13 @@ export default function ReportsPage() {
 							</select>
 						</label>
 						<label>
-							<span>Owner</span>
+							<span>Assigned Recruiter</span>
 							<select
 								value={filters.ownerId}
 								onChange={(event) => setFilters((current) => ({ ...current, ownerId: event.target.value }))}
 								disabled={!report.scope.canFilterOwner || loading || applying}
 							>
-								<option value="">{report.scope.lockedToOwnData ? 'Your Data Only' : 'All Owners'}</option>
+								<option value="">{report.scope.lockedToOwnData ? 'Your Data Only' : 'All Assigned Recruiters'}</option>
 								{report.filterOptions.owners.map((owner) => (
 									<option key={owner.id} value={owner.id}>
 										{owner.name}

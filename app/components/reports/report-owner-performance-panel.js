@@ -19,7 +19,7 @@ function OwnerMetricChip({ className, count, label, onClick }) {
 export default function ReportOwnerPerformancePanel({ owners, onSelectOwnerDetail }) {
 	return (
 		<article className="panel panel-spacious">
-			<h3>Owner Performance</h3>
+			<h3>Assigned Recruiter Performance</h3>
 			{owners.length === 0 ? <p className="panel-subtext">No records yet.</p> : null}
 			{owners.length > 0 ? (
 				<div className="report-owner-list">

@@ -171,7 +171,7 @@ async function patchClients_idHandler(req, { params }) {
 			return NextResponse.json({ error: 'Division is required for administrators.' }, { status: 400 });
 		}
 		if (!parsed.data.ownerId) {
-			return NextResponse.json({ error: 'Owner is required.' }, { status: 400 });
+			return NextResponse.json({ error: 'Assigned Recruiter is required.' }, { status: 400 });
 		}
 		const existingCustomFields =
 			existing?.customFields && typeof existing.customFields === 'object' && !Array.isArray(existing.customFields)
