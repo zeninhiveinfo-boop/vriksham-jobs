@@ -2368,7 +2368,7 @@ export default function CandidateDetailsPage() {
 												<div>
 													<div className="simple-list-title-row">
 														<strong>{attachment.fileName}</strong>
-														{attachment.isResume ? <span className="chip chip-resume">Resume</span> : null}
+														{attachment.isResume ? <span className="chip chip-resume">Primary Resume</span> : null}
 													</div>
 													<p>{formatFileSize(attachment.sizeBytes)}</p>
 													<p className="simple-list-meta">

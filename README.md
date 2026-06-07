@@ -40,7 +40,7 @@ When demo mode is enabled, authenticated demo users see a one-time welcome modal
 - Operational Reporting module with scoped KPIs, pipeline totals, drill-through detail, daily trend, owner performance, and Excel export with summary + entity tabs that mirror report-modal detail
 - List + Kanban pipeline views for Candidates and Job Orders with drag-and-drop status updates
 - Admin-defined custom fields for Candidates, Clients, Contacts, Job Orders, Submissions, Interviews, and Placements
-- AI-assisted resume parsing with fallback parsing if AI is unavailable
+- AI-assisted resume parsing with fallback parsing if AI is unavailable; recruiter-triggered resume parsing enriches reviewed drafts, and brand-new public career applicants are enriched from their uploaded resume without auto-overwriting existing candidates
 - AI candidate summaries opened from a dedicated sparkles button on candidate detail, with first-run auto-generation from profile, resume, history, skills, and recent notes
 - Candidate detail snapshot card with title, location, status, top skills, AI summary snippet, last activity, and profile-completeness guidance
 - Candidate list profile-completeness chips plus soft submission warnings when recruiters try to submit thin profiles
@@ -55,7 +55,7 @@ When demo mode is enabled, authenticated demo users see a one-time welcome modal
 - Career-site web responses stay differentiated from recruiter-curated submissions and remain hidden from the client portal until a recruiter promotes them
 - Candidate file attachments with object storage (`s3`) and local fallback
 - Candidate file workspace supports explicit resume labeling so internal users and the client portal can identify the primary resume document
-- Public career site (toggleable in Admin settings) with quick apply + resume upload
+- Public career site (toggleable in Admin settings) with quick apply + resume upload; new public applicants receive resume-based candidate enrichment while repeat applicants keep existing profile data protected
 - Candidate and job-order match workspaces (top matches, sortable/paged)
 - Administrator-only audit trails on records plus admin diagnostics
 - Admin diagnostics includes recent inbound email webhook visibility
@@ -298,6 +298,8 @@ Use `.env` for:
 | Variable | Default | Purpose |
 |---|---|---|
 | `OPENAI_RESUME_MODEL` | `gpt-4o-mini` | Model used for resume parsing/enrichment calls when OpenAI key exists in system settings. |
+
+Resume parsing is intentionally scoped. Recruiters can manually parse resumes while creating reviewed candidate drafts. Public career-site resumes enrich only brand-new candidate records created by that application; repeat applications by an existing candidate attach the latest resume and refresh resume keyword search text without automatically overwriting profile fields. Offline candidate migration and bulk resume parsing should be handled by a separate reviewed import workflow.
 
 #### File Storage
 | Variable | Default | Purpose |

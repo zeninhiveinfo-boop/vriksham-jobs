@@ -421,6 +421,7 @@ function NewCandidatePageContent() {
 
 		const attachmentFormData = new FormData();
 		attachmentFormData.append('file', parsedResumeAttachmentFile);
+		attachmentFormData.append('isResume', 'true');
 
 		const attachmentRes = await fetch(`/api/candidates/${candidateId}/files`, {
 			method: 'POST',

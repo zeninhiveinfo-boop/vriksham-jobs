@@ -8,6 +8,12 @@ import { isValidOptionalHttpUrl } from '@/lib/url-validation';
 import { normalizeCandidateSourceValue } from '@/app/constants/candidate-source-options';
 import { buildWebResponseSubmissionNotes } from '@/lib/submission-origin';
 import { sendEmailMessage } from '@/lib/email-delivery';
+import { normalizeCandidateData } from '@/lib/candidate-data';
+import { resolveCandidateSkills, resolveSkillSetForWrite } from '@/lib/candidate-skills';
+import {
+	normalizeCandidateEducationRecords,
+	normalizeCandidateWorkExperienceRecords
+} from '@/lib/candidate-history';
 import {
 	RESUME_UPLOAD_MAX_BYTES,
 	isAllowedResumeUploadContentType,
@@ -17,6 +23,7 @@ import {
 	buildCandidateAttachmentStorageKey,
 	uploadObjectBuffer
 } from '@/lib/object-storage';
+import { parseResumeDraft } from '@/lib/candidate-resume-draft';
 import { deriveResumeSearchTextFromBuffer } from '@/lib/candidate-resume-search';
 import { withInferredCityStateFromZip } from '@/lib/zip-code-lookup';
 import { formatDateTimeAt } from '@/lib/date-format';
@@ -188,6 +195,112 @@ function pickIncomingOrExisting(incoming, existingValue) {
 	const incomingValue = asTrimmedString(incoming);
 	if (incomingValue) return incomingValue;
 	return existingValue ?? null;
+}
+
+function isBlankValue(value) {
+	return value == null || (typeof value === 'string' && value.trim() === '');
+}
+
+function setIfBlank(target, key, currentValue, parsedValue) {
+	if (!isBlankValue(currentValue) || isBlankValue(parsedValue)) return;
+	target[key] = parsedValue;
+}
+
+async function enrichNewCareerCandidateFromResume({ candidate, resumeSearchText }) {
+	const normalizedResumeText = asTrimmedString(resumeSearchText);
+	if (!candidate?.id || normalizedResumeText.length < 40) {
+		return null;
+	}
+
+	const parseResult = await parseResumeDraft(normalizedResumeText);
+	const parsedDraft = normalizeCandidateData(parseResult.draft || {});
+	const resolvedSkills = await resolveCandidateSkills(undefined, parseResult.parsedSkills || []);
+	const resolvedSkillSet = await resolveSkillSetForWrite({
+		normalizedSkillSet: parsedDraft.skillSet,
+		unmatchedParsedSkillNames: resolvedSkills.unmatchedParsedSkillNames,
+		extraKnownSkillNames: resolvedSkills.skillNames
+	});
+	const normalizedEducationRecords = normalizeCandidateEducationRecords(parseResult.educationRecords || []);
+	const normalizedWorkExperienceRecords = normalizeCandidateWorkExperienceRecords(parseResult.workExperienceRecords || []);
+
+	const updateData = {};
+	setIfBlank(updateData, 'experienceYears', candidate.experienceYears, parsedDraft.experienceYears);
+	setIfBlank(updateData, 'city', candidate.city, parsedDraft.city);
+	setIfBlank(updateData, 'state', candidate.state, parsedDraft.state);
+	setIfBlank(updateData, 'website', candidate.website, parsedDraft.website);
+	setIfBlank(updateData, 'summary', candidate.summary, parsedDraft.summary);
+	setIfBlank(updateData, 'skillSet', candidate.skillSet, resolvedSkillSet);
+
+	if (resolvedSkills.hasSkillIds && resolvedSkills.skillIds.length > 0) {
+		updateData.candidateSkills = {
+			createMany: {
+				data: resolvedSkills.skillIds.map((skillId) => ({ skillId })),
+				skipDuplicates: true
+			}
+		};
+	}
+
+	if (normalizedEducationRecords.length > 0) {
+		updateData.candidateEducations = {
+			create: normalizedEducationRecords.map((record) => ({
+				recordId: createRecordId('CED'),
+				...record
+			}))
+		};
+	}
+
+	if (normalizedWorkExperienceRecords.length > 0) {
+		updateData.candidateWorkExperiences = {
+			create: normalizedWorkExperienceRecords.map((record) => ({
+				recordId: createRecordId('CWR'),
+				...record
+			}))
+		};
+	}
+
+	if (Object.keys(updateData).length === 0) {
+		return {
+			candidate,
+			parser: parseResult.parser,
+			warnings: parseResult.warnings || []
+		};
+	}
+
+	const enrichedCandidate = await prisma.candidate.update({
+		where: { id: candidate.id },
+		data: updateData
+	});
+
+	return {
+		candidate: enrichedCandidate,
+		parser: parseResult.parser,
+		warnings: parseResult.warnings || []
+	};
+}
+
+async function ensurePrimaryResumeAttachment({ candidateId, attachmentId, resumeSearchText }) {
+	if (!candidateId || !attachmentId) return;
+
+	await prisma.$transaction(async (tx) => {
+		await tx.candidateAttachment.updateMany({
+			where: {
+				candidateId,
+				id: { not: attachmentId },
+				isResume: true
+			},
+			data: { isResume: false }
+		});
+
+		await tx.candidateAttachment.update({
+			where: { id: attachmentId },
+			data: { isResume: true }
+		});
+
+		await tx.candidate.update({
+			where: { id: candidateId },
+			data: { resumeSearchText: resumeSearchText || null }
+		});
+	});
 }
 
 function normalizeResumeFile(input) {
@@ -530,7 +643,8 @@ async function postCareerSiteApplication(req, { params }) {
 			};
 		});
 
-		const { candidate, submission, candidateAuditEvent } = result;
+		let { candidate } = result;
+		const { submission, candidateAuditEvent } = result;
 		await Promise.allSettled([
 			candidateAuditEvent?.action === 'CREATE'
 				? logCreate({
@@ -558,9 +672,10 @@ async function postCareerSiteApplication(req, { params }) {
 		]);
 
 		let resumeAttachment = null;
+		let resumeSearchText = '';
 		if (resumeFile) {
 			const buffer = resumeBuffer || Buffer.from(await resumeFile.arrayBuffer());
-			const resumeSearchText = await deriveResumeSearchTextFromBuffer({
+			resumeSearchText = await deriveResumeSearchTextFromBuffer({
 				buffer,
 				fileName: resumeFile.name,
 				contentType: resumeFile.type
@@ -617,6 +732,37 @@ async function postCareerSiteApplication(req, { params }) {
 					}
 				})
 			]);
+		}
+
+		if (candidateAuditEvent?.action === 'CREATE' && resumeSearchText) {
+			const enrichmentResult = await enrichNewCareerCandidateFromResume({
+				candidate,
+				resumeSearchText
+			});
+			if (enrichmentResult?.candidate) {
+				if (enrichmentResult.candidate !== candidate) {
+					await logUpdate({
+						actorUserId: null,
+						entityType: 'CANDIDATE',
+						before: candidate,
+						after: enrichmentResult.candidate,
+						metadata: {
+							source: 'career_site_resume_parse',
+							parser: enrichmentResult.parser,
+							warnings: enrichmentResult.warnings
+						}
+					});
+				}
+				candidate = enrichmentResult.candidate;
+			}
+		}
+
+		if (resumeAttachment?.id) {
+			await ensurePrimaryResumeAttachment({
+				candidateId: candidate.id,
+				attachmentId: resumeAttachment.id,
+				resumeSearchText
+			});
 		}
 
 		if (jobOrder?.ownerUser?.id) {
