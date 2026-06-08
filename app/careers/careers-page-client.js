@@ -8,6 +8,12 @@ import { BriefcaseBusiness, Building2, ChevronLeft, ChevronRight, MapPin, Search
 const PAGE_SIZE_STORAGE_KEY = 'hg-list-page-size';
 const DEFAULT_PAGE_SIZE = 10;
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+const CAREERS_DATE_FORMATTER = new Intl.DateTimeFormat('en-IN', {
+	day: 'numeric',
+	month: 'short',
+	year: 'numeric',
+	timeZone: 'Asia/Kolkata'
+});
 
 function formatCurrencyRange(min, max, currency = 'INR') {
 	const hasMin = Number.isFinite(Number(min));
@@ -33,11 +39,7 @@ function formatDate(value) {
 	if (!value) return 'Recently posted';
 	const parsed = new Date(value);
 	if (Number.isNaN(parsed.getTime())) return 'Recently posted';
-	return parsed.toLocaleDateString(undefined, {
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric'
-	});
+	return CAREERS_DATE_FORMATTER.format(parsed);
 }
 
 function normalizeQuickPreset(value) {

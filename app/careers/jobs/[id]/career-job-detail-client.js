@@ -25,6 +25,12 @@ const initialForm = {
 };
 
 const CAREER_APPLY_SESSION_KEY = 'careerQuickApplyForm';
+const CAREERS_DATE_FORMATTER = new Intl.DateTimeFormat('en-IN', {
+	day: 'numeric',
+	month: 'short',
+	year: 'numeric',
+	timeZone: 'Asia/Kolkata'
+});
 
 function toStoredFormValue(value) {
 	return {
@@ -81,11 +87,7 @@ function formatDate(value) {
 	if (!value) return '-';
 	const date = new Date(value);
 	if (Number.isNaN(date.getTime())) return '-';
-	return date.toLocaleDateString(undefined, {
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric'
-	});
+	return CAREERS_DATE_FORMATTER.format(date);
 }
 
 export default function CareerJobDetailClient({ job }) {
