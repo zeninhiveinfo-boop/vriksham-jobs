@@ -13,7 +13,7 @@
 
 .eyebrow {
 	margin: 0 0 8px;
-	color: #047857;
+	color: #0b2636;
 	font-size: 13px;
 	font-weight: 950;
 	text-transform: uppercase;
@@ -51,8 +51,8 @@
 }
 
 .secondaryButton:hover {
-	border-color: #10b981;
-	color: #047857;
+	border-color: #ffe810;
+	color: #0b2636;
 }
 
 .statsGrid {
@@ -74,7 +74,7 @@
 	display: block;
 	font-size: 32px;
 	font-weight: 950;
-	color: #047857;
+	color: #0b2636;
 }
 
 .statCard span {
@@ -188,8 +188,8 @@
 }
 
 .planBadge {
-	background: #ecfdf5;
-	color: #047857;
+	background: #fffde8;
+	color: #0b2636;
 }
 
 .statusBadge {
@@ -212,7 +212,7 @@
 }
 
 .openButton:hover {
-	background: #047857;
+	background: #0b2636;
 }
 
 @media (max-width: 1000px) {
@@ -264,12 +264,12 @@
 }
 
 .approveButton {
-	background: #047857;
-	color: white;
+	background: #ffe810;
+	color: #0b2636;
 }
 
 .approveButton:hover {
-	background: #065f46;
+	background: #f6da00;
 }
 
 .rejectButton {
@@ -317,12 +317,12 @@
 }
 
 .approveButton {
-	background: #047857;
-	color: white;
+	background: #ffe810;
+	color: #0b2636;
 }
 
 .approveButton:hover {
-	background: #065f46;
+	background: #f6da00;
 }
 
 .rejectButton {
@@ -368,12 +368,12 @@
 }
 
 .approveButton {
-	background: #047857;
-	color: white;
+	background: #ffe810;
+	color: #0b2636;
 }
 
 .approveButton:hover {
-	background: #065f46;
+	background: #f6da00;
 }
 
 .rejectButton {
@@ -386,12 +386,12 @@
 }
 
 .markPaidButton {
-	background: #f59e0b;
-	color: white;
+	background: #ffe810;
+	color: #0b2636;
 }
 
 .markPaidButton:hover {
-	background: #d97706;
+	background: #f6da00;
 }
 
 .approveButton:disabled,
@@ -468,21 +468,21 @@
 }
 
 .assignmentReadyBadge {
-	background: #dcfce7;
-	color: #166534;
+	background: #fff7b8;
+	color: #0b2636;
 }
 
 .assignmentWarningBadge {
-	background: #fef3c7;
-	color: #92400e;
+	background: #fff7b8;
+	color: #0b2636;
 }
 
 .assignmentActionHint {
 	display: inline-flex;
 	align-items: center;
 	border-radius: 999px;
-	background: #fef3c7;
-	color: #92400e;
+	background: #fff7b8;
+	color: #0b2636;
 	padding: 8px 11px;
 	font-size: 12px;
 	font-weight: 850;
@@ -526,8 +526,8 @@
 .paymentBox input:focus,
 .paymentBox select:focus,
 .paymentBox textarea:focus {
-	border-color: #10b981;
-	box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
+	border-color: #ffe810;
+	box-shadow: 0 0 0 4px rgba(255, 232, 16, 0.14);
 }
 
 .paymentBoxFull {
@@ -553,10 +553,193 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: 999px;
-	background: #dcfce7;
-	color: #166534;
+	background: #fff7b8;
+	color: #0b2636;
 	padding: 9px 14px;
 	font-size: 13px;
 	font-weight: 900;
 	white-space: nowrap;
+}
+
+@media (max-width: 1280px) {
+	.page {
+		padding: 24px;
+	}
+
+	.header {
+		gap: 18px;
+		margin-bottom: 22px;
+	}
+
+	.header h1 {
+		font-size: clamp(28px, 2.8vw, 34px);
+		letter-spacing: -0.03em;
+	}
+
+	.statsGrid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+		margin-bottom: 18px;
+	}
+
+	.statCard {
+		border-radius: 18px;
+		padding: 18px;
+	}
+
+	.statCard strong {
+		font-size: 28px;
+	}
+
+	.card {
+		border-radius: 20px;
+	}
+
+	.cardHeader {
+		padding: 20px 22px;
+	}
+
+	.table th,
+	.table td {
+		padding: 12px 12px;
+	}
+
+	.companyCell,
+	.contactCell {
+		min-width: 140px;
+	}
+
+	.assignmentCell {
+		min-width: 132px;
+	}
+}
+
+@media (max-width: 760px) {
+	.page {
+		padding: 16px;
+	}
+
+	.header {
+		align-items: stretch;
+		margin-bottom: 18px;
+	}
+
+	.secondaryButton {
+		width: 100%;
+		white-space: normal;
+	}
+
+	.statsGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.card {
+		overflow: visible;
+	}
+
+	.cardHeader {
+		padding: 18px;
+	}
+
+	.emptyState {
+		padding: 42px 18px;
+	}
+
+	.tableWrap {
+		overflow-x: visible;
+	}
+
+	.table,
+	.table tbody,
+	.table tr,
+	.table td {
+		display: block;
+		width: 100%;
+	}
+
+	.table thead {
+		display: none;
+	}
+
+	.table tr {
+		display: grid;
+		gap: 10px;
+		padding: 16px;
+		border-bottom: 1px solid #e2e8f0;
+	}
+
+	.table tr:last-child {
+		border-bottom: 0;
+	}
+
+	.table td {
+		display: grid;
+		grid-template-columns: minmax(96px, 34%) minmax(0, 1fr);
+		align-items: start;
+		gap: 12px;
+		padding: 0;
+		border-bottom: 0;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
+	.table td::before {
+		color: #64748b;
+		font-size: 11px;
+		font-weight: 950;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.table td:nth-child(1)::before {
+		content: "Company";
+	}
+
+	.table td:nth-child(2)::before {
+		content: "Contact";
+	}
+
+	.table td:nth-child(3)::before {
+		content: "Status";
+	}
+
+	.table td:nth-child(4)::before {
+		content: "Plan";
+	}
+
+	.table td:nth-child(5)::before {
+		content: "Payment";
+	}
+
+	.table td:nth-child(6)::before {
+		content: "Assignment";
+	}
+
+	.table td:nth-child(7)::before {
+		content: "Updated";
+	}
+
+	.table td:nth-child(8)::before {
+		content: "Actions";
+	}
+
+	.companyCell,
+	.contactCell,
+	.assignmentCell {
+		min-width: 0;
+	}
+
+	.rowActions,
+	.actionGroup {
+		justify-content: flex-start;
+	}
+
+	.approveButton,
+	.rejectButton,
+	.markPaidButton,
+	.portalReadyButton,
+	.jobOrderButton,
+	.openButton {
+		white-space: normal;
+	}
 }

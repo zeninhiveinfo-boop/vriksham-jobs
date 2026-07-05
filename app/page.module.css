@@ -4,7 +4,7 @@
 	background:
 		linear-gradient(180deg, rgba(247, 251, 252, 0.98) 0%, rgba(255, 255, 255, 0.98) 45%),
 		radial-gradient(circle at 18% 12%, rgba(14, 165, 233, 0.11), transparent 28rem),
-		radial-gradient(circle at 92% 18%, rgba(34, 197, 94, 0.12), transparent 26rem);
+		radial-gradient(circle at 92% 18%, rgba(246, 218, 0, 0.12), transparent 26rem);
 	color: #0c2f43;
 	font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	overflow-x: hidden;
@@ -45,7 +45,7 @@
 	height: 8rem;
 	right: 16rem;
 	bottom: 0;
-	border-color: rgba(34, 197, 94, 0.12);
+	border-color: rgba(246, 218, 0, 0.12);
 }
 
 .header {
@@ -313,7 +313,7 @@
 	width: 11rem;
 	height: 11rem;
 	border-radius: 999px;
-	background: rgba(34, 197, 94, 0.18);
+	background: rgba(246, 218, 0, 0.18);
 	filter: blur(34px);
 	z-index: -1;
 }
@@ -350,9 +350,9 @@
 	margin: 0;
 	border: 1px solid rgba(255, 255, 255, 0.18);
 	border-radius: 999px;
-	background: rgba(34, 197, 94, 0.16);
+	background: rgba(246, 218, 0, 0.16);
 	padding: 7px 10px;
-	color: #bbf7d0;
+	color: #fff18a;
 	font-size: 12px;
 	font-weight: 900;
 }
@@ -389,7 +389,7 @@
 	inset: auto 13px 0 58px;
 	height: 3px;
 	border-radius: 999px;
-	background: linear-gradient(90deg, #22c55e, rgba(14, 165, 233, 0.28));
+	background: linear-gradient(90deg, #ffe810, rgba(14, 165, 233, 0.28));
 }
 
 .avatar {
@@ -427,8 +427,8 @@
 .candidateCard p {
 	margin: 0;
 	border-radius: 999px;
-	background: #dcfce7;
-	color: #166534;
+	background: #fff7b8;
+	color: #0b2636;
 	padding: 6px 9px;
 	font-size: 12px;
 	font-weight: 950;
@@ -497,7 +497,7 @@
 	gap: 13px;
 	align-items: flex-start;
 	margin-top: 14px;
-	border: 1px solid rgba(34, 197, 94, 0.2);
+	border: 1px solid rgba(246, 218, 0, 0.2);
 	border-radius: 18px;
 	background: rgba(240, 253, 244, 0.86);
 	padding: 15px;
@@ -509,8 +509,8 @@
 	border-radius: 14px;
 	display: grid;
 	place-items: center;
-	background: #dcfce7;
-	color: #15803d;
+	background: #fff7b8;
+	color: #0b2636;
 	flex: 0 0 auto;
 }
 
@@ -520,7 +520,7 @@
 }
 
 .reviewCard strong {
-	color: #14532d;
+	color: #061b3a;
 	font-size: 14px;
 	font-weight: 900;
 }
@@ -641,7 +641,7 @@
 	top: 0;
 	height: 3px;
 	border-radius: 999px;
-	background: linear-gradient(90deg, #0369a1, #22c55e);
+	background: linear-gradient(90deg, #0369a1, #ffe810);
 	opacity: 0.7;
 }
 
@@ -736,7 +736,7 @@
 	border: 1px solid rgba(12, 74, 110, 0.1);
 	border-radius: 38px;
 	background:
-		radial-gradient(circle at 50% 48%, rgba(34, 197, 94, var(--orbit-glow)), transparent 16rem),
+		radial-gradient(circle at 50% 48%, rgba(246, 218, 0, var(--orbit-glow)), transparent 16rem),
 		radial-gradient(circle at 54% 50%, rgba(14, 165, 233, 0.18), transparent 20rem),
 		linear-gradient(135deg, rgba(8, 47, 73, 0.98), rgba(3, 105, 161, 0.92));
 	box-shadow:
@@ -762,7 +762,7 @@
 
 .orbitScene::after {
 	inset: 124px 86px;
-	border-color: rgba(187, 247, 208, 0.2);
+	border-color: rgba(255, 241, 138, 0.2);
 	transform:
 		translateY(calc(var(--orbit-lift) * -0.65))
 		rotateX(68deg)
@@ -841,7 +841,7 @@
 	height: 32px;
 	border-radius: 12px;
 	background: rgba(255, 255, 255, 0.16);
-	color: #bbf7d0;
+	color: #fff18a;
 	font-size: 12px;
 	font-weight: 950;
 }
@@ -983,7 +983,7 @@
 .controlPanel {
 	padding: 24px;
 	background:
-		radial-gradient(circle at 26% 24%, rgba(34, 197, 94, 0.2), transparent 13rem),
+		radial-gradient(circle at 26% 24%, rgba(246, 218, 0, 0.2), transparent 13rem),
 		radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.2), transparent 15rem),
 		linear-gradient(135deg, rgba(8, 47, 73, 0.98), rgba(3, 105, 161, 0.88)),
 		#082f49;
@@ -1005,8 +1005,8 @@
 	width: 18rem;
 	height: 18rem;
 	border-radius: 999px;
-	border: 1px solid rgba(187, 247, 208, 0.18);
-	box-shadow: inset 0 0 80px rgba(187, 247, 208, 0.08);
+	border: 1px solid rgba(255, 241, 138, 0.18);
+	box-shadow: inset 0 0 80px rgba(255, 241, 138, 0.08);
 }
 
 .controlBeam {
@@ -1014,7 +1014,7 @@
 	right: 34px;
 	top: 51%;
 	height: 2px;
-	background: linear-gradient(90deg, transparent, rgba(187, 247, 208, 0.8), transparent);
+	background: linear-gradient(90deg, transparent, rgba(255, 241, 138, 0.8), transparent);
 	transform: rotate(-6deg);
 	opacity: 0.72;
 }
@@ -1037,9 +1037,9 @@
 
 .controlHeader span {
 	border-radius: 999px;
-	background: rgba(34, 197, 94, 0.18);
-	border: 1px solid rgba(187, 247, 208, 0.28);
-	color: #bbf7d0;
+	background: rgba(246, 218, 0, 0.18);
+	border: 1px solid rgba(255, 241, 138, 0.28);
+	color: #fff18a;
 	padding: 8px 11px;
 	font-size: 12px;
 	font-weight: 950;
@@ -1066,7 +1066,7 @@
 }
 
 .healthGrid svg {
-	color: #86efac;
+	color: #ffe810;
 	margin-bottom: auto;
 }
 
@@ -1129,7 +1129,7 @@
 }
 
 .handoffRow strong {
-	color: #bbf7d0;
+	color: #fff18a;
 	font-size: 32px;
 	font-weight: 950;
 	line-height: 1;
@@ -1232,7 +1232,7 @@
 }
 
 .roleCard:nth-child(2)::before {
-	background: rgba(34, 197, 94, 0.14);
+	background: rgba(246, 218, 0, 0.14);
 }
 
 .roleIcon {
@@ -1249,8 +1249,8 @@
 }
 
 .roleCard:nth-child(2) .roleIcon {
-	background: #dcfce7;
-	color: #15803d;
+	background: #fff7b8;
+	color: #0b2636;
 }
 
 .roleCard > p,
@@ -1285,7 +1285,7 @@
 }
 
 .roleCard li svg {
-	color: #16a34a;
+	color: #e5c600;
 	flex: 0 0 auto;
 }
 
@@ -1315,7 +1315,7 @@
 .roleTrace span {
 	height: 4px;
 	border-radius: 999px;
-	background: linear-gradient(90deg, #0369a1, #22c55e);
+	background: linear-gradient(90deg, #0369a1, #ffe810);
 }
 
 .roleTrace span:nth-child(2) {
@@ -1338,7 +1338,7 @@
 	align-items: center;
 	padding: 34px;
 	background:
-		radial-gradient(circle at 82% 22%, rgba(187, 247, 208, 0.22), transparent 16rem),
+		radial-gradient(circle at 82% 22%, rgba(255, 241, 138, 0.22), transparent 16rem),
 		linear-gradient(135deg, rgba(8, 47, 73, 0.98), rgba(3, 105, 161, 0.9)),
 		#082f49;
 	color: #ffffff;
@@ -1353,7 +1353,7 @@
 .planPanel .kicker {
 	background: rgba(255, 255, 255, 0.1);
 	border-color: rgba(255, 255, 255, 0.16);
-	color: #bbf7d0;
+	color: #fff18a;
 	box-shadow: none;
 }
 
@@ -1377,7 +1377,7 @@
 
 .launchRail svg {
 	margin-bottom: auto;
-	color: #bbf7d0;
+	color: #fff18a;
 }
 
 .launchRail strong {
@@ -1420,7 +1420,7 @@
 	border: 1px solid rgba(12, 74, 110, 0.1);
 	border-radius: 38px;
 	background:
-		radial-gradient(circle at 76% 42%, rgba(34, 197, 94, 0.2), transparent 14rem),
+		radial-gradient(circle at 76% 42%, rgba(246, 218, 0, 0.2), transparent 14rem),
 		radial-gradient(circle at 28% 58%, rgba(14, 165, 233, 0.18), transparent 16rem),
 		linear-gradient(135deg, rgba(8, 47, 73, 0.98), rgba(3, 105, 161, 0.9));
 	box-shadow:
@@ -1459,7 +1459,7 @@
 	width: 100%;
 	height: 100%;
 	border-radius: inherit;
-	background: linear-gradient(90deg, #bbf7d0, #38bdf8, #ffffff);
+	background: linear-gradient(90deg, #fff18a, #38bdf8, #ffffff);
 	transform-origin: center top;
 }
 
@@ -1504,8 +1504,8 @@
 	border-radius: 15px;
 	display: grid;
 	place-items: center;
-	background: rgba(187, 247, 208, 0.18);
-	color: #bbf7d0;
+	background: rgba(255, 241, 138, 0.18);
+	color: #fff18a;
 	font-size: 13px;
 	font-weight: 950;
 }
@@ -1549,7 +1549,7 @@
 	position: absolute;
 	inset: -18px;
 	border-radius: 42px;
-	border: 1px solid rgba(187, 247, 208, 0.28);
+	border: 1px solid rgba(255, 241, 138, 0.28);
 }
 
 .flowGate img {
