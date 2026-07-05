@@ -1,5 +1,4 @@
 import './globals.css';
-import AgentationDev from './components/agentation-dev';
 import RootShellWrapper from '@/app/components/root-shell-wrapper';
 import { getPublicAppBaseUrl } from '@/lib/site-url';
 import { DEFAULT_SITE_NAME, getSystemBranding } from '@/lib/system-settings';
@@ -31,7 +30,6 @@ export default async function RootLayout({ children }) {
 		<html lang="en" data-theme={branding.themeKey}>
 			<body>
 				<RootShellWrapper>{children}</RootShellWrapper>
-						<AgentationDev />
 		</body>
 		</html>
 	);
