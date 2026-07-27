@@ -31,7 +31,7 @@ const productionSecurityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
-	serverExternalPackages: ['pdf-parse', 'word-extractor', 'mammoth'],
+	serverExternalPackages: ['pdf-parse', '@napi-rs/canvas', 'word-extractor', 'mammoth'],
 	async headers() {
 		const headers = process.env.NODE_ENV === 'production'
 			? [...commonSecurityHeaders, ...productionSecurityHeaders]
