@@ -31,6 +31,7 @@ import { candidateAttachmentAcceptString } from '@/lib/candidate-attachment-opti
 import { formatDateTimeAt } from '@/lib/date-format';
 import { isValidEmailAddress } from '@/lib/email-validation';
 import { formatSelectValueLabel } from '@/lib/select-value-label';
+import { CURRENT_CTC_BAND_OPTIONS } from '@/lib/current-ctc-options';
 import { sortByConfig } from '@/lib/list-sort';
 import { submissionCreatedByLabel, submissionOriginLabel } from '@/lib/submission-origin';
 import { getEffectiveSubmissionStatus } from '@/lib/submission-status';
@@ -92,6 +93,7 @@ const initialEditForm = {
 	ownerId: '',
 	currentJobTitle: '',
 	currentEmployer: '',
+	currentCtcBand: '',
 	address: '',
 	addressPlaceId: '',
 	addressLatitude: '',
@@ -166,6 +168,7 @@ function toForm(row, availableSkills = []) {
 		ownerId: row.ownerId == null ? '' : String(row.ownerId),
 		currentJobTitle: row.currentJobTitle || '',
 		currentEmployer: row.currentEmployer || '',
+		currentCtcBand: row.currentCtcBand || '',
 		address: row.address || '',
 		addressPlaceId: row.addressPlaceId || '',
 		addressLatitude: row.addressLatitude ?? '',
@@ -404,8 +407,7 @@ export default function CandidateDetailsPage() {
 			editForm.source.trim() &&
 			(!isAdmin || editForm.divisionId.trim()) &&
 			editForm.ownerId.trim() &&
-			editForm.currentJobTitle.trim() &&
-			editForm.currentEmployer.trim()
+			editForm.currentJobTitle.trim()
 	);
 	const hasValidEmail = isValidEmailAddress(editForm.email);
 	const hasValidWebsite = isValidOptionalHttpUrl(editForm.website);
@@ -1927,12 +1929,19 @@ export default function CandidateDetailsPage() {
 									required
 								/>
 							</FormField>
-							<FormField label="Current Employer" required>
-								<input
-									value={editForm.currentEmployer}
-									onChange={(e) => setEditForm((f) => ({ ...f, currentEmployer: e.target.value }))}
-									required
-								/>
+							<FormField label="Current CTC">
+								<select
+									aria-label="Current CTC"
+									value={editForm.currentCtcBand}
+									onChange={(e) => setEditForm((f) => ({ ...f, currentCtcBand: e.target.value }))}
+								>
+									<option value="">Not provided</option>
+									{CURRENT_CTC_BAND_OPTIONS.map((option) => (
+										<option key={option.value} value={option.value}>
+											{option.label}
+										</option>
+									))}
+								</select>
 							</FormField>
 						</div>
 					</section>

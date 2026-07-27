@@ -9,8 +9,33 @@ import { CLIENT_FEEDBACK_SCORECARD_FIELDS, formatClientFeedbackScore, parseClien
 import { formatDateTimeAt } from '@/lib/date-format';
 import { getSystemBranding } from '@/lib/system-settings';
 import { logError, logInfo, logWarn, requestLogContext } from '@/lib/logger';
+import { consumeRequestThrottle } from '@/lib/request-throttle';
+import { enforceMutationThrottle } from '@/lib/mutation-throttle';
+import {
+	CLIENT_PORTAL_FEEDBACK_RATE_LIMIT_MAX_REQUESTS,
+	CLIENT_PORTAL_FEEDBACK_RATE_LIMIT_WINDOW_SECONDS,
+	CLIENT_PORTAL_RATE_LIMIT_MAX_REQUESTS,
+	CLIENT_PORTAL_RATE_LIMIT_WINDOW_SECONDS
+} from '@/lib/security-constants';
 
 import { withApiLogging } from '@/lib/api-logging';
+
+const CLIENT_PORTAL_RESPONSE_HEADERS = {
+	'Cache-Control': 'no-store',
+	'Referrer-Policy': 'no-referrer',
+	'X-Robots-Tag': 'noindex, nofollow'
+};
+const MAX_CLIENT_FEEDBACK_COMMENT_LENGTH = 2000;
+
+function portalJson(body, init = {}) {
+	return NextResponse.json(body, {
+		...init,
+		headers: {
+			...CLIENT_PORTAL_RESPONSE_HEADERS,
+			...(init.headers || {})
+		}
+	});
+}
 
 function escapeHtml(value) {
 	return String(value || '')
@@ -99,38 +124,66 @@ function buildClientFeedbackEmail({
 
 async function getClient_review_tokenHandler(req, { params }) {
 	try {
+		const throttle = await consumeRequestThrottle({
+			req,
+			routeKey: 'client_review.token.get',
+			maxRequests: CLIENT_PORTAL_RATE_LIMIT_MAX_REQUESTS,
+			windowSeconds: CLIENT_PORTAL_RATE_LIMIT_WINDOW_SECONDS
+		});
+		if (!throttle.allowed) {
+			return portalJson(
+				{ error: 'Too many client portal requests. Please try again shortly.' },
+				{
+					status: 429,
+					headers: { 'Retry-After': String(throttle.retryAfterSeconds || 60) }
+				}
+			);
+		}
+
 		const branding = await getSystemBranding();
 		if (!branding.clientPortalEnabled) {
-			return NextResponse.json({ error: 'Client review portal not found.' }, { status: 404 });
+			return portalJson({ error: 'Client review portal not found.' }, { status: 404 });
 		}
 		const awaitedParams = await params;
 		const token = String(awaitedParams?.token || '').trim();
 		const portalAccess = await loadClientPortalAccessByToken(token);
 		if (!portalAccess) {
-			return NextResponse.json({ error: 'Client review portal not found.' }, { status: 404 });
+			return portalJson({ error: 'Client review portal not found.' }, { status: 404 });
 		}
 
 		const viewedAt = new Date();
 		void markClientPortalViewed(portalAccess.id);
 		portalAccess.lastViewedAt = viewedAt;
 
-		return NextResponse.json(await buildClientPortalPayload({ req, token, portalAccess }));
+		return portalJson(await buildClientPortalPayload({ req, token, portalAccess }));
 	} catch {
-		return NextResponse.json({ error: 'Failed to load client review portal.' }, { status: 500 });
+		return portalJson({ error: 'Failed to load client review portal.' }, { status: 500 });
 	}
 }
 
 async function postClient_review_tokenHandler(req, { params }) {
 	try {
+		const throttleResponse = await enforceMutationThrottle(req, 'client_review.token.post', {
+			maxRequests: CLIENT_PORTAL_FEEDBACK_RATE_LIMIT_MAX_REQUESTS,
+			windowSeconds: CLIENT_PORTAL_FEEDBACK_RATE_LIMIT_WINDOW_SECONDS,
+			message: 'Too many feedback submissions. Please try again shortly.'
+		});
+		if (throttleResponse) {
+			for (const [key, value] of Object.entries(CLIENT_PORTAL_RESPONSE_HEADERS)) {
+				throttleResponse.headers.set(key, value);
+			}
+			return throttleResponse;
+		}
+
 		const branding = await getSystemBranding();
 		if (!branding.clientPortalEnabled) {
-			return NextResponse.json({ error: 'Client review portal not found.' }, { status: 404 });
+			return portalJson({ error: 'Client review portal not found.' }, { status: 404 });
 		}
 		const awaitedParams = await params;
 		const token = String(awaitedParams?.token || '').trim();
 		const portalAccess = await loadClientPortalAccessByToken(token);
 		if (!portalAccess) {
-			return NextResponse.json({ error: 'Client review portal not found.' }, { status: 404 });
+			return portalJson({ error: 'Client review portal not found.' }, { status: 404 });
 		}
 
 		const body = await req.json().catch(() => ({}));
@@ -139,10 +192,16 @@ async function postClient_review_tokenHandler(req, { params }) {
 		const comment = String(body.comment || '');
 		const scorecard = parseClientFeedbackScorecard(body.scorecard);
 		if (!['comment', 'request_interview', 'pass'].includes(actionType)) {
-			return NextResponse.json({ error: 'Unsupported client feedback action.' }, { status: 400 });
+			return portalJson({ error: 'Unsupported client feedback action.' }, { status: 400 });
 		}
 		if (!Number.isInteger(submissionId) || submissionId <= 0) {
-			return NextResponse.json({ error: 'Submission is required.' }, { status: 400 });
+			return portalJson({ error: 'Submission is required.' }, { status: 400 });
+		}
+		if (comment.length > MAX_CLIENT_FEEDBACK_COMMENT_LENGTH) {
+			return portalJson(
+				{ error: `Feedback comments must be ${MAX_CLIENT_FEEDBACK_COMMENT_LENGTH} characters or fewer.` },
+				{ status: 400 }
+			);
 		}
 
 		const result = await createClientSubmissionFeedback({
@@ -262,12 +321,12 @@ async function postClient_review_tokenHandler(req, { params }) {
 		);
 
 		const refreshedAccess = await loadClientPortalAccessByToken(token);
-		return NextResponse.json({
+		return portalJson({
 			message: `${result.actionLabel} saved.`,
 			portal: await buildClientPortalPayload({ req, token, portalAccess: refreshedAccess })
 		});
 	} catch (error) {
-		return NextResponse.json(
+		return portalJson(
 			{ error: error instanceof Error ? error.message : 'Failed to save client feedback.' },
 			{ status: 400 }
 		);

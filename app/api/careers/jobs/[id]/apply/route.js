@@ -29,6 +29,10 @@ import { withInferredCityStateFromZip } from '@/lib/zip-code-lookup';
 import { formatDateTimeAt } from '@/lib/date-format';
 import { createNotification } from '@/lib/notifications';
 import { createRecordId } from '@/lib/record-id';
+import {
+	CURRENT_CTC_BAND_VALUES,
+	currentCtcBandLabel
+} from '@/lib/current-ctc-options';
 import { getPublicAppBaseUrl } from '@/lib/site-url';
 import {
 	CAREERS_APPLY_RATE_LIMIT_MAX_REQUESTS,
@@ -63,7 +67,10 @@ const careerApplicationSchema = z.object({
 	mobile: z.string().trim().min(1, 'Mobile phone is required.'),
 	zipCode: z.string().trim().min(1, 'Zip code is required.'),
 	currentJobTitle: z.string().trim().min(1, 'Current job title is required.'),
-	currentEmployer: z.string().trim().min(1, 'Current employer is required.'),
+	currentEmployer: optionalText,
+	currentCtcBand: z.enum(CURRENT_CTC_BAND_VALUES, {
+		errorMap: () => ({ message: 'Select a valid current CTC range.' })
+	}),
 	linkedinUrl: optionalUrl
 });
 
@@ -84,7 +91,7 @@ function buildWebApplicationCandidateNoteContent({ jobOrderTitle, application, n
 		`Mobile: ${asTrimmedString(application.mobile) || '-'}`,
 		`PIN Code: ${asTrimmedString(application.zipCode) || '-'}`,
 		`Current Title: ${asTrimmedString(application.currentJobTitle) || '-'}`,
-		`Current Employer: ${asTrimmedString(application.currentEmployer) || '-'}`,
+		`Current CTC: ${currentCtcBandLabel(application.currentCtcBand) || '-'}`,
 		`LinkedIn: ${asTrimmedString(application.linkedinUrl) || '-'}`,
 		`Resume File: ${asTrimmedString(resumeFileName) || '-'}`
 	];
@@ -110,6 +117,7 @@ function buildCareerSiteApplicationOwnerEmail({
 	const offeredLinkedin = asTrimmedString(application.linkedinUrl) || '-';
 	const safeApplicantName = applicantName || '-';
 	const safeJobOrderTitle = asTrimmedString(jobOrder?.title) || '-';
+	const currentCtcDisplay = currentCtcBandLabel(application.currentCtcBand) || '-';
 	const appliedAtDisplay = formatDateTimeAt(new Date());
 	const subject = `New Career Site Application: ${safeApplicantName} for ${safeJobOrderTitle}`;
 	const normalizedBaseUrl = String(baseUrl || '').trim().replace(/\/$/, '');
@@ -132,7 +140,7 @@ function buildCareerSiteApplicationOwnerEmail({
 		`Mobile: ${asTrimmedString(application.mobile) || '-'}`,
 		`PIN Code: ${asTrimmedString(application.zipCode) || '-'}`,
 		`Current Title: ${asTrimmedString(application.currentJobTitle) || '-'}`,
-		`Current Employer: ${asTrimmedString(application.currentEmployer) || '-'}`,
+		`Current CTC: ${currentCtcDisplay}`,
 		`LinkedIn: ${offeredLinkedin}`,
 		`Candidate Record ID: ${asTrimmedString(candidate?.recordId) || '-'}`,
 		`Submission Record ID: ${asTrimmedString(submission?.recordId) || '-'}`,
@@ -164,7 +172,7 @@ function buildCareerSiteApplicationOwnerEmail({
 			<li><strong>Mobile:</strong> ${escapeHtml(asTrimmedString(application.mobile) || '-')}</li>
 			<li><strong>PIN Code:</strong> ${escapeHtml(asTrimmedString(application.zipCode) || '-')}</li>
 			<li><strong>Current Title:</strong> ${escapeHtml(asTrimmedString(application.currentJobTitle) || '-')}</li>
-			<li><strong>Current Employer:</strong> ${escapeHtml(asTrimmedString(application.currentEmployer) || '-')}</li>
+			<li><strong>Current CTC:</strong> ${escapeHtml(currentCtcDisplay)}</li>
 			<li><strong>LinkedIn:</strong> ${escapeHtml(offeredLinkedin)}</li>
 			<li><strong>Candidate Record ID:</strong> ${escapeHtml(asTrimmedString(candidate?.recordId) || '-')}</li>
 			<li><strong>Submission Record ID:</strong> ${
@@ -230,6 +238,7 @@ async function enrichNewCareerCandidateFromResume({ candidate, resumeSearchText 
 	setIfBlank(updateData, 'website', candidate.website, parsedDraft.website);
 	setIfBlank(updateData, 'summary', candidate.summary, parsedDraft.summary);
 	setIfBlank(updateData, 'skillSet', candidate.skillSet, resolvedSkillSet);
+	setIfBlank(updateData, 'currentEmployer', candidate.currentEmployer, parsedDraft.currentEmployer);
 
 	if (resolvedSkills.hasSkillIds && resolvedSkills.skillIds.length > 0) {
 		updateData.candidateSkills = {
@@ -391,6 +400,7 @@ async function parseApplicationInput(req) {
 				zipCode: asTrimmedString(formData.get('zipCode')),
 				currentJobTitle: asTrimmedString(formData.get('currentJobTitle')),
 				currentEmployer: asTrimmedString(formData.get('currentEmployer')),
+				currentCtcBand: asTrimmedString(formData.get('currentCtcBand')),
 				linkedinUrl: asTrimmedString(formData.get('linkedinUrl')),
 				[HONEYPOT_FIELD]: asTrimmedString(formData.get(HONEYPOT_FIELD)),
 				[FORM_STARTED_AT_FIELD]: asTrimmedString(formData.get(FORM_STARTED_AT_FIELD))
@@ -410,6 +420,7 @@ async function parseApplicationInput(req) {
 			zipCode: asTrimmedString(body?.zipCode),
 			currentJobTitle: asTrimmedString(body?.currentJobTitle),
 			currentEmployer: asTrimmedString(body?.currentEmployer),
+			currentCtcBand: asTrimmedString(body?.currentCtcBand),
 			linkedinUrl: asTrimmedString(body?.linkedinUrl),
 			[HONEYPOT_FIELD]: asTrimmedString(body?.[HONEYPOT_FIELD]),
 			[FORM_STARTED_AT_FIELD]: asTrimmedString(body?.[FORM_STARTED_AT_FIELD])
@@ -547,6 +558,7 @@ async function postCareerSiteApplication(req, { params }) {
 					divisionId: jobOrder.divisionId ?? null,
 					currentJobTitle: application.currentJobTitle?.trim() || null,
 					currentEmployer: application.currentEmployer?.trim() || null,
+					currentCtcBand: application.currentCtcBand,
 					zipCode: application.zipCode?.trim() || null,
 					linkedinUrl: application.linkedinUrl?.trim() || null
 				});
@@ -569,6 +581,7 @@ async function postCareerSiteApplication(req, { params }) {
 					state: candidate.state,
 					currentJobTitle: pickIncomingOrExisting(application.currentJobTitle, candidate.currentJobTitle),
 					currentEmployer: pickIncomingOrExisting(application.currentEmployer, candidate.currentEmployer),
+					currentCtcBand: application.currentCtcBand,
 					linkedinUrl: pickIncomingOrExisting(application.linkedinUrl, candidate.linkedinUrl),
 					ownerId: candidate.ownerId ?? jobOrder.ownerId ?? null,
 					divisionId: candidate.divisionId ?? jobOrder.divisionId ?? null
@@ -594,6 +607,7 @@ async function postCareerSiteApplication(req, { params }) {
 				zipCode: application.zipCode,
 				currentJobTitle: application.currentJobTitle,
 				currentEmployer: application.currentEmployer,
+				currentCtcBand: application.currentCtcBand,
 				linkedinUrl: application.linkedinUrl,
 				resumeFileName: resumeFile?.name || ''
 			});

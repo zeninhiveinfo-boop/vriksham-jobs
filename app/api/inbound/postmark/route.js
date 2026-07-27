@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 import { prisma } from '@/lib/prisma';
 import {
 	CANDIDATE_ATTACHMENT_MAX_BYTES,
@@ -25,20 +26,57 @@ import { withApiLogging } from '@/lib/api-logging';
 
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
 
-function getWebhookSecret(req) {
-	return (
-		req.headers.get('x-webhook-secret') ||
-		req.headers.get('x-postmark-webhook-secret') ||
-		req.nextUrl.searchParams.get('secret') ||
-		''
-	)
-		.trim();
+function timingSafeEqualText(leftValue, rightValue) {
+	const left = Buffer.from(String(leftValue || ''), 'utf8');
+	const right = Buffer.from(String(rightValue || ''), 'utf8');
+	if (left.length !== right.length) return false;
+	return crypto.timingSafeEqual(left, right);
 }
 
-function isAuthorized(req) {
-	const configuredSecret = String(process.env.POSTMARK_INBOUND_WEBHOOK_SECRET || '').trim();
-	if (!configuredSecret) return true;
-	return getWebhookSecret(req) === configuredSecret;
+function decodeBasicCredentials(req) {
+	const authorization = String(req.headers.get('authorization') || '').trim();
+	if (!authorization.toLowerCase().startsWith('basic ')) return null;
+	try {
+		const decoded = Buffer.from(authorization.slice(6).trim(), 'base64').toString('utf8');
+		const separator = decoded.indexOf(':');
+		if (separator < 0) return null;
+		return {
+			username: decoded.slice(0, separator),
+			password: decoded.slice(separator + 1)
+		};
+	} catch {
+		return null;
+	}
+}
+
+function webhookAuthorizationState(req) {
+	const username = String(process.env.POSTMARK_WEBHOOK_USERNAME || '').trim();
+	const password = String(process.env.POSTMARK_WEBHOOK_PASSWORD || '').trim();
+	const legacySecret = String(process.env.POSTMARK_INBOUND_WEBHOOK_SECRET || '').trim();
+
+	if (username && password) {
+		const supplied = decodeBasicCredentials(req);
+		return {
+			configured: true,
+			authorized:
+				Boolean(supplied) &&
+				timingSafeEqualText(supplied.username, username) &&
+				timingSafeEqualText(supplied.password, password)
+		};
+	}
+
+	if (legacySecret) {
+		const suppliedSecret =
+			req.headers.get('x-webhook-secret') ||
+			req.headers.get('x-postmark-webhook-secret') ||
+			'';
+		return {
+			configured: true,
+			authorized: timingSafeEqualText(String(suppliedSecret).trim(), legacySecret)
+		};
+	}
+
+	return { configured: false, authorized: false };
 }
 
 function getExternalMessageId(payload) {
@@ -258,7 +296,11 @@ async function maybeSaveCandidateAttachment(candidateId, messageId, attachment, 
 
 async function postInboundPostmarkHandler(req) {
 	try {
-		if (!isAuthorized(req)) {
+		const authorization = webhookAuthorizationState(req);
+		if (!authorization.configured) {
+			return NextResponse.json({ error: 'Inbound webhook is not configured.' }, { status: 503 });
+		}
+		if (!authorization.authorized) {
 			return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
 		}
 

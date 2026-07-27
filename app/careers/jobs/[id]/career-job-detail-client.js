@@ -6,6 +6,7 @@ import { ArrowLeft, BriefcaseBusiness, Building2, MapPin } from 'lucide-react';
 import { useToast } from '@/app/components/toast-provider';
 import { formatPhoneInput } from '@/lib/phone';
 import { isValidOptionalHttpUrl } from '@/lib/url-validation';
+import { CURRENT_CTC_BAND_OPTIONS } from '@/lib/current-ctc-options';
 import {
 	RESUME_UPLOAD_MAX_BYTES,
 	isAllowedResumeUploadFileName,
@@ -19,7 +20,7 @@ const initialForm = {
 	mobile: '',
 	zipCode: '',
 	currentJobTitle: '',
-	currentEmployer: '',
+	currentCtcBand: '',
 	linkedinUrl: '',
 	faxNumber: ''
 };
@@ -40,7 +41,7 @@ function toStoredFormValue(value) {
 		mobile: String(value?.mobile || ''),
 		zipCode: String(value?.zipCode || ''),
 		currentJobTitle: String(value?.currentJobTitle || ''),
-		currentEmployer: String(value?.currentEmployer || ''),
+		currentCtcBand: String(value?.currentCtcBand || ''),
 		linkedinUrl: String(value?.linkedinUrl || ''),
 		faxNumber: ''
 	};
@@ -108,7 +109,7 @@ export default function CareerJobDetailClient({ job }) {
 					form.mobile.trim() &&
 					form.zipCode.trim() &&
 					form.currentJobTitle.trim() &&
-					form.currentEmployer.trim() &&
+					form.currentCtcBand.trim() &&
 					resumeFile
 			),
 		[form, resumeFile]
@@ -125,7 +126,7 @@ export default function CareerJobDetailClient({ job }) {
 			// Ignore sessionStorage failures and keep the form usable.
 		}
 	}, [
-		form.currentEmployer,
+		form.currentCtcBand,
 		form.currentJobTitle,
 		form.email,
 		form.firstName,
@@ -164,7 +165,7 @@ export default function CareerJobDetailClient({ job }) {
 			payload.set('mobile', form.mobile);
 			payload.set('zipCode', form.zipCode);
 			payload.set('currentJobTitle', form.currentJobTitle);
-			payload.set('currentEmployer', form.currentEmployer);
+			payload.set('currentCtcBand', form.currentCtcBand);
 			payload.set('linkedinUrl', form.linkedinUrl);
 			payload.set('faxNumber', form.faxNumber);
 			payload.set('startedAtMs', startedAtMs);
@@ -325,14 +326,21 @@ export default function CareerJobDetailClient({ job }) {
 								/>
 							</label>
 							<label>
-								<span>Current / Latest Employer *</span>
-								<input
-									value={form.currentEmployer}
+								<span>Current CTC *</span>
+								<select
+									value={form.currentCtcBand}
 									onChange={(event) =>
-										setForm((current) => ({ ...current, currentEmployer: event.target.value }))
+										setForm((current) => ({ ...current, currentCtcBand: event.target.value }))
 									}
 									required
-								/>
+								>
+									<option value="">Select current CTC</option>
+									{CURRENT_CTC_BAND_OPTIONS.map((option) => (
+										<option key={option.value} value={option.value}>
+											{option.label}
+										</option>
+									))}
+								</select>
 							</label>
 						</div>
 

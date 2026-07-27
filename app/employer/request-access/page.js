@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './request-access.module.css';
 
@@ -16,11 +16,13 @@ const emptyForm = {
 	state: '',
 	zipCode: '',
 	hiringRequirement: '',
-	selectedPlan: 'single_requirement'
+	selectedPlan: 'single_requirement',
+	faxNumber: ''
 };
 
 export default function EmployerRequestAccessPage() {
 	const [form, setForm] = useState(emptyForm);
+	const formStartedAtRef = useRef(Date.now());
 	const [saving, setSaving] = useState(false);
 	const [success, setSuccess] = useState('');
 	const [error, setError] = useState('');
@@ -42,7 +44,10 @@ export default function EmployerRequestAccessPage() {
 		const res = await fetch('/api/employer/request-access', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(form)
+			body: JSON.stringify({
+				...form,
+				startedAtMs: formStartedAtRef.current
+			})
 		});
 
 		const data = await res.json().catch(() => ({}));
@@ -55,6 +60,7 @@ export default function EmployerRequestAccessPage() {
 
 		setSuccess('Your request has been submitted. Our team will contact you shortly.');
 		setForm(emptyForm);
+		formStartedAtRef.current = Date.now();
 		setSaving(false);
 	}
 
@@ -104,6 +110,17 @@ export default function EmployerRequestAccessPage() {
 				</div>
 
 				<form className={styles.form} onSubmit={submitRequest}>
+					<label className={styles.trapField} aria-hidden="true">
+						Fax number
+						<input
+							name="faxNumber"
+							type="text"
+							tabIndex="-1"
+							autoComplete="off"
+							value={form.faxNumber}
+							onChange={(event) => updateField('faxNumber', event.target.value)}
+						/>
+					</label>
 					<h2>Employer Request Form</h2>
 					<p>Submit your company details and our team will review your access request.</p>
 

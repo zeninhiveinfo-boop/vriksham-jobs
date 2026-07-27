@@ -269,6 +269,7 @@ model Candidate {
 	owner           String?
 	currentJobTitle String?
 	currentEmployer String?
+	currentCtcBand  String?
 	experienceYears Float?
 	address         String?
 	addressPlaceId  String?

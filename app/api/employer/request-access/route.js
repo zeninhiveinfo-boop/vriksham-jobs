@@ -1,6 +1,43 @@
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { createRecordId } from '@/lib/record-id';
+import { isValidEmailAddress } from '@/lib/email-validation';
+import { isValidOptionalHttpUrl } from '@/lib/url-validation';
+import { enforceMutationThrottle } from '@/lib/mutation-throttle';
+import {
+	EMPLOYER_REQUEST_MIN_FORM_FILL_SECONDS,
+	EMPLOYER_REQUEST_RATE_LIMIT_MAX_REQUESTS,
+	EMPLOYER_REQUEST_RATE_LIMIT_WINDOW_SECONDS
+} from '@/lib/security-constants';
+
+const HONEYPOT_FIELD = 'faxNumber';
+const FORM_STARTED_AT_FIELD = 'startedAtMs';
+const MAX_REQUEST_BODY_BYTES = 64 * 1024;
+const DUPLICATE_WINDOW_HOURS = 24;
+
+const optionalText = (maxLength) => z.string().trim().max(maxLength).optional().or(z.literal(''));
+const employerRequestSchema = z.object({
+	companyName: z.string().trim().min(1, 'Company name is required.').max(160),
+	contactPerson: z.string().trim().min(1, 'Contact person is required.').max(160),
+	email: z
+		.string()
+		.trim()
+		.toLowerCase()
+		.max(254)
+		.refine((value) => isValidEmailAddress(value), 'A valid work email is required.'),
+	phone: optionalText(40),
+	website: optionalText(500).refine((value) => isValidOptionalHttpUrl(value), 'Enter a valid company website URL.'),
+	industry: optionalText(120),
+	city: optionalText(120),
+	state: optionalText(120),
+	zipCode: optionalText(20),
+	hiringLocation: optionalText(240),
+	hiringRequirement: z.string().trim().min(1, 'Hiring requirement is required.').max(5000),
+	selectedPlan: z.enum(['single_requirement', 'end_to_end']).default('single_requirement'),
+	[HONEYPOT_FIELD]: optionalText(200),
+	[FORM_STARTED_AT_FIELD]: z.union([z.string(), z.number()]).optional()
+});
 
 function cleanText(value) {
 	return String(value || '').trim();
@@ -25,8 +62,29 @@ function splitName(fullName) {
 	};
 }
 
-function isValidEmail(email) {
-	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
+function firstValidationMessage(error) {
+	return error?.issues?.[0]?.message || 'Check the submitted details and try again.';
+}
+
+function isOversizedRequest(req) {
+	const contentLength = Number(req.headers.get('content-length') || 0);
+	return Number.isFinite(contentLength) && contentLength > MAX_REQUEST_BODY_BYTES;
+}
+
+function looksAutomated(input) {
+	if (cleanText(input?.[HONEYPOT_FIELD])) return true;
+
+	const startedAtMs = Number(input?.[FORM_STARTED_AT_FIELD]);
+	if (!Number.isFinite(startedAtMs) || startedAtMs <= 0) return true;
+	const elapsedMs = Date.now() - startedAtMs;
+	return elapsedMs < EMPLOYER_REQUEST_MIN_FORM_FILL_SECONDS * 1000 || elapsedMs > 24 * 60 * 60 * 1000;
+}
+
+function successResponse() {
+	return NextResponse.json({
+		ok: true,
+		message: 'Request submitted successfully.'
+	});
 }
 
 function getPlanConfig(selectedPlan) {
@@ -55,54 +113,58 @@ function getPlanConfig(selectedPlan) {
 
 export async function POST(req) {
 	try {
-		const body = await req.json();
+		const throttleResponse = await enforceMutationThrottle(req, 'employer.request_access.post', {
+			maxRequests: EMPLOYER_REQUEST_RATE_LIMIT_MAX_REQUESTS,
+			windowSeconds: EMPLOYER_REQUEST_RATE_LIMIT_WINDOW_SECONDS,
+			message: 'Too many employer requests from this network. Please try again later.'
+		});
+		if (throttleResponse) return throttleResponse;
 
-		const companyName = cleanText(body.companyName);
-		const contactPerson = cleanText(body.contactPerson);
-		const email = cleanText(body.email).toLowerCase();
-		const phone = cleanText(body.phone);
-		const website = cleanText(body.website);
-        const industry = cleanText(body.industry);
-        const city = cleanText(body.city);
-        const state = cleanText(body.state);
-        const zipCode = cleanText(body.zipCode);
-		const hiringLocation = cleanText(body.hiringLocation);
-		const hiringRequirement = cleanText(body.hiringRequirement);
-		const selectedPlan = cleanText(body.selectedPlan) || 'single_requirement';
+		if (isOversizedRequest(req)) {
+			return NextResponse.json({ error: 'Request payload is too large.' }, { status: 413 });
+		}
+
+		const body = await req.json().catch(() => null);
+		const parsed = employerRequestSchema.safeParse(body);
+		if (!parsed.success) {
+			return NextResponse.json({ error: firstValidationMessage(parsed.error) }, { status: 400 });
+		}
+		if (looksAutomated(parsed.data)) {
+			return successResponse();
+		}
+
+		const {
+			companyName,
+			contactPerson,
+			email,
+			phone,
+			website,
+			industry,
+			city,
+			state,
+			zipCode,
+			hiringLocation,
+			hiringRequirement,
+			selectedPlan
+		} = parsed.data;
 
 		const planConfig = getPlanConfig(selectedPlan);
 
-		if (!companyName) {
-			return NextResponse.json(
-				{ error: 'Company name is required.' },
-				{ status: 400 }
-			);
-		}
-
-		if (!contactPerson) {
-			return NextResponse.json(
-				{ error: 'Contact person is required.' },
-				{ status: 400 }
-			);
-		}
-
-		if (!email || !isValidEmail(email)) {
-			return NextResponse.json(
-				{ error: 'A valid work email is required.' },
-				{ status: 400 }
-			);
-		}
-
-		if (!hiringRequirement) {
-			return NextResponse.json(
-				{ error: 'Hiring requirement is required.' },
-				{ status: 400 }
-			);
-		}
-
 		const { firstName, lastName } = splitName(contactPerson);
+		const duplicateCutoff = new Date(Date.now() - DUPLICATE_WINDOW_HOURS * 60 * 60 * 1000);
+		const existingRequest = await prisma.client.findFirst({
+			where: {
+				status: 'Pending Approval',
+				createdAt: { gte: duplicateCutoff },
+				contacts: { some: { email } }
+			},
+			select: { id: true }
+		});
+		if (existingRequest) {
+			return successResponse();
+		}
 
-		const result = await prisma.$transaction(async (tx) => {
+		await prisma.$transaction(async (tx) => {
 			const client = await tx.client.create({
 				data: {
 					recordId: createRecordId('client'),
@@ -201,18 +263,9 @@ export async function POST(req) {
 				}
 			});
 
-			return {
-				clientId: client.id,
-				contactId: contact.id,
-				selectedPlan: planConfig.selectedPlan
-			};
 		});
 
-		return NextResponse.json({
-			ok: true,
-			message: 'Employer request submitted successfully.',
-			...result
-		});
+		return successResponse();
 	} catch (error) {
 		console.error('[employer-request-access]', error);
 

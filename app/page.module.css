@@ -186,6 +186,26 @@
 	box-shadow: 0 14px 28px rgba(12, 47, 67, 0.08);
 }
 
+/* Keep the main hero CTAs distinct from the reused final-section CTA styles. */
+.heroActions .heroPrimary {
+	background: #082f49;
+	box-shadow: 0 16px 34px rgba(8, 47, 73, 0.24);
+}
+
+.heroActions .heroPrimary:hover {
+	background: #06283d;
+}
+
+.heroActions .heroSecondary {
+	background: #e6d023;
+	border-color: #e6d023;
+}
+
+.heroActions .heroSecondary:hover {
+	background: #cbb71f;
+	border-color: #cbb71f;
+}
+
 .hero {
 	position: relative;
 	z-index: 1;

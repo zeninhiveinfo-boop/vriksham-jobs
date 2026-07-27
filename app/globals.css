@@ -11901,7 +11901,8 @@ small {
 	font-weight: 850;
 }
 
-.career-apply-form input {
+.career-apply-form input,
+.career-apply-form select {
 	width: 100%;
 	min-width: 0;
 	min-height: 42px;
@@ -11911,10 +11912,12 @@ small {
 	color: #0f2537;
 	padding: 10px 12px;
 	font: inherit;
+	font-weight: 400;
 	outline: none;
 }
 
-.career-apply-form input:focus {
+.career-apply-form input:focus,
+.career-apply-form select:focus {
 	border-color: #ffe810;
 	box-shadow: 0 0 0 4px rgba(255, 232, 16, 0.14);
 }

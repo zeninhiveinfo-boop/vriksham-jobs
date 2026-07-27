@@ -188,7 +188,7 @@ async function run() {
 		);
 		assert(directorVisibleIds.has(clientA.id), 'Director missing client A in own division.');
 		assert(directorVisibleIds.has(clientB.id), 'Director missing client B in own division.');
-		assert(!directorVisibleIds.has(clientOther.id), 'Director can see client from another division.');
+		assert(directorVisibleIds.has(clientOther.id), 'Director missing client from another division.');
 
 		const recruiterAList = await apiGet('/api/clients', recruiterACookie);
 		assert(recruiterAList.res.ok, 'Recruiter should be able to list clients.');
@@ -205,10 +205,10 @@ async function run() {
 			`Recruiter A should get 404 for peer client detail, got ${recruiterAForbiddenDetail.res.status}.`
 		);
 
-		const directorForbiddenDetail = await apiGet(`/api/clients/${clientOther.id}`, directorCookie);
+		const directorGlobalDetail = await apiGet(`/api/clients/${clientOther.id}`, directorCookie);
 		assert(
-			directorForbiddenDetail.res.status === 404,
-			`Director should get 404 for out-of-division client detail, got ${directorForbiddenDetail.res.status}.`
+			directorGlobalDetail.res.ok,
+			`Director should have global client detail access, got ${directorGlobalDetail.res.status}.`
 		);
 
 		console.log('Permissions API smoke checks passed.');

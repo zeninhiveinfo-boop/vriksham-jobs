@@ -60,7 +60,8 @@ async function verifySessionToken(token) {
 	if (!Number.isInteger(userId) || userId <= 0) return false;
 	if (!Number.isInteger(expiresAtEpochSeconds) || expiresAtEpochSeconds <= nowEpochSeconds) return false;
 
-	const sessionSecret = process.env.AUTH_SESSION_SECRET || 'dev-auth-session-secret-change-me';
+	const sessionSecret = String(process.env.AUTH_SESSION_SECRET || '').trim();
+	if (!sessionSecret) return false;
 	const key = await crypto.subtle.importKey(
 		'raw',
 		encoder.encode(sessionSecret),
@@ -160,6 +161,24 @@ function redirectWithRequestId(url, requestId) {
 	return withResponseRequestId(NextResponse.redirect(url), requestId);
 }
 
+function resolveSafeInternalRedirect(req, value, fallbackPath = '/admin') {
+	const candidate = String(value || '').trim();
+	if (!candidate.startsWith('/') || candidate.startsWith('//')) {
+		return new URL(fallbackPath, req.url);
+	}
+
+	try {
+		const target = new URL(candidate, req.url);
+		const requestOrigin = new URL(req.url).origin;
+		if (target.origin !== requestOrigin) {
+			return new URL(fallbackPath, req.url);
+		}
+		return target;
+	} catch {
+		return new URL(fallbackPath, req.url);
+	}
+}
+
 export async function proxy(req) {
 	const { pathname, search } = req.nextUrl;
 	if (isStaticAsset(pathname)) {
@@ -183,12 +202,12 @@ export async function proxy(req) {
 	}
 
 	if (pathname === '/login') {
-	if (isAuthenticated) {
-		const nextParam = req.nextUrl.searchParams.get('next') || '/admin';
-		return redirectWithRequestId(new URL(nextParam, req.url), requestId);
+		if (isAuthenticated) {
+			const nextParam = req.nextUrl.searchParams.get('next') || '/admin';
+			return redirectWithRequestId(resolveSafeInternalRedirect(req, nextParam), requestId);
+		}
+		return nextWithRequestId(forwardHeaders, requestId);
 	}
-	return nextWithRequestId(forwardHeaders, requestId);
-}
 
 	if (isPublicPagePath(pathname)) {
 		return nextWithRequestId(forwardHeaders, requestId);

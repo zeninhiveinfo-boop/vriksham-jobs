@@ -21,6 +21,7 @@ import { formatDateTimeAt } from '@/lib/date-format';
 import { isValidEmailAddress } from '@/lib/email-validation';
 import { isValidOptionalHttpUrl } from '@/lib/url-validation';
 import { CANDIDATE_STATUS_OPTIONS } from '@/lib/candidate-status';
+import { CURRENT_CTC_BAND_OPTIONS } from '@/lib/current-ctc-options';
 import { fetchUnassignedDivisionOption } from '@/lib/default-division-client';
 import {
 	RESUME_UPLOAD_MAX_BYTES,
@@ -39,6 +40,7 @@ const initialForm = {
 	ownerId: '',
 	currentJobTitle: '',
 	currentEmployer: '',
+	currentCtcBand: '',
 	address: '',
 	addressPlaceId: '',
 	addressLatitude: '',
@@ -66,6 +68,7 @@ function toForm(row) {
 		ownerId: row.ownerId == null ? '' : String(row.ownerId),
 		currentJobTitle: row.currentJobTitle || '',
 		currentEmployer: row.currentEmployer || '',
+		currentCtcBand: row.currentCtcBand || '',
 		address: row.address || '',
 		addressPlaceId: row.addressPlaceId || '',
 		addressLatitude: row.addressLatitude ?? '',
@@ -198,8 +201,7 @@ function NewCandidatePageContent() {
 			form.source.trim() &&
 			form.ownerId.trim() &&
 			(!isAdmin || form.divisionId.trim()) &&
-			form.currentJobTitle.trim() &&
-			form.currentEmployer.trim()
+			form.currentJobTitle.trim()
 	);
 	const hasValidEmail = isValidEmailAddress(form.email);
 	const hasValidWebsite = isValidOptionalHttpUrl(form.website);
@@ -775,12 +777,19 @@ function NewCandidatePageContent() {
 										required
 									/>
 								</FormField>
-								<FormField label="Current Employer" required>
-									<input
-										value={form.currentEmployer}
-										onChange={(e) => setForm((f) => ({ ...f, currentEmployer: e.target.value }))}
-										required
-									/>
+								<FormField label="Current CTC">
+									<select
+										aria-label="Current CTC"
+										value={form.currentCtcBand}
+										onChange={(e) => setForm((f) => ({ ...f, currentCtcBand: e.target.value }))}
+									>
+										<option value="">Not provided</option>
+										{CURRENT_CTC_BAND_OPTIONS.map((option) => (
+											<option key={option.value} value={option.value}>
+												{option.label}
+											</option>
+										))}
+									</select>
 								</FormField>
 							</div>
 							<FormField label="Address">
