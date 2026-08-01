@@ -354,7 +354,9 @@ export default function CareerJobDetailClient({ job }) {
 						</label>
 
 						<label>
-							<span>Resume File (PDF, DOC, DOCX) *</span>
+							<span>
+								Resume File (PDF, DOC, DOCX — maximum {Math.floor(RESUME_UPLOAD_MAX_BYTES / (1024 * 1024))} MB) *
+							</span>
 							<input
 								key={resumeInputKey}
 								type="file"
