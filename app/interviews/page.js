@@ -102,7 +102,7 @@ export default function InterviewsPage() {
 						candidateDisplayName: formatPersonName(
 							interview.candidate?.firstName,
 							interview.candidate?.lastName,
-							{ format: 'last-first', fallback: '-' }
+							{ fallback: '-' }
 						),
 						candidateSearchText: buildPersonNameSearchText(
 							interview.candidate?.firstName,

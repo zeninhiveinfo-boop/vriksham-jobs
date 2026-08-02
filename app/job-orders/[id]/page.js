@@ -314,9 +314,7 @@ export default function JobOrderDetailsPage() {
 				if (field === 'submissionPriority') return Number(submission.submissionPriority || 0);
 				if (field === 'createdAt') return submission.createdAt || '';
 				if (field === 'candidate') {
-					return formatPersonName(submission.candidate?.firstName, submission.candidate?.lastName, {
-						format: 'last-first'
-					});
+					return formatPersonName(submission.candidate?.firstName, submission.candidate?.lastName);
 				}
 				if (field === 'status') return formatSelectValueLabel(submission.status);
 				if (field === 'submittedBy') return submissionCreatedByLabel(submission);
@@ -342,9 +340,7 @@ export default function JobOrderDetailsPage() {
 				if (field === 'subject') return interview.subject || '';
 				if (field === 'status') return formatSelectValueLabel(interview.status);
 				if (field === 'candidate') {
-					return formatPersonName(interview.candidate?.firstName, interview.candidate?.lastName, {
-						format: 'last-first'
-					});
+					return formatPersonName(interview.candidate?.firstName, interview.candidate?.lastName);
 				}
 				return '';
 			}),
@@ -357,9 +353,7 @@ export default function JobOrderDetailsPage() {
 				if (field === 'createdAt') return offer.createdAt || '';
 				if (field === 'status') return formatSelectValueLabel(offer.status);
 				if (field === 'candidate') {
-					return formatPersonName(offer.candidate?.firstName, offer.candidate?.lastName, {
-						format: 'last-first'
-					});
+					return formatPersonName(offer.candidate?.firstName, offer.candidate?.lastName);
 				}
 				return '';
 			}),
@@ -1898,10 +1892,10 @@ export default function JobOrderDetailsPage() {
 															</span>
 												<strong>
 													<Link href={`/candidates/${submission.candidate.id}`}>
-														{formatPersonName(
-															submission.candidate?.firstName,
-															submission.candidate?.lastName,
-															{ format: 'last-first', fallback: 'Candidate unavailable' }
+																{formatPersonName(
+																	submission.candidate?.firstName,
+																	submission.candidate?.lastName,
+																	{ fallback: 'Candidate unavailable' }
 														)}
 													</Link>
 												</strong>
@@ -1936,9 +1930,9 @@ export default function JobOrderDetailsPage() {
 														className="row-action-icon submission-open-link"
 														title="Open submission detail"
 														aria-label={`Open submission detail for ${formatPersonName(
-															submission.candidate?.firstName,
-															submission.candidate?.lastName,
-															{ format: 'last-first', fallback: 'candidate' }
+																submission.candidate?.firstName,
+																submission.candidate?.lastName,
+																{ fallback: 'candidate' }
 														)}`}
 													>
 														<ArrowUpRight aria-hidden="true" />
@@ -1999,11 +1993,10 @@ export default function JobOrderDetailsPage() {
 													</strong>
 													<p>
 														{interview.candidate
-															? formatPersonName(
-																interview.candidate.firstName,
-																interview.candidate.lastName,
-																{ format: 'last-first' }
-															)
+																? formatPersonName(
+																	interview.candidate.firstName,
+																	interview.candidate.lastName
+																)
 															: 'Candidate unavailable'}
 													</p>
 													<p className="simple-list-meta">@ <span className="meta-emphasis-time">{formatDate(interview.startsAt || interview.createdAt)}</span></p>
@@ -2052,9 +2045,7 @@ export default function JobOrderDetailsPage() {
 													</strong>
 													<p>
 														{offer.candidate
-															? formatPersonName(offer.candidate.firstName, offer.candidate.lastName, {
-																format: 'last-first'
-															})
+															? formatPersonName(offer.candidate.firstName, offer.candidate.lastName)
 															: 'Candidate unavailable'}
 													</p>
 													<p className="simple-list-meta">@ <span className="meta-emphasis-time">{formatDate(offer.createdAt)}</span></p>

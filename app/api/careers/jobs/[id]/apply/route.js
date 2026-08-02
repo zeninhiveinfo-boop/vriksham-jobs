@@ -55,7 +55,7 @@ const FORM_STARTED_AT_FIELD = 'startedAtMs';
 
 const careerApplicationSchema = z.object({
 	firstName: z.string().trim().min(1, 'First name is required.'),
-	lastName: z.string().trim().min(1, 'Last name is required.'),
+	lastName: optionalText,
 	email: z
 		.string()
 		.trim()

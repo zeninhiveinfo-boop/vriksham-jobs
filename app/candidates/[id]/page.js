@@ -400,7 +400,6 @@ export default function CandidateDetailsPage() {
 	const isAdmin = useIsAdministrator(actingUser);
 	const hasRequiredFields = Boolean(
 		editForm.firstName.trim() &&
-			editForm.lastName.trim() &&
 			editForm.email.trim() &&
 			editForm.mobile.trim() &&
 			editForm.status.trim() &&
@@ -1740,11 +1739,10 @@ export default function CandidateDetailsPage() {
 									required
 								/>
 							</FormField>
-							<FormField label="Last Name" required>
+							<FormField label="Last Name">
 								<input
 									value={editForm.lastName}
 									onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
-									required
 								/>
 							</FormField>
 						</div>

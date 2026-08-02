@@ -194,7 +194,6 @@ function NewCandidatePageContent() {
 	);
 	const hasRequiredFields = Boolean(
 		form.firstName.trim() &&
-			form.lastName.trim() &&
 			form.email.trim() &&
 			form.mobile.trim() &&
 			form.status.trim() &&
@@ -654,11 +653,10 @@ function NewCandidatePageContent() {
 										required
 									/>
 								</FormField>
-								<FormField label="Last Name" required>
+								<FormField label="Last Name">
 									<input
 										value={form.lastName}
 										onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-										required
 									/>
 								</FormField>
 							</div>

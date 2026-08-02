@@ -104,7 +104,6 @@ export default function CareerJobDetailClient({ job }) {
 		() =>
 			Boolean(
 				form.firstName.trim() &&
-					form.lastName.trim() &&
 					form.email.trim() &&
 					form.mobile.trim() &&
 					form.zipCode.trim() &&
@@ -265,13 +264,12 @@ export default function CareerJobDetailClient({ job }) {
 								/>
 							</label>
 							<label>
-								<span>Last Name *</span>
+								<span>Last Name</span>
 								<input
 									value={form.lastName}
 									onChange={(event) =>
 										setForm((current) => ({ ...current, lastName: event.target.value }))
 									}
-									required
 								/>
 							</label>
 						</div>
@@ -282,7 +280,6 @@ export default function CareerJobDetailClient({ job }) {
 								type="email"
 								value={form.email}
 								onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-								required
 							/>
 						</label>
 

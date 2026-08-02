@@ -103,7 +103,7 @@ export default function SubmissionsPage() {
 					candidateDisplayName: formatPersonName(
 						submission.candidate?.firstName,
 						submission.candidate?.lastName,
-						{ format: 'last-first', fallback: '-' }
+						{ fallback: '-' }
 					),
 					candidateSearchText: buildPersonNameSearchText(
 						submission.candidate?.firstName,

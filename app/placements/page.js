@@ -189,7 +189,7 @@ export default function PlacementsPage() {
 						candidateDisplayName: formatPersonName(
 							placement.candidate?.firstName,
 							placement.candidate?.lastName,
-							{ format: 'last-first', fallback: '-' }
+							{ fallback: '-' }
 						),
 						candidateSearchText: buildPersonNameSearchText(
 							placement.candidate?.firstName,

@@ -261,7 +261,6 @@ function scoreCandidate(candidate, jobOrder, allSkills, requiredSkillIds) {
 	return {
 		candidateId: candidate.id,
 		candidateName: formatPersonName(candidate.firstName, candidate.lastName, {
-			format: 'last-first',
 			fallback: 'Candidate'
 		}),
 		currentJobTitle: candidate.currentJobTitle || '',

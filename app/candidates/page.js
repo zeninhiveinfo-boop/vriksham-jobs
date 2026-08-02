@@ -180,7 +180,6 @@ export default function CandidatesPage() {
 						...candidate,
 						fullName: formatPersonName(candidate.firstName, candidate.lastName, { fallback: '-' }),
 						displayName: formatPersonName(candidate.firstName, candidate.lastName, {
-							format: 'last-first',
 							fallback: '-'
 						}),
 						nameSearchText: buildPersonNameSearchText(candidate.firstName, candidate.lastName, {
