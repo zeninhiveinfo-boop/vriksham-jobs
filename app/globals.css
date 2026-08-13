@@ -3805,7 +3805,47 @@ textarea {
 	width: 100%;
 	background: #fff;
 	border: 1px solid var(--line);
+	font-size: 0.9rem;
+}
+
+.phone-input-wrapper {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	background: #fff;
+	border: 1px solid var(--line);
 	border-radius: 8px;
+	overflow: hidden;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.phone-input-wrapper:focus-within {
+	border-color: #2563eb;
+	box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.phone-prefix {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.55rem 0.75rem;
+	background: #f1f5f9;
+	color: #334155;
+	font-weight: 600;
+	font-size: 0.9rem;
+	border-right: 1px solid var(--line);
+	user-select: none;
+	white-space: nowrap;
+}
+
+.phone-input-wrapper input {
+	border: none !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	outline: none !important;
+	box-shadow: none !important;
+	flex: 1;
+	width: 100%;
 	padding: 0.55rem 0.65rem;
 	font-size: 0.9rem;
 }
@@ -11916,8 +11956,19 @@ small {
 	outline: none;
 }
 
+.career-apply-form .phone-input-wrapper {
+	border: 1px solid #cbd5e1;
+	border-radius: 13px;
+	background: #ffffff;
+	color: #0f2537;
+	font: inherit;
+	font-weight: 400;
+	outline: none;
+}
+
 .career-apply-form input:focus,
-.career-apply-form select:focus {
+.career-apply-form select:focus,
+.career-apply-form .phone-input-wrapper:focus-within {
 	border-color: #ffe810;
 	box-shadow: 0 0 0 4px rgba(255, 232, 16, 0.14);
 }

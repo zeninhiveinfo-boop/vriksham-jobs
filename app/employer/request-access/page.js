@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './request-access.module.css';
+import PhoneInput from '@/app/components/phone-input';
 
 const emptyForm = {
 	companyName: '',
@@ -210,11 +211,9 @@ export default function EmployerRequestAccessPage() {
 
 						<label>
 							Phone Number
-							<input
-								type="tel"
-								placeholder="+91 98765 43210"
+							<PhoneInput
 								value={form.phone}
-								onChange={(event) => updateField('phone', event.target.value)}
+								onChange={(nextValue) => updateField('phone', nextValue)}
 							/>
 						</label>
 

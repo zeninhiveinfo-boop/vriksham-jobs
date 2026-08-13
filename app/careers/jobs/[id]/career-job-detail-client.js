@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, BriefcaseBusiness, Building2, MapPin } from 'lucide-react';
 import { useToast } from '@/app/components/toast-provider';
-import { formatPhoneInput } from '@/lib/phone';
+import PhoneInput from '@/app/components/phone-input';
 import { isValidOptionalHttpUrl } from '@/lib/url-validation';
 import { CURRENT_CTC_BAND_OPTIONS } from '@/lib/current-ctc-options';
 import {
@@ -284,15 +284,12 @@ export default function CareerJobDetailClient({ job }) {
 						<div className="career-apply-grid-2">
 							<label>
 								<span>Mobile *</span>
-								<input
-									type="tel"
-									inputMode="numeric"
-									autoComplete="tel"
+								<PhoneInput
 									value={form.mobile}
-									onChange={(event) =>
+									onChange={(nextValue) =>
 										setForm((current) => ({
 											...current,
-											mobile: formatPhoneInput(event.target.value)
+											mobile: nextValue
 										}))
 									}
 									required

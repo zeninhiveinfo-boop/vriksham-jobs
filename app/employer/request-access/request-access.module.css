@@ -280,19 +280,24 @@
 }
 
 .grid input,
-.grid textarea {
+.grid textarea,
+.grid :global(.phone-input-wrapper) {
 	width: 100%;
 	min-width: 0;
 	border: 1px solid #c8d5e7;
 	border-radius: 14px;
 	background: var(--input);
 	color: var(--text);
-	padding: 13px 14px;
 	font: inherit;
 	font-size: 0.93rem;
 	font-weight: 750;
 	outline: none;
 	transition: 0.18s ease;
+}
+
+.grid input,
+.grid textarea {
+	padding: 13px 14px;
 }
 
 .grid input::placeholder,
