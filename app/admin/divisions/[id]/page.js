@@ -113,6 +113,21 @@ export default function DivisionDetailsPage() {
 		setSaveState({ saving: false, error: '', success: 'Division updated.' });
 	}
 
+	async function onDelete() {
+		if (!window.confirm(`Are you sure you want to delete the division "${division.name}"?`)) {
+			return;
+		}
+		setSaveState({ saving: true, error: '', success: '' });
+		const res = await fetch(`/api/divisions/${id}`, { method: 'DELETE' });
+		if (!res.ok) {
+			const data = await res.json().catch(() => ({}));
+			setSaveState({ saving: false, error: data.error || 'Failed to delete division.', success: '' });
+			return;
+		}
+		toast.success(`Division "${division.name}" deleted.`);
+		router.push('/admin/divisions');
+	}
+
 	if (loading) {
 		return (
 			<AdminGate>
@@ -184,6 +199,17 @@ export default function DivisionDetailsPage() {
 									label="Save Division"
 									savingLabel="Saving Division..."
 								/>
+								{division.id !== 1 ? (
+									<button
+										type="button"
+										className="btn-danger"
+										onClick={onDelete}
+										disabled={saveState.saving}
+										style={{ marginLeft: 'auto' }}
+									>
+										Delete Division
+									</button>
+								) : null}
 								<span className="form-actions-meta">
 									<span>Updated:</span>
 									<strong>{formatDate(division.updatedAt)}</strong>
