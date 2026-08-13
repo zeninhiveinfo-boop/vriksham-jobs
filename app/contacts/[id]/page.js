@@ -585,7 +585,7 @@ export default function ContactDetailsPage() {
 							<div className="detail-form-grid-2">
 								<FormField label="Phone" required>
 									<PhoneInput
-										placeholder="(555) 555-5555"
+										placeholder="98765 43210"
 										value={form.phone}
 										onChange={(phone) => setForm((f) => ({ ...f, phone }))}
 										required

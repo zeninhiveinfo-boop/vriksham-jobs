@@ -672,7 +672,7 @@ function NewCandidatePageContent() {
 							{emailError ? <p className="panel-subtext error">{emailError}</p> : null}
 							<FormField label="Mobile" required>
 								<PhoneInput
-									placeholder="(555) 555-5555"
+									placeholder="98765 43210"
 									value={form.mobile}
 									onChange={(mobile) => setForm((f) => ({ ...f, mobile }))}
 									required

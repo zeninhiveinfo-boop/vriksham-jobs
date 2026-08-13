@@ -3805,6 +3805,8 @@ textarea {
 	width: 100%;
 	background: #fff;
 	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: 0.55rem 0.65rem;
 	font-size: 0.9rem;
 }
 
