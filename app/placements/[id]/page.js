@@ -17,7 +17,7 @@ import useArchivedEntities from '@/app/hooks/use-archived-entities';
 import useIsAdministrator from '@/app/hooks/use-is-administrator';
 import useUnsavedChangesGuard from '@/app/hooks/use-unsaved-changes-guard';
 import { formatDateTimeAt } from '@/lib/date-format';
-import { formatCurrencyInput, normalizeCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
+import { DEFAULT_CURRENCY, formatCurrencyInput, normalizeCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
 import {
 	buildDefaultPlacementCommissionSplits,
 	getPlacementCommissionOwners,
@@ -34,7 +34,7 @@ const initialForm = {
 	status: 'planned',
 	placementType: 'temp',
 	compensationType: 'hourly',
-	currency: 'USD',
+	currency: DEFAULT_CURRENCY,
 	hourlyRtBillRate: '',
 	hourlyRtPayRate: '',
 	hourlyOtBillRate: '',
@@ -118,59 +118,59 @@ function toForm(row) {
 		status: row.status || 'planned',
 		placementType: row.placementType || 'temp',
 		compensationType,
-		currency: row.currency || 'USD',
+		currency: row.currency || 'INR',
 		hourlyRtBillRate:
 			row.hourlyRtBillRate == null
 				? row.regularRate == null
 					? compensationType === 'hourly' && row.amount != null
-						? formatCurrencyInput(String(row.amount), row.currency || 'USD')
+						? formatCurrencyInput(String(row.amount), row.currency || 'INR')
 						: ''
-					: formatCurrencyInput(String(row.regularRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.hourlyRtBillRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.regularRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.hourlyRtBillRate), row.currency || 'INR'),
 		hourlyRtPayRate:
 			row.hourlyRtPayRate == null
 				? row.regularRate == null
 					? compensationType === 'hourly' && row.amount != null
-						? formatCurrencyInput(String(row.amount), row.currency || 'USD')
+						? formatCurrencyInput(String(row.amount), row.currency || 'INR')
 						: ''
-					: formatCurrencyInput(String(row.regularRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.hourlyRtPayRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.regularRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.hourlyRtPayRate), row.currency || 'INR'),
 		hourlyOtBillRate:
 			row.hourlyOtBillRate == null
 				? row.overtimeRate == null
 					? ''
-					: formatCurrencyInput(String(row.overtimeRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.hourlyOtBillRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.overtimeRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.hourlyOtBillRate), row.currency || 'INR'),
 		hourlyOtPayRate:
 			row.hourlyOtPayRate == null
 				? row.overtimeRate == null
 					? ''
-					: formatCurrencyInput(String(row.overtimeRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.hourlyOtPayRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.overtimeRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.hourlyOtPayRate), row.currency || 'INR'),
 		dailyBillRate:
 			row.dailyBillRate == null
 				? row.dailyRate == null
 					? compensationType === 'daily' && row.amount != null
-						? formatCurrencyInput(String(row.amount), row.currency || 'USD')
+						? formatCurrencyInput(String(row.amount), row.currency || 'INR')
 						: ''
-					: formatCurrencyInput(String(row.dailyRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.dailyBillRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.dailyRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.dailyBillRate), row.currency || 'INR'),
 		dailyPayRate:
 			row.dailyPayRate == null
 				? row.dailyRate == null
 					? compensationType === 'daily' && row.amount != null
-						? formatCurrencyInput(String(row.amount), row.currency || 'USD')
+						? formatCurrencyInput(String(row.amount), row.currency || 'INR')
 						: ''
-					: formatCurrencyInput(String(row.dailyRate), row.currency || 'USD')
-				: formatCurrencyInput(String(row.dailyPayRate), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.dailyRate), row.currency || 'INR')
+				: formatCurrencyInput(String(row.dailyPayRate), row.currency || 'INR'),
 		yearlyCompensation:
 			row.yearlyCompensation == null
 				? row.annualSalary == null
 					? compensationType === 'salary' && row.amount != null
-						? formatCurrencyInput(String(row.amount), row.currency || 'USD')
+						? formatCurrencyInput(String(row.amount), row.currency || 'INR')
 						: ''
-					: formatCurrencyInput(String(row.annualSalary), row.currency || 'USD')
-				: formatCurrencyInput(String(row.yearlyCompensation), row.currency || 'USD'),
+					: formatCurrencyInput(String(row.annualSalary), row.currency || 'INR')
+				: formatCurrencyInput(String(row.yearlyCompensation), row.currency || 'INR'),
 		commissionSplits:
 			Array.isArray(row.commissionSplits) && row.commissionSplits.length > 0
 				? row.commissionSplits
@@ -207,7 +207,7 @@ function formatPlacementType(value) {
 function formatCurrency(currency, value) {
 	const parsed = parseCurrencyInput(value);
 	if (parsed == null) return '-';
-	return `${currency || 'USD'} ${parsed.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+	return `INR ${parsed.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 }
 
 function formatCompensationSummary(row) {
@@ -999,8 +999,7 @@ export default function PlacementDetailsPage() {
 											})
 										}
 									>
-										<option value="USD">USD</option>
-										<option value="CAD">CAD</option>
+										<option value="INR">INR</option>
 									</select>
 								</FormField>
 							</div>
@@ -1017,7 +1016,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														hourlyRtPayRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1033,7 +1032,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														hourlyRtBillRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1049,7 +1048,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														hourlyOtPayRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1065,7 +1064,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														hourlyOtBillRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1085,7 +1084,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														dailyPayRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1101,7 +1100,7 @@ export default function PlacementDetailsPage() {
 														...current,
 														dailyBillRate: formatCurrencyInput(
 															e.target.value,
-															current.currency || 'USD'
+															current.currency || 'INR'
 														)
 													}))
 												}
@@ -1120,7 +1119,7 @@ export default function PlacementDetailsPage() {
 													...current,
 													yearlyCompensation: formatCurrencyInput(
 														e.target.value,
-														current.currency || 'USD'
+														current.currency || 'INR'
 													)
 												}))
 											}

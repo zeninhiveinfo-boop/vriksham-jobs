@@ -14,12 +14,12 @@ import { useToast } from '@/app/components/toast-provider';
 import useUnsavedChangesGuard from '@/app/hooks/use-unsaved-changes-guard';
 import { JOB_ORDER_EMPLOYMENT_TYPES } from '@/lib/job-order-options';
 import { hasMeaningfulRichTextContent } from '@/lib/rich-text';
-import { formatCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
+import { DEFAULT_CURRENCY, formatCurrencyInput, parseCurrencyInput, SUPPORTED_CURRENCIES } from '@/lib/currency-input';
 import { fetchLookupOptionById } from '@/lib/lookup-client';
 import { fetchUnassignedDivisionOption } from '@/lib/default-division-client';
 import { toBooleanFlag } from '@/lib/boolean-flag';
 
-const JOB_ORDER_CURRENCIES = ['INR', 'USD', 'CAD'];
+const JOB_ORDER_CURRENCIES = SUPPORTED_CURRENCIES;
 
 const initialForm = {
 	title: '',
@@ -548,8 +548,6 @@ function NewJobOrdersPageContent() {
 									}}
 								>
 									<option value="INR">INR</option>
-									<option value="USD">USD</option>
-									<option value="CAD">CAD</option>
 								</select>
 							</FormField>
 							<FormField label="Salary Min">

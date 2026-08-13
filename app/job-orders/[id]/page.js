@@ -40,12 +40,12 @@ import { hasMeaningfulRichTextContent } from '@/lib/rich-text';
 import { sortByConfig } from '@/lib/list-sort';
 import { submissionCreatedByLabel, submissionOriginLabel } from '@/lib/submission-origin';
 import { getEffectiveSubmissionStatus } from '@/lib/submission-status';
-import { formatCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
+import { DEFAULT_CURRENCY, formatCurrencyInput, parseCurrencyInput, SUPPORTED_CURRENCIES } from '@/lib/currency-input';
 import { fetchLookupOptionById } from '@/lib/lookup-client';
 import { toBooleanFlag } from '@/lib/boolean-flag';
 import { buildJobOrderTimeline } from '@/lib/activity-timeline';
 
-const JOB_ORDER_CURRENCIES = ['USD', 'CAD'];
+const JOB_ORDER_CURRENCIES = SUPPORTED_CURRENCIES;
 
 const initialForm = {
 	title: '',
@@ -61,7 +61,7 @@ const initialForm = {
 	status: 'open',
 	employmentType: '',
 	openings: '1',
-	currency: 'USD',
+	currency: DEFAULT_CURRENCY,
 	salaryMin: '',
 	salaryMax: '',
 	publishToCareerSite: false,
@@ -126,7 +126,7 @@ function formatClientFeedbackLabel(value) {
 function toForm(row) {
 	if (!row) return initialForm;
 	const employmentType = JOB_ORDER_EMPLOYMENT_TYPES.includes(row.employmentType) ? row.employmentType : '';
-	const currency = JOB_ORDER_CURRENCIES.includes(row.currency) ? row.currency : 'USD';
+	const currency = JOB_ORDER_CURRENCIES.includes(row.currency) ? row.currency : DEFAULT_CURRENCY;
 
 	return {
 		title: row.title || '',
@@ -170,7 +170,7 @@ function normalizeZipValue(value) {
 }
 
 function toJobOrderPayload(formValue) {
-	const currency = JOB_ORDER_CURRENCIES.includes(formValue.currency) ? formValue.currency : 'USD';
+	const currency = JOB_ORDER_CURRENCIES.includes(formValue.currency) ? formValue.currency : DEFAULT_CURRENCY;
 	return {
 		...formValue,
 		status: toJobOrderStatusValue(formValue.status),
@@ -1499,8 +1499,7 @@ export default function JobOrderDetailsPage() {
 											}));
 										}}
 									>
-										<option value="USD">USD</option>
-										<option value="CAD">CAD</option>
+									<option value="INR">INR</option>
 									</select>
 								</FormField>
 								<FormField label="Salary Min">

@@ -32,17 +32,15 @@ function formatCurrency(currency, value) {
 	const parsed = Number(value);
 	if (!Number.isFinite(parsed)) return '-';
 
-	const currencyCode =
-		typeof currency === 'string' && currency.trim() ? currency.trim().toUpperCase() : 'USD';
 	try {
-		return new Intl.NumberFormat('en-US', {
+		return new Intl.NumberFormat('en-IN', {
 			style: 'currency',
-			currency: currencyCode,
+			currency: 'INR',
 			minimumFractionDigits: 0,
 			maximumFractionDigits: 2
 		}).format(parsed);
 	} catch {
-		return `${currencyCode} ${parsed.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+		return `₹${parsed.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
 	}
 }
 
@@ -50,22 +48,19 @@ function formatAnnualCurrency(currency, value) {
 	const parsed = Number(value);
 	if (!Number.isFinite(parsed)) return '-';
 
-	const currencyCode =
-		typeof currency === 'string' && currency.trim() ? currency.trim().toUpperCase() : 'USD';
-
 	if (Math.abs(parsed) >= 1000 && Math.abs(parsed) < 1000000) {
 		const thousands = parsed / 1000;
 		const rounded = Number.isInteger(thousands) ? String(thousands) : thousands.toFixed(1).replace(/\.0$/, '');
-		return `${currencyCode === 'USD' ? '$' : `${currencyCode} `}${rounded}k`;
+		return `₹${rounded}k`;
 	}
 
 	if (Math.abs(parsed) >= 1000000) {
 		const millions = parsed / 1000000;
 		const rounded = Number.isInteger(millions) ? String(millions) : millions.toFixed(1).replace(/\.0$/, '');
-		return `${currencyCode === 'USD' ? '$' : `${currencyCode} `}${rounded}m`;
+		return `₹${rounded}m`;
 	}
 
-	return formatCurrency(currencyCode, parsed);
+	return formatCurrency('INR', parsed);
 }
 
 function formatPlacementType(value) {

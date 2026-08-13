@@ -604,9 +604,7 @@ function normalizeEmploymentTypeValue(value) {
 }
 
 function normalizeCurrencyCode(value) {
-	const normalized = String(value || '').trim().toUpperCase();
-	if (normalized === 'CAD') return 'CAD';
-	return 'USD';
+	return 'INR';
 }
 
 function mapBullhornClientRow(row, context = {}) {
@@ -3882,7 +3880,7 @@ async function importData(tx, data, actingUser) {
 			status: toTrimmedString(row?.status) || 'planned',
 			placementType: toTrimmedString(row?.placementType) || 'temp',
 			compensationType: toTrimmedString(row?.compensationType) || 'hourly',
-			currency: toTrimmedString(row?.currency) || 'USD',
+			currency: toTrimmedString(row?.currency) || 'INR',
 			offeredOn: toOptionalDate(row?.offeredOn),
 			expectedJoinDate: toOptionalDate(row?.expectedJoinDate),
 			endDate: toOptionalDate(row?.endDate),

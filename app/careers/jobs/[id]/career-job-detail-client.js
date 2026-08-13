@@ -69,11 +69,9 @@ function formatCurrencyRange(min, max, currency = 'INR') {
 	const hasMax = Number.isFinite(Number(max));
 	if (!hasMin && !hasMax) return 'Salary / CTC discussed during screening.';
 
-	const normalizedCurrency = currency === 'USD' || currency === 'CAD' ? currency : 'INR';
-
 	const formatter = new Intl.NumberFormat('en-IN', {
 		style: 'currency',
-		currency: normalizedCurrency,
+		currency: 'INR',
 		maximumFractionDigits: 0
 	});
 

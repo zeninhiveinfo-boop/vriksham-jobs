@@ -11,14 +11,14 @@ import PlacementCommissionSplitsSection from '@/app/components/placement-commiss
 import SaveActionButton from '@/app/components/save-action-button';
 import { useToast } from '@/app/components/toast-provider';
 import useUnsavedChangesGuard from '@/app/hooks/use-unsaved-changes-guard';
-import { formatCurrencyInput, normalizeCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
+import { DEFAULT_CURRENCY, formatCurrencyInput, normalizeCurrencyInput, parseCurrencyInput } from '@/lib/currency-input';
 import { validatePlacementCommissionSplits } from '@/lib/placement-commission';
 
 const initialForm = {
 	status: 'planned',
 	placementType: 'temp',
 	compensationType: 'hourly',
-	currency: 'USD',
+	currency: DEFAULT_CURRENCY,
 	hourlyRtBillRate: '',
 	hourlyRtPayRate: '',
 	hourlyOtBillRate: '',
@@ -337,8 +337,7 @@ function NewPlacementPageContent() {
 								value={form.currency}
 								onChange={(e) => setForm((current) => ({ ...current, currency: e.target.value }))}
 							>
-								<option value="USD">USD</option>
-								<option value="CAD">CAD</option>
+								<option value="INR">INR</option>
 							</select>
 						</FormField>
 					</div>
