@@ -191,6 +191,8 @@ Email drafting:
 Primary purpose:
 - Track companies, ownership, status, and client-level notes/activity.
 
+![Create Client Screen](screenshots/01_create_client.png)
+
 Common actions:
 1. `Clients > New Client`
 2. Set required fields including owner and status.
@@ -207,15 +209,17 @@ List workflow:
 Primary purpose:
 - Track hiring-side people tied to clients.
 
+![Create Contact Screen](screenshots/02_create_contact.png)
+
 Common actions:
 1. `Contacts > New Contact`
 2. Complete required fields:
 - Name
 - Email
-- Mobile
+- Mobile (+91 Indian format)
 - Source
 - Owner
-- Client
+- **Client** (Must select an existing Client company)
 3. Add title, department, address, and notes.
 
 Behavior notes:
@@ -230,11 +234,14 @@ Behavior notes:
 Primary purpose:
 - Define open requisitions and required qualifications.
 
+![Create Job Order Screen](screenshots/03_create_job_order.png)
+
 Common actions:
 1. `Job Orders > New Job Order`
-2. Set required owner, status, client, and hiring manager contact.
-3. Add internal description.
-4. If career-site posting is enabled:
+2. Set required owner, status, **Client**, and hiring manager **Contact**.
+3. Set Currency (standardized to INR `₹`).
+4. Add internal description.
+5. If career-site posting is enabled:
 - Toggle publish on
 - Add public description (required when publishing)
 
