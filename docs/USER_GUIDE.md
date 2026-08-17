@@ -1,20 +1,31 @@
 # Vriksham Jobs User Guide
 
-This guide is for day-to-day users. It explains the core workflow and how each module fits together.
+This guide is for day-to-day users. It explains the core workflow, entity creation order, prerequisites, and how each module fits together.
 
-## 1) Core Workflow
+## 1) Core Workflow & Entity Creation Order
 
-Use this sequence as your default process:
+In Vriksham Jobs ATS, entities depend on upstream data. Following the correct sequence prevents data friction and orphaned records:
 
-1. Create or update a `Client`.
-2. Create or update a `Contact` for that client.
-3. Create a `Job Order` linked to the client and hiring manager contact.
-4. Add or import a `Candidate`.
-5. Create a `Submission` for candidate + job order.
-6. Share the `Client Review Portal` from the job order when you want external client feedback without requiring client login.
-7. Schedule one or more `Interviews`.
-8. Convert successful submissions to `Placements`.
-9. Use notes, activities, and administrator audit trail access for accountability where applicable.
+```
+[1. Division & Admin Setup] ➔ [2. Recruiters] ➔ [3. Client (Company)] ➔ [4. Contact] ➔ [5. Job Order] ➔ [6. Candidate] ➔ [7. Submission] ➔ [8. Placement]
+```
+
+### Entity Creation Sequence & Prerequisites Matrix
+
+| Sequence | Entity to Create | Prerequisite (What Must Exist First) | Why This Sequence Matters |
+|---|---|---|---|
+| **Step 1** | **Division** | Admin User | Defines team scoping & access rules (e.g. *Mangalore Hiring Team*). |
+| **Step 2** | **Recruiter / User** | Division | Every recruiter must belong to an active division. |
+| **Step 3** | **Client (Company)** | Division & Assigned Recruiter | Companies belong to a division and an assigned owner. |
+| **Step 4** | **Contact** | **Client (Company)**, Division, Recruiter | A contact (Hiring Manager) belongs to a specific Client company. |
+| **Step 5** | **Job Order (Mandate)** | **Client (Company)** AND **Contact**, Recruiter | Job openings require a client company and point-of-contact. |
+| **Step 6** | **Candidate** | Division & Assigned Recruiter | Talent profiles are assigned to a recruiter and division. |
+| **Step 7** | **Submission** | Candidate AND Job Order | Links a candidate to an active Job Order. |
+| **Step 8** | **Placement** | Candidate, Job Order, Client, Contact | Final hired record linking candidate, job, client, and rates. |
+
+### Key Localization Standards:
+- **Currency**: Standardized exclusively to Indian Rupee (**INR ₹**).
+- **Phone Numbers**: Auto-formatted to Indian 10-digit mobile format with a fixed, non-editable **`+91`** country code prefix. Supports pasting raw strings like `+91 98765 43210`, `09876543210`, or `98765 43210`.
 
 ## 2) Roles And Access
 
