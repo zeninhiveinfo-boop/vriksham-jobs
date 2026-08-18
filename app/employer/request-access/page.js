@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './request-access.module.css';
 import PhoneInput from '@/app/components/phone-input';
+import { INDUSTRY_OPTIONS } from '@/app/constants/industry-options';
 
 const emptyForm = {
 	companyName: '',
@@ -229,12 +230,17 @@ export default function EmployerRequestAccessPage() {
 
 						<label>
 							Industry
-							<input
-								type="text"
-								placeholder="Technology, Healthcare, Manufacturing..."
+							<select
 								value={form.industry}
 								onChange={(event) => updateField('industry', event.target.value)}
-							/>
+							>
+								<option value="">Select industry</option>
+								{INDUSTRY_OPTIONS.map((opt) => (
+									<option key={opt.value} value={opt.value}>
+										{opt.label}
+									</option>
+								))}
+							</select>
 						</label>
 
 						<label>
