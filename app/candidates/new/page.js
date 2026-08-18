@@ -829,8 +829,10 @@ function NewCandidatePageContent() {
 								</FormField>
 								<FormField label="Zip Code">
 									<input
+										maxLength={6}
+										placeholder="575001"
 										value={form.zipCode}
-										onChange={(e) => setForm((f) => ({ ...f, zipCode: e.target.value }))}
+										onChange={(e) => setForm((f) => ({ ...f, zipCode: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
 									/>
 								</FormField>
 							</div>

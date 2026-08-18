@@ -224,8 +224,8 @@ function normalizeZipCode(value) {
 	const raw = toTrimmedString(value);
 	if (!raw) return null;
 	const digits = raw.replace(/\D/g, '');
-	if (digits.length >= 5) {
-		return digits.slice(0, 5);
+	if (digits.length >= 6) {
+		return digits.slice(0, 6);
 	}
 	return raw;
 }

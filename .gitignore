@@ -24,6 +24,7 @@ prisma/dev.db-*
 .local-storage/
 .backups/
 .generated/
+.resume-migration/
 
 # Logs / reports
 *.log

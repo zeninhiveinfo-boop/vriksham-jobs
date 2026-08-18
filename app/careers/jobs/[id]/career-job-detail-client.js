@@ -299,8 +299,10 @@ export default function CareerJobDetailClient({ job }) {
 								<span>PIN Code *</span>
 								<input
 									inputMode="numeric"
+									maxLength={6}
+									placeholder="575001"
 									value={form.zipCode}
-									onChange={(event) => setForm((current) => ({ ...current, zipCode: event.target.value }))}
+									onChange={(event) => setForm((current) => ({ ...current, zipCode: event.target.value.replace(/\D/g, '').slice(0, 6) }))}
 									required
 								/>
 							</label>

@@ -163,10 +163,8 @@ function toSalaryPayloadValue(value) {
 }
 
 function normalizeZipValue(value) {
-	const rawValue = String(value || '').trim();
-	if (!rawValue) return '';
-	const match = rawValue.match(/\d{5}/);
-	return match ? match[0] : rawValue;
+	if (!value) return '';
+	return String(value).replace(/\D/g, '').slice(0, 6);
 }
 
 function toJobOrderPayload(formValue) {
@@ -1452,6 +1450,8 @@ export default function JobOrderDetailsPage() {
 								</FormField>
 								<FormField label="Zip Code" required>
 									<input
+										maxLength={6}
+										placeholder="575001"
 										value={form.zipCode}
 										onChange={(e) => setForm((f) => ({ ...f, zipCode: normalizeZipValue(e.target.value) }))}
 										required

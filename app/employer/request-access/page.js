@@ -271,9 +271,10 @@ export default function EmployerRequestAccessPage() {
 							PIN Code
 							<input
 								type="text"
+								maxLength={6}
 								placeholder="575001"
 								value={form.zipCode}
-								onChange={(event) => updateField('zipCode', event.target.value)}
+								onChange={(event) => updateField('zipCode', event.target.value.replace(/\D/g, '').slice(0, 6))}
 							/>
 						</label>
 					</div>

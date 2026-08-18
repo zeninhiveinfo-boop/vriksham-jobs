@@ -75,7 +75,7 @@ function formatDate(value) {
 }
 
 function normalizeZipFromPlace(postalCode) {
-	const match = String(postalCode || '').match(/\d{5}/);
+	const match = String(postalCode || '').match(/\d{6}|\d{5}/);
 	return match ? match[0] : '';
 }
 
@@ -645,8 +645,10 @@ export default function ClientDetailsPage() {
 								</FormField>
 								<FormField label="Zip Code" required>
 									<input
+										maxLength={6}
+										placeholder="575001"
 										value={form.zipCode}
-										onChange={(e) => setForm((f) => ({ ...f, zipCode: e.target.value }))}
+										onChange={(e) => setForm((f) => ({ ...f, zipCode: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
 										required
 									/>
 								</FormField>

@@ -1810,10 +1810,12 @@ export default function CandidateDetailsPage() {
 								/>
 							</FormField>
 							<FormField label="Zip Code">
-								<input
-									value={editForm.zipCode}
-									onChange={(e) => setEditForm((f) => ({ ...f, zipCode: e.target.value }))}
-								/>
+									<input
+										maxLength={6}
+										placeholder="575001"
+										value={editForm.zipCode}
+										onChange={(e) => setEditForm((f) => ({ ...f, zipCode: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
+									/>
 							</FormField>
 						</div>
 						<div className="detail-form-grid-2">
