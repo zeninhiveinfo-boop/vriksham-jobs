@@ -298,10 +298,12 @@ export default function CareersPageClient({
 								<div className="careers-job-head">
 									<div>
 										<h2>{job.title}</h2>
+										{/* HIDE CLIENT NAME FOR NOW (PRESERVED FOR LATER USE):
 										<p className="careers-job-company">
 											<Building2 aria-hidden="true" />
 											<span>{job.client?.name || 'Confidential Client'}</span>
 										</p>
+										*/}
 									</div>
 									<p className="careers-job-posted">Posted {formatDate(job.publishedAt || job.openedAt)}</p>
 								</div>

@@ -208,10 +208,12 @@ export default function CareerJobDetailClient({ job }) {
 						<p className="careers-eyebrow">Vriksham Jobs opportunity</p>
 						<h1>{job.title}</h1>
 						<div className="career-detail-meta">
+							{/* HIDE CLIENT NAME FOR NOW (PRESERVED FOR LATER USE):
 							<p>
 								<Building2 aria-hidden="true" />
 								<span>{job.client?.name || 'Confidential Employer'}</span>
 							</p>
+							*/}
 							<p>
 								<MapPin aria-hidden="true" />
 								<span>{job.location || 'Location flexible'}</span>
